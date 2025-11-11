@@ -1,0 +1,82 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000; /* Ensure it's above sidebar */
+}
+
+.modal-content-viewer-downloader {
+  width: 90%;
+  max-width: 1400px;
+  height: 90vh;
+  background-color: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
+
+.modal-close-button-top-right {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #6b7280;
+  font-size: 1.5rem;
+  line-height: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-title-downloader {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.modal-viewer-container {
+  flex-grow: 1; /* This makes the viewer take up most of the space */
+  min-height: 0; /* Important for flex children */
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.modal-download-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.modal-download-button {
+  background-color: #10b981;
+  color: #fff;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease-in-out;
+  font-weight: 500;
+}
+
+.modal-download-button:hover {
+  background-color: #059669;
+}
+
+.modal-no-cronograma-message {
+  text-align: center;
+  color: #6b7280;
+  padding: 2rem;
+  font-size: 1.1rem;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

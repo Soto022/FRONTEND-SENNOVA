@@ -1,0 +1,222 @@
+/* Estilos para el Modal de Crear Proyecto */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-container {
+  background-color: var(--sena-light-gray, #F5F5F5);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+/* Estilo para modales más pequeños */
+.small-modal {
+  max-width: 450px;
+}
+
+.modal-header {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: var(--space-md);
+  border-top-left-radius: var(--border-radius-lg);
+  border-top-right-radius: var(--border-radius-lg);
+  text-align: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.modal-content {
+  padding: var(--space-xl);
+  overflow-y: auto;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Estilos de los botones de navegación */
+.btn-cancel, .btn-prev, .btn-next, .btn-save, .btn-add {
+  padding: var(--space-sm) var(--space-lg);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel {
+  background-color: var(--color-error);
+  color: white;
+}
+.btn-cancel:hover { background-color: #c0392b; }
+
+.btn-prev, .btn-next {
+  background-color: var(--color-primary);
+  color: white;
+}
+.btn-prev:hover, .btn-next:hover { background-color: var(--color-primary-dark); }
+
+.btn-save {
+  background-color: var(--color-primary-dark);
+  color: white;
+}
+.btn-save:hover { background-color: #0F8A1F; }
+
+.btn-add {
+  background-color: var(--color-accent);
+  color: white;
+  margin-bottom: var(--space-lg);
+}
+.btn-add:hover { background-color: #2980b9; }
+
+.step-navigation {
+  display: flex;
+  gap: var(--space-md);
+}
+
+/* Estilos de los formularios */
+.form-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  width: 100%;
+}
+
+.step-title {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin: 0 0 var(--space-md) 0;
+  text-align: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--color-text-light);
+}
+
+.form-group input[type="text"], 
+.form-group input[type="date"], 
+.form-group select, 
+.form-group textarea {
+  width: 100%;
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  font-family: var(--font-family-base);
+  font-size: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: var(--space-lg);
+}
+.form-row .form-group {
+  flex: 1;
+}
+
+/* Estilos de las tablas */
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+th {
+  background-color: var(--color-primary-bg);
+  font-weight: 600;
+}
+
+.chip-active {
+  background-color: var(--color-success);
+  color: white;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: var(--color-error);
+}
+
+/* Estilos para carga de archivos */
+.step-subtitle { text-align: center; color: var(--color-text-light); }
+
+.file-upload-container {
+  border: 2px dashed var(--color-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-xl);
+  text-align: center;
+  background-color: var(--color-primary-bg);
+}
+
+.file-upload-container input[type="file"] {
+  display: none;
+}
+
+.file-upload-label {
+  cursor: pointer;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.file-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  font-weight: 500;
+}
+
+.check-icon { color: var(--color-success); }
+
+.static-info {
+  background-color: #eee;
+  padding: var(--space-sm);
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  color: #555;
+  margin: 0;
+}

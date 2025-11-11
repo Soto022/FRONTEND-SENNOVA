@@ -1,0 +1,102 @@
+/* Estilos para el Modal de Crear Semillero */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-container {
+  background-color: var(--sena-light-gray, #F5F5F5);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+/* Estilo para modales más pequeños */
+.small-modal {
+  max-width: 450px;
+}
+
+.modal-header {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: var(--space-md);
+  border-top-left-radius: var(--border-radius-lg);
+  border-top-right-radius: var(--border-radius-lg);
+  text-align: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.modal-content {
+  padding: var(--space-xl);
+  overflow-y: auto;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Estilos de los botones de navegación */
+.btn-cancel, .btn-prev, .btn-next, .btn-save, .btn-add {
+  padding: var(--space-sm) var(--space-lg);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel {
+  background-color: var(--color-error);
+  color: white;
+}
+.btn-cancel:hover { background-color: #c0392b; }
+
+.btn-save {
+  background-color: var(--color-primary-dark);
+  color: white;
+}
+.btn-save:hover { background-color: #0F8A1F; }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--color-text-light);
+}
+
+.form-group input[type="text"], 
+.form-group input[type="date"], 
+.form-group select, 
+.form-group textarea {
+  width: 100%;
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  font-family: var(--font-family-base);
+  font-size: 1rem;
+}

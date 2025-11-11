@@ -1,0 +1,19 @@
+.aprendices {
+  padding: 2rem;
+}
+
+.aprendices__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.aprendices__title {
+  font-size: 2rem;
+  color: #333;
+}
+
+.aprendices__content {
+  /* Estilos para el contenido de la página de aprendices */
+}

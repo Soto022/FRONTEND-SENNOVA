@@ -1,0 +1,201 @@
+.proyectos {
+  padding: var(--space-xl);
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--color-background);
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.proyectos__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-xl);
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.proyectos__title-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.proyectos__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+  line-height: 1.2;
+}
+
+.proyectos__subtitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+.proyectos__actions {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-surface);
+  padding: var(--space-md);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+}
+
+/* ===== FILTROS ===== */
+.proyectos__filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-lg);
+  background-color: var(--color-surface);
+  padding: var(--space-lg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: var(--space-md);
+  align-items: end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 180px;
+}
+
+.filter-group__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-light);
+  margin-bottom: var(--space-xs);
+}
+
+.filter-group__input,
+.filter-group__select {
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background-color: var(--color-surface);
+  width: 100%;
+}
+
+.filter-group__input:focus,
+.filter-group__select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Grupo especial para el botón de limpiar */
+.filter-group--button {
+  display: flex;
+  align-items: flex-end;
+}
+
+.filter-group--button .filter-group__label {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ===== CONTADOR DE RESULTADOS ===== */
+.proyectos__results {
+  margin-bottom: var(--space-lg);
+  padding: 0 var(--space-xs);
+}
+
+.results__count {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ===== CONTENIDO PRINCIPAL ===== */
+.proyectos__content {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: var(--space-xl);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1020px) {
+  .proyectos {
+    padding: var(--space-lg);
+  }
+  
+  .proyectos__filters {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    padding: var(--space-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .proyectos {
+    padding: var(--space-md);
+  }
+  
+  .proyectos__header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-md);
+  }
+  
+  .proyectos__actions {
+    justify-content: center;
+  }
+  
+  .proyectos__filters {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+  
+  .filter-group {
+    min-width: 100%;
+  }
+  
+  .filter-group--button {
+    margin-top: var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .proyectos__title {
+    font-size: 1.75rem;
+  }
+  
+  .proyectos__subtitle {
+    font-size: 1.25rem;
+  }
+  
+  .proyectos__filters {
+    padding: var(--space-md);
+  }
+}
+
+/* ===== ESTADOS DE ACCESIBILIDAD ===== */
+.filter-group__input:focus-visible,
+.filter-group__select:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ===== UTILIDADES ===== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

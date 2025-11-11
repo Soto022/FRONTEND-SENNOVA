@@ -1,0 +1,217 @@
+/* ===========================
+   ESTILOS GENERALES
+=========================== */
+.detalles-proyecto-container {
+  background: linear-gradient(180deg, #fdf7f7 0%, #ffffff 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+}
+
+/* ===========================
+   CABECERA
+=========================== */
+.detalles-header {
+  background: #28a745;
+  color: #fff;
+  padding: 25px 40px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid #1e7e34;
+}
+
+.detalles-header h1 {
+  margin: 0;
+  font-size: 2.3rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ===========================
+   CONTENIDO PRINCIPAL
+=========================== */
+.detalles-main-content {
+  flex-grow: 1;
+  padding: 40px 50px;
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ===========================
+   SECCIÓN DE TABLAS Y BOTONES
+=========================== */
+.tablas-y-botones {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.tablas-container {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 30px;
+  transition: all 0.3s ease;
+}
+
+.tablas-container:hover {
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* ===========================
+   BOTONES LATERALES
+=========================== */
+.botones-laterales {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 280px;
+  margin-top: 55px;
+}
+
+.botones-laterales button {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+}
+
+.botones-laterales button:hover {
+  background: linear-gradient(135deg, #27ae60, #1e8449);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.botones-laterales button:active {
+  transform: scale(0.97);
+}
+
+/* ===========================
+   TARJETAS DE DETALLE
+=========================== */
+.tarjeta-proyecto-card {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+  padding: 25px 30px;
+  transition: box-shadow 0.3s ease;
+}
+
+.tarjeta-proyecto-card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.tarjeta-proyecto-card h2 {
+  color: #1e7e34;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #28a745;
+  padding-bottom: 8px;
+}
+
+.tarjeta-proyecto-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px 30px;
+}
+
+.tarjeta-proyecto-details p {
+  background: #f9f9f9;
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tarjeta-proyecto-details p strong {
+  color: #333;
+  min-width: 150px;
+}
+
+/* ===========================
+   ESTADO DEL PROYECTO
+=========================== */
+.estado-proyecto {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: white;
+  text-transform: capitalize;
+}
+
+.estado-proyecto.activo {
+  background: #28a745;
+}
+.estado-proyecto.inactivo {
+  background: #dc3545;
+}
+.estado-proyecto.en-progreso {
+  background: #ffc107;
+  color: #333;
+}
+
+/* ===========================
+   PIE DE PÁGINA
+=========================== */
+.detalles-footer {
+  background: #28a745;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-size: 0.95rem;
+  margin-top: auto;
+  border-top: 3px solid #1e7e34;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 992px) {
+  .tablas-y-botones {
+    flex-direction: column-reverse;
+  }
+
+  .botones-laterales {
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 0;
+    margin-bottom: 25px;
+  }
+
+  .tablas-container {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .botones-laterales {
+    flex-direction: column;
+  }
+
+  .detalles-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .tarjeta-proyecto-details {
+    grid-template-columns: 1fr;
+  }
+}

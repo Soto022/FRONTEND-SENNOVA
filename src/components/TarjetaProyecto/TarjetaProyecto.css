@@ -1,0 +1,98 @@
+/* 
+  Estilos mejorados para TarjetaProyecto 
+  Diseño moderno, limpio y profesional.
+*/
+
+/* Contenedor principal de la tarjeta */
+.tarjeta-proyecto-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(28, 37, 44, 0.08);
+  border: 1px solid #e9ecef;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tarjeta-proyecto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(28, 37, 44, 0.12);
+}
+
+/* Título del proyecto */
+.tarjeta-proyecto-titulo {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2c3e50; /* Azul oscuro profesional */
+  text-align: center;
+  margin: 0 0 2rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f1f3f5;
+}
+
+/* Grid para los detalles del proyecto */
+.tarjeta-proyecto-grid {
+  display: grid;
+  /* Columnas responsivas: se ajustan al contenido, mínimo 280px */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem; /* Espaciado entre los items */
+}
+
+/* Cada item de detalle (label + value) */
+.tarjeta-proyecto-item {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid #e9ecef;
+}
+
+/* Etiqueta (ej: "Regional", "Semillero") */
+.tarjeta-proyecto-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6c757d; /* Gris secundario */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+/* Valor del detalle */
+.tarjeta-proyecto-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #343a40; /* Gris oscuro principal */
+  display: flex;
+  align-items: center;
+}
+
+/* Estilos para la "píldora" de estado */
+.estado-proyecto {
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px; /* Totalmente redondeado */
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  color: #fff;
+  display: inline-block;
+  line-height: 1.2;
+}
+
+.estado-proyecto.activo,
+.estado-proyecto.en-curso {
+  background-color: #28a745; /* Verde */
+}
+
+.estado-proyecto.finalizado {
+  background-color: #dc3545; /* Rojo */
+}
+
+.estado-proyecto.pendiente {
+  background-color: #ffc107; /* Amarillo */
+  color: #212529; /* Texto oscuro para mejor contraste */
+}
+
+.estado-proyecto.desconocido {
+  background-color: #6c757d; /* Gris */
+}

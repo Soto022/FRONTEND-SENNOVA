@@ -1,0 +1,86 @@
+/* Reusing some styles from CrearProyectoModal by convention */
+@import '../CrearProyecto/CrearProyectoModal.css';
+
+.mi-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(30, 30, 30, 0.85); /* Fondo gris oscuro */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.mi-modal-container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mi-modal-header {
+  padding: 20px 25px;
+  border-bottom: 1px solid #eee;
+}
+
+.mi-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.mi-modal-content {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group-full-width {
+  flex-basis: 100%;
+}
+
+.date-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.date-input-container input[type="date"] {
+  padding-right: 30px; /* Space for the icon */
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 10px;
+  pointer-events: none; /* Make icon non-interactive */
+  color: #888;
+}
+
+.mi-modal-divider {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 0;
+}
+
+.mi-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 25px;
+  background-color: #f9fafb;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.mi-modal-footer .btn-cancel,
+.mi-modal-footer .btn-save {
+  padding: 12px 25px;
+  font-size: 1rem;
+}

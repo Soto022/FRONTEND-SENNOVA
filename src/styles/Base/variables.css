@@ -1,0 +1,110 @@
+:root {
+  /* ===== TIPOGRAFÍA ===== */
+  --font-family-base: 'Inter', sans-serif;
+
+  /* ===== PALETA DE COLORES ===== */
+  --color-primary: #14b62a;
+  --color-primary-dark: #0F8A1F; /* Tono oscuro del primario */
+  --color-primary-light: #20D43A; /* Tono claro del primario */
+  --color-primary-bg: #e8f5e9; /* Color de fondo para tarjetas */
+  --color-secondary: #191818;
+  --color-accent: #3b82f6;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-danger: #ef4444;
+  --color-danger-dark: #d93737;
+  --color-background: #f4f0f0;
+  --color-surface: #ffffff;
+  --color-text: #000000;
+  --color-text-light: #333333;
+  --color-text-inverse: #ffffff; /* Texto blanco para fondos oscuros */
+  --color-border: #e5e7eb;
+
+  /* ===== ESPACIADO ===== */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+
+  /* ===== BORDES ===== */
+  --border-radius: 0.375rem;
+  --border-radius-lg: 0.5rem;
+
+  /* ===== SOMBRAS ===== */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  /* ===== SIDEBAR ===== */
+  --sidebar-width: 240px; /* Ancho reducido */
+  --sidebar-bg: var(--color-primary);
+  --sidebar-text: var(--color-text-inverse);
+  --sidebar-z-index: 1000;
+  --sidebar-transition: 0.3s ease;
+}
+
+body {
+  font-family: var(--font-family-base);
+  color: var(--color-text);
+}
+
+/* ===== ESTILOS DE APP ===== */
+.app {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-background);
+}
+
+.app-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100vh;
+  margin-left: var(--sidebar-width);
+  transition: margin-left var(--sidebar-transition);
+}
+
+.app-main {
+  flex: 1;
+  padding: var(--space-xl);
+  overflow-y: auto; /* Permite el scroll solo en el área principal */
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .app-main {
+    padding: var(--space-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-content-wrapper {
+    margin-left: 0;
+  }
+  .app-main {
+    padding: var(--space-md);
+  }
+}
+
+/* ===== UTILIDADES DEBUG ===== */
+.debug-border {
+  border: 2px solid red !important;
+}
+
+.debug-bg {
+  background-color: rgba(255, 0, 0, 0.1) !important;
+}
+
+.debug-message {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: green;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  z-index: 10000;
+  font-weight: bold;
+}

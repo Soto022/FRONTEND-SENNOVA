@@ -1,0 +1,10 @@
+.footer {
+  padding: var(--space-md) var(--space-xl);
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  grid-area: footer; /* Para el layout principal */
+}

@@ -1,0 +1,102 @@
+/* Bloque table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Elemento header dentro de table */
+.table__header {
+  background-color: #07ea4f;
+}
+
+/* Elemento row dentro de table */
+.table__row {
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Modificador para row con hover */
+.table__row--hover:hover {
+  background-color: #f1f5f9;
+}
+
+/* Elemento cell dentro de table */
+.table__cell {
+  padding: var(--space-md);
+  text-align: center;
+}
+
+/* Modificador para celdas de header */
+.table__cell--header {
+  font-weight: 600;
+  color: var(--color-text-light);
+}
+
+/* Bloque progress */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+
+/* Elemento bar dentro de progress */
+.progress__bar {
+  width: 6rem;
+  height: 0.9rem;
+  background-color: var(--color-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+/* Elemento fill dentro de progress */
+.progress__fill {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: var(--border-radius);
+}
+
+/* Elemento text dentro de progress */
+.progress__text {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+}
+
+/* Bloque status */
+.status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Modificador para estado en curso */
+.status--in-progress {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+/* Bloque action-button */
+.action-button {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+  margin-right: var(--space-xs);
+}
+
+/* Modificador para botón de editar */
+.action-button--edit {
+  color: var(--color-primary);
+}
+
+.action-button--edit:hover {
+  background-color: #dbeafe;
+}
+
+/* Modificador para botón de eliminar */
+.action-button--delete {
+  color: var(--color-error);
+}
+
+.action-button--delete:hover {
+  background-color: #fee2e2;
+}

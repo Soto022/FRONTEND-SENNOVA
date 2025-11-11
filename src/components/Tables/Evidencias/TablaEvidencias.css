@@ -1,0 +1,16 @@
+/* Estilos específicos para TablaEvidencias, si son necesarios. */
+
+.button-ver {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.button-ver:hover {
+  background-color: #0056b3;
+}

@@ -1,0 +1,6 @@
+/* src/styles/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Importar todos los estilos en orden */
+@import './Base/reset.css';
+@import './Base/variables.css';

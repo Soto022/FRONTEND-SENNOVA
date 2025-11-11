@@ -1,0 +1,142 @@
+/* src/components/Sidebar/Sidebar.css */
+.sidebar {
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  width: 250px;
+  height: 100vh;
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  transform: translateX(0); /* Always visible on desktop */
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar--open {
+  transform: translateX(0);
+}
+
+.sidebar__close-btn {
+  background: none;
+  border: none;
+  color: var(--color-text);
+  font-size: 2rem;
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  cursor: pointer;
+  display: none; /* Hidden on desktop */
+}
+
+.sidebar__profile {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-primary-bg);
+  border-radius: var(--border-radius);
+  padding: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.sidebar__profile-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin-right: var(--space-md);
+}
+
+.sidebar__profile-name {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.sidebar__profile-role {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+}
+
+.sidebar__nav {
+  flex-grow: 1;
+}
+
+.sidebar__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar__item {
+  margin-bottom: var(--space-sm);
+}
+
+.sidebar__item a {
+  display: flex;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--border-radius);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar__item a:hover {
+  background-color: var(--color-hover);
+}
+
+.sidebar__item--active a {
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: bold;
+}
+
+.sidebar__icon {
+  font-size: 1.2rem;
+  margin-right: var(--space-md);
+}
+
+.sidebar__text {
+  font-size: 1rem;
+}
+
+.sidebar__footer {
+  margin-top: auto; /* Pushes the footer to the bottom */
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.sidebar__item--logout a {
+  background-color: var(--color-error);
+  color: white;
+  justify-content: center;
+}
+
+.sidebar__item--logout a:hover {
+  background-color: var(--color-error-dark);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%); /* Hidden by default on mobile */
+  }
+
+  .sidebar--open {
+    transform: translateX(0); /* Visible when open on mobile */
+  }
+
+  .sidebar__close-btn {
+    display: block;
+  }
+}

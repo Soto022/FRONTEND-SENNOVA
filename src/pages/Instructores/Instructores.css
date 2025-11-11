@@ -1,0 +1,15 @@
+.instructores {
+  padding: 2rem;
+}
+
+.instructores__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.instructores__title {
+  font-size: 2rem;
+  font-weight: bold;
+}
