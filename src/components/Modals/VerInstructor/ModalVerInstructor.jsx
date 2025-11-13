@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ModalVerInstructor.css';
 
-const ModalVerInstructor = ({ isOpen, onClose, instructor }) => {
+const ModalVerInstructor = ({ isOpen, onClose, instructorId, allInstructores }) => {
+    const [instructor, setInstructor] = useState(null);
+
+    useEffect(() => {
+        if (isOpen && instructorId && allInstructores) {
+            const foundInstructor = allInstructores.find(i => i.id === instructorId);
+            setInstructor(foundInstructor);
+        } else {
+            setInstructor(null);
+        }
+    }, [isOpen, instructorId, allInstructores]);
+
     if (!isOpen || !instructor) return null;
 
     return (
@@ -42,6 +53,10 @@ const ModalVerInstructor = ({ isOpen, onClose, instructor }) => {
                                 <span className="value">{instructor.fechaInactivacion}</span>
                             </div>
                         )}
+                        <div className="instructor-info-item">
+                            <span className="label">PROYECTO ASIGNADO:</span>
+                            <span className="value">{instructor.proyectoAsignado || 'No asignado'}</span>
+                        </div>
                         <hr className="card-separator" />
                         <div className="instructor-dates">
                             <div className="date-item">

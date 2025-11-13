@@ -23,7 +23,8 @@ export const useInstructores = () => {
         ...instructorData, 
         id: Date.now(),
         estado: instructorData.estado || 'Activo', // Inicializar estado
-        fechaInactivacion: instructorData.fechaInactivacion || '' // Inicializar fechaInactivacion
+        fechaInactivacion: instructorData.fechaInactivacion || '', // Inicializar fechaInactivacion
+        proyectoAsignado: instructorData.proyectoAsignado || '' // Initialize proyectoAsignado
       }];
     });
   }, []);

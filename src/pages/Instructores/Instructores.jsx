@@ -11,7 +11,7 @@ const Instructores = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [editingInstructor, setEditingInstructor] = useState(null);
-  const [viewingInstructor, setViewingInstructor] = useState(null);
+  const [viewingInstructorId, setViewingInstructorId] = useState(null); // Changed to store ID
   const { allProjects, updateProject } = useProjects(); // Get projects and updateProject
   const { instructores, addInstructor, updateInstructor, deleteInstructor } = useInstructores();
 
@@ -24,14 +24,14 @@ const Instructores = () => {
     setIsAddModalOpen(false);
   };
 
-  const handleOpenViewModal = (instructor) => {
-    setViewingInstructor(instructor);
+  const handleOpenViewModal = (instructorId) => { // Accepts ID
+    setViewingInstructorId(instructorId);
     setIsViewModalOpen(true);
   };
 
   const handleCloseViewModal = () => {
     setIsViewModalOpen(false);
-    setViewingInstructor(null);
+    setViewingInstructorId(null);
   };
 
   const handleSaveInstructor = (instructorData) => {
@@ -93,7 +93,7 @@ const Instructores = () => {
       <td className="table__cell">
         <button 
           className="action-button action-button--view"
-          onClick={() => handleOpenViewModal(instructor)}
+          onClick={() => handleOpenViewModal(instructor.id)} // Pass ID
           aria-label="Ver detalles del instructor"
         >
           👁️
@@ -140,7 +140,8 @@ const Instructores = () => {
       />
       <ModalVerInstructor
         isOpen={isViewModalOpen}
-        instructor={viewingInstructor}
+        instructorId={viewingInstructorId} // Pass ID
+        allInstructores={instructores} // Pass full list
         onClose={handleCloseViewModal}
       />
     </div>

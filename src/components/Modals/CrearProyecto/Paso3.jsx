@@ -1,7 +1,7 @@
 // src/components/Modals/CrearProyecto/Paso3.jsx
 import { useState, useEffect } from 'react';
 
-const Paso3 = ({ data, updateData, aprendices }) => {
+const Paso3 = ({ data, updateData, aprendices, updateAprendiz }) => {
   const [selectedAprendices, setSelectedAprendices] = useState(data.aprendices || []);
   const [showApprenticeTable, setShowApprenticeTable] = useState(false);
 
@@ -21,6 +21,16 @@ const Paso3 = ({ data, updateData, aprendices }) => {
       } else {
         return [...prev, aprendiz];
       }
+    });
+  };
+
+  const handleRemoveApprentice = (id) => {
+    setSelectedAprendices(prev => {
+      const removedAprendiz = prev.find(aprendiz => aprendiz.id === id);
+      if (removedAprendiz) {
+        updateAprendiz(id, { proyectoAsignado: '' }); // Clear assigned project
+      }
+      return prev.filter(aprendiz => aprendiz.id !== id);
     });
   };
 
@@ -44,7 +54,8 @@ const Paso3 = ({ data, updateData, aprendices }) => {
                 <th>Nombre del aprendiz</th>
                 <th>N° Ficha</th>
                 <th>Documento</th>
-                <th>Estado</th> {/* Added Estado column */}
+                <th>Estado</th>
+                <th>Acción</th> {/* Added Acción column for removal */}
               </tr>
             </thead>
             <tbody>
@@ -53,7 +64,16 @@ const Paso3 = ({ data, updateData, aprendices }) => {
                   <td>{aprendiz.nombre}</td>
                   <td>{aprendiz.ficha}</td>
                   <td>{aprendiz.documento}</td>
-                  <td>{aprendiz.estado}</td> {/* Display Estado */}
+                  <td>{aprendiz.estado}</td>
+                  <td>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveApprentice(aprendiz.id)}
+                      className="btn-remove" // You might want to define this class in your CSS
+                    >
+                      Eliminar
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

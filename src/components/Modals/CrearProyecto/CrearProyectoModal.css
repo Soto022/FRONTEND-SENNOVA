@@ -91,6 +91,21 @@
 }
 .btn-add:hover { background-color: #2980b9; }
 
+.btn-remove {
+  background-color: #ff6b6b; /* Similar to inactive status */
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.btn-remove:hover {
+  background-color: #e53935; /* A slightly darker red on hover */
+}
+
 .step-navigation {
   display: flex;
   gap: var(--space-md);

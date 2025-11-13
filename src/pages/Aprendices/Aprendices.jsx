@@ -11,9 +11,9 @@ const Aprendices = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [editingAprendiz, setEditingAprendiz] = useState(null);
-  const [viewingAprendiz, setViewingAprendiz] = useState(null);
+  const [viewingAprendizId, setViewingAprendizId] = useState(null); // Changed to store ID
   const { allProjects, updateProject } = useProjects(); // Get projects and updateProject
-  const { aprendices, addAprendiz, updateAprendiz, deleteAprendiz } = useAprendices();
+  const { aprendices, addAprendiz, updateAprendiz, deleteAprendiz, clearAprendizProjects } = useAprendices(); // Get clearAprendizProjects
 
   const handleOpenAddModal = () => {
     setEditingAprendiz(null);
@@ -24,14 +24,14 @@ const Aprendices = () => {
     setIsAddModalOpen(false);
   };
 
-  const handleOpenViewModal = (aprendiz) => {
-    setViewingAprendiz(aprendiz);
+  const handleOpenViewModal = (aprendizId) => { // Accepts ID
+    setViewingAprendizId(aprendizId);
     setIsViewModalOpen(true);
   };
 
   const handleCloseViewModal = () => {
     setIsViewModalOpen(false);
-    setViewingAprendiz(null);
+    setViewingAprendizId(null);
   };
 
   const handleSaveAprendiz = (aprendizData) => {
@@ -73,51 +73,50 @@ const Aprendices = () => {
     'Acciones',
   ];
 
-  const renderRow = (aprendiz) => (
-    <tr key={aprendiz.id} className="table__row">
-      <td className="table__cell">{aprendiz.nombre}</td>
-      <td className="table__cell">{aprendiz.telefono}</td>
-      <td className="table__cell">{aprendiz.email}</td>
-      <td className="table__cell">{aprendiz.documento}</td>
-      <td className="table__cell">{aprendiz.fechaInicio}</td>
-      <td className="table__cell">
-        <span className={`estado-aprendiz ${aprendiz.estado ? aprendiz.estado.toLowerCase() : 'desconocido'}`}>
-          {aprendiz.estado || 'Desconocido'}
-        </span>
-      </td> {/* Celda para el estado con estilo */}
-      <td className="table__cell">
-        {aprendiz.estado === 'Inactivo' && aprendiz.fechaInactivacion ? (
-          aprendiz.fechaInactivacion
-        ) : (
-          '-'
-        )}
-      </td> {/* Celda para la nueva columna */}
-      <td className="table__cell">
-        <button 
-          className="action-button action-button--view"
-          onClick={() => handleOpenViewModal(aprendiz)}
-          aria-label="Ver detalles del aprendiz"
-        >
-          👁️
-        </button>
-        <button 
-          className="action-button action-button--edit"
-          onClick={() => handleEditAprendiz(aprendiz)}
-          aria-label="Editar aprendiz"
-        >
-          ✏️
-        </button>
-        <button 
-          className="action-button action-button--delete"
-          onClick={() => handleDeleteAprendiz(aprendiz.id)}
-          aria-label="Eliminar aprendiz"
-        >
-          🗑️
-        </button>
-      </td>
-    </tr>
-  );
-
+    const renderRow = (aprendiz) => (
+      <tr key={aprendiz.id} className="table__row">
+        <td className="table__cell">{aprendiz.nombre}</td>
+        <td className="table__cell">{aprendiz.telefono}</td>
+        <td className="table__cell">{aprendiz.email}</td>
+        <td className="table__cell">{aprendiz.documento}</td>
+        <td className="table__cell">{aprendiz.fechaInicio}</td>
+        <td className="table__cell">
+          <span className={`estado-aprendiz ${aprendiz.estado ? aprendiz.estado.toLowerCase() : 'desconocido'}`}>
+            {aprendiz.estado || 'Desconocido'}
+          </span>
+        </td>
+        <td className="table__cell">
+          {aprendiz.estado === 'Inactivo' && aprendiz.fechaInactivacion ? (
+            aprendiz.fechaInactivacion
+          ) : (
+            '-'
+          )}
+        </td>
+        <td className="table__cell">
+          <button
+            className="action-button action-button--view"
+            onClick={() => handleOpenViewModal(aprendiz.id)} // Pass ID
+            aria-label="Ver detalles del aprendiz"
+          >
+            👁️
+          </button>
+          <button
+            className="action-button action-button--edit"
+            onClick={() => handleEditAprendiz(aprendiz)}
+            aria-label="Editar aprendiz"
+          >
+            ✏️
+          </button>
+          <button
+            className="action-button action-button--delete"
+            onClick={() => handleDeleteAprendiz(aprendiz.id)}
+            aria-label="Eliminar aprendiz"
+          >
+            🗑️
+          </button>
+        </td>
+      </tr>
+    );
   return (
     <div className="aprendices">
       <div className="aprendices__header">
@@ -143,7 +142,8 @@ const Aprendices = () => {
       />
       <ModalVerAprendiz
         isOpen={isViewModalOpen}
-        aprendiz={viewingAprendiz}
+        aprendizId={viewingAprendizId} // Pass ID
+        allAprendices={aprendices} // Pass full list
         onClose={handleCloseViewModal}
       />
     </div>

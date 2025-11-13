@@ -1,7 +1,7 @@
 // src/components/Modals/CrearProyecto/Paso4.jsx
 import { useState, useEffect } from 'react';
 
-const Paso4 = ({ data, updateData, instructores }) => {
+const Paso4 = ({ data, updateData, instructores, updateInstructor }) => {
   const [showInstructorTable, setShowInstructorTable] = useState(false);
   const [selectedInstructores, setSelectedInstructores] = useState(data.instructores || []);
 
@@ -20,6 +20,16 @@ const Paso4 = ({ data, updateData, instructores }) => {
       } else {
         return [...prev, instructor];
       }
+    });
+  };
+
+  const handleRemoveInstructor = (id) => {
+    setSelectedInstructores(prev => {
+      const removedInstructor = prev.find(instructor => instructor.id === id);
+      if (removedInstructor) {
+        updateInstructor(id, { proyectoAsignado: '' }); // Clear assigned project
+      }
+      return prev.filter(instructor => instructor.id !== id);
     });
   };
 
@@ -43,6 +53,7 @@ const Paso4 = ({ data, updateData, instructores }) => {
                 <th>Nombre del instructor</th>
                 <th>Correo</th>
                 <th>Rol</th>
+                <th>Acción</th> {/* Added Acción column for removal */}
               </tr>
             </thead>
             <tbody>
@@ -51,6 +62,15 @@ const Paso4 = ({ data, updateData, instructores }) => {
                   <td>{instructor.nombre}</td>
                   <td>{instructor.email}</td>
                   <td>{instructor.rol}</td>
+                  <td>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveInstructor(instructor.id)}
+                      className="btn-remove" // You might want to define this class in your CSS
+                    >
+                      Eliminar
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

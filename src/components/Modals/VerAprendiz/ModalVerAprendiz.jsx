@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ModalVerAprendiz.css';
 
-const ModalVerAprendiz = ({ isOpen, onClose, aprendiz }) => {
-  if (!isOpen) {
+const ModalVerAprendiz = ({ isOpen, onClose, aprendizId, allAprendices }) => {
+  const [aprendiz, setAprendiz] = useState(null);
+
+  useEffect(() => {
+    if (isOpen && aprendizId && allAprendices) {
+      const foundAprendiz = allAprendices.find(a => a.id === aprendizId);
+      setAprendiz(foundAprendiz);
+    } else {
+      setAprendiz(null);
+    }
+  }, [isOpen, aprendizId, allAprendices]);
+
+  if (!isOpen || !aprendiz) {
     return null;
   }
 

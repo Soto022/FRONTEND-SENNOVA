@@ -42,7 +42,8 @@ export const useAprendices = () => {
           return prev;
         }
       }
-      return prev.map(a => a.id === id ? { ...a, ...updatedData } : a);
+      const newAprendices = prev.map(a => a.id === id ? { ...a, ...updatedData } : a);
+      return newAprendices;
     });
   }, []);
 

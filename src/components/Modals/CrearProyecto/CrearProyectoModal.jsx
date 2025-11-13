@@ -12,7 +12,7 @@ import { useAprendices } from '../../../hook/useAprendices'; // Import useAprend
 const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, aprendices, projectToEdit }) => {
   const [step, setStep] = useState(1);
   const [projectData, setProjectData] = useState({});
-  const { instructores } = useInstructores();
+  const { instructores, updateInstructor } = useInstructores(); // Get instructores and updateInstructor
   const { updateAprendiz } = useAprendices(); // Get updateAprendiz
 
   useEffect(() => {
@@ -82,6 +82,12 @@ const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, aprendices, p
         updateAprendiz(aprendiz.id, { proyectoAsignado: projectData.nombreProyecto });
       });
     }
+    // Also update assigned instructors' proyectoAsignado field
+    if (projectData.instructores && projectData.instructores.length > 0) {
+      projectData.instructores.forEach(instructor => {
+        updateInstructor(instructor.id, { proyectoAsignado: projectData.nombreProyecto });
+      });
+    }
   };
 
   const renderStep = () => {
@@ -92,9 +98,9 @@ const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, aprendices, p
       case 2:
         return <Paso2 data={projectData} updateData={setProjectData} />;
       case 3:
-        return <Paso3 data={projectData} updateData={setProjectData} aprendices={aprendices} />;
+        return <Paso3 data={projectData} updateData={setProjectData} aprendices={aprendices} updateAprendiz={updateAprendiz} />;
       case 4:
-        return <Paso4 data={projectData} updateData={setProjectData} instructores={instructores} />;
+        return <Paso4 data={projectData} updateData={setProjectData} instructores={instructores} updateInstructor={updateInstructor} />;
       case 5:
         return <Paso5 data={projectData} updateData={setProjectData} />;
       default:
