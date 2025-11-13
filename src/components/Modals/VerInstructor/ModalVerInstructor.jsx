@@ -30,6 +30,18 @@ const ModalVerInstructor = ({ isOpen, onClose, instructor }) => {
                             <span className="label">ROL:</span>
                             <span className="value">{instructor.rol}</span>
                         </div>
+                        <div className="instructor-info-item">
+                            <span className="label">ESTADO:</span>
+                            <span className={`status-capsule ${instructor.estado === 'Activo' ? 'active' : 'inactive'}`}>
+                                {instructor.estado}
+                            </span>
+                        </div>
+                        {instructor.estado === 'Inactivo' && instructor.fechaInactivacion && (
+                            <div className="instructor-info-item">
+                                <span className="label">FECHA DE INACTIVACIÓN:</span>
+                                <span className="value">{instructor.fechaInactivacion}</span>
+                            </div>
+                        )}
                         <hr className="card-separator" />
                         <div className="instructor-dates">
                             <div className="date-item">

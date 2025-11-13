@@ -14,6 +14,7 @@ const TablaAprendices = ({ aprendices }) => {
             <th>Email</th>
             <th>Ficha</th>
             <th>Estado</th>
+            <th>Fecha de inactivación</th> {/* Nueva columna */}
           </tr>
         </thead>
         <tbody>
@@ -28,11 +29,18 @@ const TablaAprendices = ({ aprendices }) => {
                     {aprendiz.estado || 'Desconocido'}
                   </span>
                 </td>
+                <td>
+                  {aprendiz.estado === 'Inactivo' && aprendiz.fechaInactivacion ? (
+                    aprendiz.fechaInactivacion
+                  ) : (
+                    '-'
+                  )}
+                </td> {/* Celda para la nueva columna */}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="4" style={{ textAlign: 'center' }}>No hay aprendices vinculados a este proyecto.</td>
+              <td colSpan="5" style={{ textAlign: 'center' }}>No hay aprendices vinculados a este proyecto.</td> {/* Colspan ajustado */}
             </tr>
           )}
         </tbody>

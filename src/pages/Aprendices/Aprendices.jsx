@@ -69,6 +69,7 @@ const Aprendices = () => {
     'Documento',
     'Fecha inicio',
     'Estado',
+    'Fecha de inactivación', // Nueva cabecera
     'Acciones',
   ];
 
@@ -79,7 +80,18 @@ const Aprendices = () => {
       <td className="table__cell">{aprendiz.email}</td>
       <td className="table__cell">{aprendiz.documento}</td>
       <td className="table__cell">{aprendiz.fechaInicio}</td>
-      <td className="table__cell">{aprendiz.estado}</td>
+      <td className="table__cell">
+        <span className={`estado-aprendiz ${aprendiz.estado ? aprendiz.estado.toLowerCase() : 'desconocido'}`}>
+          {aprendiz.estado || 'Desconocido'}
+        </span>
+      </td> {/* Celda para el estado con estilo */}
+      <td className="table__cell">
+        {aprendiz.estado === 'Inactivo' && aprendiz.fechaInactivacion ? (
+          aprendiz.fechaInactivacion
+        ) : (
+          '-'
+        )}
+      </td> {/* Celda para la nueva columna */}
       <td className="table__cell">
         <button 
           className="action-button action-button--view"

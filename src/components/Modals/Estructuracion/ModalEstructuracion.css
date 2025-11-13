@@ -40,6 +40,7 @@
   padding: 25px;
   overflow-y: auto;
   flex-grow: 1;
+  min-height: 0; /* Añadido para asegurar que el scroll funcione correctamente en flex containers */
 }
 
 .modal-card {
@@ -56,10 +57,30 @@
   font-size: 1.2rem;
 }
 
-.modal-card p {
-  margin: 0;
+.modal-card .markdown-content {
   line-height: 1.6;
   color: #333;
+  text-align: justify;
+  overflow-wrap: break-word; /* Añadido para prevenir desbordamiento horizontal */
+}
+
+.modal-card .markdown-content p {
+  margin-bottom: 1em; /* Añade espacio entre párrafos */
+}
+
+.modal-card .markdown-content p:last-child {
+  margin-bottom: 0;
+}
+
+.modal-card .markdown-content ul,
+.modal-card .markdown-content ol {
+  padding-left: 20px; /* Sangría para las listas */
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+
+.modal-card .markdown-content li {
+  margin-bottom: 0.5em; /* Espacio entre elementos de la lista */
 }
 
 .modal-footer {

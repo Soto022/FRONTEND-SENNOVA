@@ -1,4 +1,7 @@
 :root {
+  /* ===== LAYOUT ===== */
+  --header-height: 70px;
+
   /* ===== TIPOGRAFÍA ===== */
   --font-family-base: 'Inter', sans-serif;
 
@@ -62,8 +65,7 @@ body {
   flex-direction: column;
   flex: 1;
   min-height: 100vh;
-  margin-left: var(--sidebar-width);
-  transition: margin-left var(--sidebar-transition);
+  /* Se elimina el margin-left que causaba el problema */
 }
 
 .app-main {
@@ -80,9 +82,6 @@ body {
 }
 
 @media (max-width: 768px) {
-  .app-content-wrapper {
-    margin-left: 0;
-  }
   .app-main {
     padding: var(--space-md);
   }

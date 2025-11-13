@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useProjects } from '../../hook/useProjects';
-import { useAprendices } from '../../hook/useAprendices'; // Importar el hook de aprendices
+import { useAprendices } from '../../hook/useAprendices'; 
+import { useInstructores } from '../../hook/useInstructores'; // Importar el hook de instructores
 
 import './DetallesProyecto.css';
 
@@ -15,7 +16,8 @@ import ModalCronograma from '../Modals/Cronograma/ModalCronograma';
 const DetallesProyecto = () => {
   const { id } = useParams();
   const { allProjects } = useProjects();
-  const { aprendices: allAprendices } = useAprendices(); // Obtener la lista global de aprendices
+  const { aprendices: allAprendices } = useAprendices(); 
+  const { instructores: allInstructores } = useInstructores(); // Obtener la lista global de instructores
   const [isEstructuracionOpen, setEstructuracionOpen] = useState(false);
   const [isCronogramaOpen, setCronogramaOpen] = useState(false);
 
@@ -50,12 +52,23 @@ const DetallesProyecto = () => {
     estado: project.estado || 'desconocido',
   };
 
-  // Mapear los aprendices del proyecto para incluir su estado actual
+  // Mapear los aprendices del proyecto para incluir su estado actual y fechaInactivacion
   const aprendicesConEstadoActualizado = project.aprendices.map(projAprendiz => {
     const aprendizGlobal = allAprendices.find(a => a.id === projAprendiz.id);
     return {
       ...projAprendiz,
-      estado: aprendizGlobal ? aprendizGlobal.estado : projAprendiz.estado // Usar el estado global si existe, sino el del proyecto
+      estado: aprendizGlobal ? aprendizGlobal.estado : projAprendiz.estado, // Usar el estado global si existe, sino el del proyecto
+      fechaInactivacion: aprendizGlobal ? aprendizGlobal.fechaInactivacion : projAprendiz.fechaInactivacion // Incluir fechaInactivacion
+    };
+  });
+
+  // Mapear los instructores del proyecto para incluir su estado actual y fechaInactivacion
+  const instructoresConEstadoActualizado = project.instructores.map(projInstructor => {
+    const instructorGlobal = allInstructores.find(i => i.id === projInstructor.id);
+    return {
+      ...projInstructor,
+      estado: instructorGlobal ? instructorGlobal.estado : projInstructor.estado, // Usar el estado global si existe, sino el del proyecto
+      fechaInactivacion: instructorGlobal ? instructorGlobal.fechaInactivacion : projInstructor.fechaInactivacion // Incluir fechaInactivacion
     };
   });
 
@@ -78,7 +91,7 @@ const DetallesProyecto = () => {
           </div>
         </div>
 
-        <TablaInstructores instructores={project.instructores} />
+        <TablaInstructores instructores={instructoresConEstadoActualizado} /> {/* Pasar instructores actualizados */}
         <TablaEvidencias />
       </main>
 

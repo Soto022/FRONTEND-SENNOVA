@@ -67,6 +67,8 @@ const Instructores = () => {
     'Teléfono',
     'Correo',
     'Rol',
+    'Estado', // Nueva cabecera
+    'Fecha de inactivación', // Nueva cabecera
     'Acciones',
   ];
 
@@ -76,6 +78,18 @@ const Instructores = () => {
       <td className="table__cell">{instructor.contacto}</td>
       <td className="table__cell">{instructor.email}</td>
       <td className="table__cell">{instructor.rol}</td>
+      <td className="table__cell">
+        <span className={`estado-aprendiz ${instructor.estado ? instructor.estado.toLowerCase() : 'desconocido'}`}>
+          {instructor.estado || 'Desconocido'}
+        </span>
+      </td> {/* Celda para el estado */}
+      <td className="table__cell">
+        {instructor.estado === 'Inactivo' && instructor.fechaInactivacion ? (
+          instructor.fechaInactivacion
+        ) : (
+          '-'
+        )}
+      </td> {/* Celda para la fecha de inactivación */}
       <td className="table__cell">
         <button 
           className="action-button action-button--view"

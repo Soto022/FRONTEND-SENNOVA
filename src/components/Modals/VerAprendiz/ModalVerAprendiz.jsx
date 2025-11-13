@@ -30,6 +30,12 @@ const ModalVerAprendiz = ({ isOpen, onClose, aprendiz }) => {
                 {aprendiz.estado}
               </span>
             </div>
+            {aprendiz.estado === 'Inactivo' && aprendiz.fechaInactivacion && (
+              <div className="aprendiz-info-item">
+                <span className="label">FECHA DE INACTIVACIÓN:</span>
+                <span className="value">{aprendiz.fechaInactivacion}</span>
+              </div>
+            )}
             <div className="aprendiz-info-item">
               <span className="label">CORREO ELECTRÓNICO:</span>
               <span className="value">{aprendiz.email}</span>
@@ -52,11 +58,6 @@ const ModalVerAprendiz = ({ isOpen, onClose, aprendiz }) => {
                 <span>🗓️</span>
                 <span className="label">FECHA DE INGRESO:</span>
                 <span className="value">{aprendiz.fechaInicio}</span>
-              </div>
-              <div className="date-item">
-                <span>🗓️</span>
-                <span className="label">FECHA DE RETIRO:</span>
-                <span className="value">{aprendiz.fechaRetiro || 'N/A'}</span>
               </div>
             </div>
           </div>

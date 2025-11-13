@@ -10,6 +10,9 @@ const Paso1 = ({ data, updateData, semilleros }) => {
     }));
   };
 
+  // Filtrar solo los semilleros activos para mostrar en el select
+  const activeSemilleros = semilleros.filter(s => s.estado === 'activo');
+
   return (
     <form className="form-step">
       <h3 className="step-title">Información principal del Proyecto</h3>
@@ -30,17 +33,6 @@ const Paso1 = ({ data, updateData, semilleros }) => {
         <p className="static-info">CAI (CENTRO DE AUTOMATIZACION INDUSTRIAL)</p>
       </div>
 
-      <div className="form-group">
-        <label htmlFor="programaFormacion">Programa de Formación</label>
-        <input 
-          type="text" 
-          id="programaFormacion"
-          name="programaFormacion" // Estandarizado a camelCase
-          value={data.programaFormacion || ''}
-          onChange={handleChange}
-          placeholder="Ej: Análisis y Desarrollo de Software"
-        />
-      </div>
 
       <div className="form-group">
         <label htmlFor="nombreProyecto">Título del proyecto</label>
@@ -62,9 +54,9 @@ const Paso1 = ({ data, updateData, semilleros }) => {
           onChange={handleChange}
         >
           <option value="">Seleccionar...</option>
-          {semilleros && semilleros.map(semillero => (
-            <option key={semillero.nombre} value={semillero.nombre}>
-              {semillero.nombre}
+          {activeSemilleros.map(semillero => (
+            <option key={semillero.name} value={semillero.name}>
+              {semillero.name}
             </option>
           ))}
         </select>
@@ -131,8 +123,8 @@ Paso1.propTypes = {
   data: PropTypes.object.isRequired,
   updateData: PropTypes.func.isRequired,
   semilleros: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    nombre: PropTypes.string
+    name: PropTypes.string.isRequired,
+    estado: PropTypes.string.isRequired,
   })),
 };
 

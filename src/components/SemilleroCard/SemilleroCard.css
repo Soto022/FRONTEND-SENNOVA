@@ -13,11 +13,23 @@
   box-shadow: var(--shadow-md);
 }
 
+.semillero-card--inactivo {
+  opacity: 0.6;
+  background-color: var(--color-gray-light);
+  border-color: var(--color-gray);
+}
+
 .semillero-card__nombre {
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--sena-dark-gray);
-  margin: 0 0 var(--space-lg) 0;
+  margin: 0 0 var(--space-sm) 0; /* Ajustado para dejar espacio para el estado */
+}
+
+.semillero-card__estado {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  margin-bottom: var(--space-lg);
 }
 
 .semillero-card__actions {
@@ -42,10 +54,29 @@
   background-color: var(--color-primary-dark);
 }
 
-.semillero-card__btn--delete {
-  background-color: var(--color-danger);
+.semillero-card__btn--disabled {
+  background-color: var(--color-gray);
+  cursor: not-allowed;
+  opacity: 0.8;
+  color: var(--color-text-light);
 }
 
-.semillero-card__btn--delete:hover {
+.semillero-card__btn--disabled:hover {
+  background-color: var(--color-gray); /* No cambiar al pasar el ratón */
+}
+
+.semillero-card__btn--inactivar {
+  background-color: var(--color-danger); /* Color para inactivar */
+}
+
+.semillero-card__btn--inactivar:hover {
   background-color: var(--color-danger-dark);
+}
+
+.semillero-card__btn--activar {
+  background-color: var(--color-success); /* Color para activar */
+}
+
+.semillero-card__btn--activar:hover {
+  background-color: var(--color-success-dark);
 }

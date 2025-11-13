@@ -34,9 +34,10 @@ const ProjectTable = ({ projects, onEdit, onDelete }) => {
       <td className="table__cell">{project.nombreProyecto || project.name}</td>
       <td className="table__cell">{project.semillero}</td>
       <td className="table__cell">
-        {project.aprendices && project.aprendices.length > 0
-          ? project.aprendices.map(a => a.nombre).join(', ')
-          : 'N/A'}
+        {(() => {
+          const count = project.aprendices ? project.aprendices.length : 0;
+          return count === 1 ? '1 aprendiz' : `${count} aprendices`;
+        })()}
       </td>
       <td className="table__cell">{formatDate(project.fechaInicio)}</td>
       <td className="table__cell">

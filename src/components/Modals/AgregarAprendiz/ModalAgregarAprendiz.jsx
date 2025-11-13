@@ -11,12 +11,15 @@ const ModalAgregarAprendiz = ({ isOpen, onClose, onSave, aprendizToEdit }) => {
     ficha: '',
     fechaInicio: '',
     estado: 'Activo',
-    // proyectoAsignado: '', // Removed
+    fechaInactivacion: '', // Nuevo campo
   });
 
   useEffect(() => {
     if (aprendizToEdit) {
-      setFormData(aprendizToEdit);
+      setFormData({
+        ...aprendizToEdit,
+        fechaInactivacion: aprendizToEdit.fechaInactivacion || '', // Asegurar que exista
+      });
     } else {
       setFormData({
         nombre: '',
@@ -27,7 +30,7 @@ const ModalAgregarAprendiz = ({ isOpen, onClose, onSave, aprendizToEdit }) => {
         ficha: '',
         fechaInicio: '',
         estado: 'Activo',
-        // proyectoAsignado: '', // Removed
+        fechaInactivacion: '',
       });
     }
   }, [aprendizToEdit, isOpen]);
@@ -38,7 +41,14 @@ const ModalAgregarAprendiz = ({ isOpen, onClose, onSave, aprendizToEdit }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => {
+      const newState = { ...prev, [name]: value };
+      // Si el estado cambia a 'Activo', limpiar fechaInactivacion
+      if (name === 'estado' && value === 'Activo') {
+        newState.fechaInactivacion = '';
+      }
+      return newState;
+    });
   };
 
   const handleSave = () => {
@@ -93,7 +103,18 @@ const ModalAgregarAprendiz = ({ isOpen, onClose, onSave, aprendizToEdit }) => {
                   <option value="Inactivo">Inactivo</option>
                 </select>
               </div>
-              {/* Removed Proyecto asignado select */}
+              {formData.estado === 'Inactivo' && (
+                <div className="form-group">
+                  <label htmlFor="fechaInactivacion">Fecha de inactivación</label>
+                  <input 
+                    type="date" 
+                    id="fechaInactivacion" 
+                    name="fechaInactivacion" 
+                    value={formData.fechaInactivacion} 
+                    onChange={handleChange} 
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

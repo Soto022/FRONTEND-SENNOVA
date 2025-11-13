@@ -4,3 +4,26 @@
 /* Importar todos los estilos en orden */
 @import './Base/reset.css';
 @import './Base/variables.css';
+
+/* --- Layout Principal (Push Sidebar debajo del Header) --- */
+
+.app {
+  /* No se necesita un layout flex o grid aquí, el sidebar es fijo y el contenido principal tiene padding. */
+}
+
+.app-content-wrapper {
+  padding-top: var(--header-height); /* Espacio para el header fijo */
+  margin-left: 0; /* Por defecto, sidebar cerrado */
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.app.sidebar-open .app-content-wrapper {
+  margin-left: var(--sidebar-width); /* Cuando el sidebar está abierto, empuja el contenido */
+}
+
+/* Responsive: En móvil, el contenido siempre ocupa todo el ancho */
+@media (max-width: 768px) {
+  .app-content-wrapper {
+    margin-left: 0 !important;
+  }
+}

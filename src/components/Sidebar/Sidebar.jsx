@@ -10,14 +10,6 @@ const Sidebar = ({ isOpen, onClose }) => {
   return (
     <>
       <div className={`sidebar ${isOpen ? 'sidebar--open' : ''}`}>
-        <button 
-          className="sidebar__close-btn"
-          onClick={onClose}
-          aria-label="Cerrar menú"
-        >
-          <span className="sidebar__close-icon">×</span>
-        </button>
-        
         <div className="sidebar__profile">
           <div className="sidebar__profile-avatar">DC</div>
           <div className="sidebar__profile-info">
@@ -69,7 +61,9 @@ const Sidebar = ({ isOpen, onClose }) => {
         
         <div className="sidebar__footer">
           <div className={`sidebar__item sidebar__item--logout ${isItemActive('/logout') ? 'sidebar__item--active' : ''}`}>
-             <Link to="#" onClick={onClose}> {}
+             <Link to="#" onClick={onClose}>
+
+
                 <span className="sidebar__icon"></span>
                 <span className="sidebar__text">Cerrar sesión</span>
               </Link>

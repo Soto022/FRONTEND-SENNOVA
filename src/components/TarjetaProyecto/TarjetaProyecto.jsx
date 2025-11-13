@@ -32,7 +32,7 @@ const TarjetaProyecto = ({ proyecto }) => {
         <DetalleItem label="Centro de Formación" value="CAI - Centro de Automatización Industrial" />
 
         {/* Información Dinámica */}
-        <DetalleItem label="Programa de Formación" value={proyecto.programaFormacion} />
+    
         <DetalleItem label="Línea de Investigación" value={proyecto.lineaInvestigacion} />
         <DetalleItem label="Semillero" value={proyecto.semillero} />
         <DetalleItem label="Líder del Proyecto" value={proyecto.liderProyecto || proyecto.lider} />

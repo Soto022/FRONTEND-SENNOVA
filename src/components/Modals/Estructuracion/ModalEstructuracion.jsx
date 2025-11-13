@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import './ModalEstructuracion.css';
 
 const ModalEstructuracion = ({ isOpen, onClose, project }) => {
@@ -28,47 +29,69 @@ const ModalEstructuracion = ({ isOpen, onClose, project }) => {
         <div className="modal-body">
           <div className="modal-card">
             <h4>Resumen del proyecto</h4>
-            <p>{project?.resumen || project?.descripcion || 'No definido.'}</p>
+            <div className="markdown-content">
+              <ReactMarkdown>{project?.resumen || project?.descripcion || 'No definido.'}</ReactMarkdown>
+            </div>
           </div>
           <div className="modal-card">
             <h4>Planteamiento del problema</h4>
-            <p>{project?.problema || 'No definido.'}</p>
+            <div className="markdown-content">
+              <ReactMarkdown>{project?.problema || 'No definido.'}</ReactMarkdown>
+            </div>
           </div>
           <div className="modal-card">
             <h4>Objetivo general</h4>
-            <p>{project?.objetivo || 'No definido.'}</p>
+            <div className="markdown-content">
+              <ReactMarkdown>{project?.objetivo || 'No definido.'}</ReactMarkdown>
+            </div>
           </div>
           <div className="modal-card">
             <h4>Objetivos específicos</h4>
-            <p>{project?.objetivosEspecificos || 'No definidos.'}</p>
+            <div className="markdown-content">
+              <ReactMarkdown>{project?.objetivosEspecificos || 'No definidos.'}</ReactMarkdown>
+            </div>
           </div>
           <div className="modal-card">
             <h4>Justificación</h4>
-            <p>{project?.justificacion || 'No definida.'}</p>
+            <div className="markdown-content">
+              <ReactMarkdown>{project?.justificacion || 'No definida.'}</ReactMarkdown>
+            </div>
           </div>
           <div className="modal-card">
             <h4>Metodología</h4> {/* Separated from Impactos */}
-            <p>{project?.metodologia || 'No definida.'}</p>
+            <div className="markdown-content">
+              <ReactMarkdown>{project?.metodologia || 'No definida.'}</ReactMarkdown>
+            </div>
           </div>
           <div className="modal-card">
             <h4>Impactos</h4> {/* New field */}
-            <p>{project?.impactos || 'No definidos.'}</p>
+            <div className="markdown-content">
+              <ReactMarkdown>{project?.impactos || 'No definidos.'}</ReactMarkdown>
+            </div>
           </div>
           <div className="modal-card">
             <h4>Alcance del proyecto</h4>
-            <p>{project?.alcance || 'No definido.'}</p>
+            <div className="markdown-content">
+              <ReactMarkdown>{project?.alcance || 'No definido.'}</ReactMarkdown>
+            </div>
           </div>
           <div className="modal-card">
             <h4>Palabras Clave</h4> {/* New field */}
-            <p>{project?.palabrasClave || 'No definidas.'}</p>
+            <div className="markdown-content">
+              <ReactMarkdown>{project?.palabrasClave || 'No definidas.'}</ReactMarkdown>
+            </div>
           </div>
           <div className="modal-card">
             <h4>Beneficiarios</h4> {/* New field */}
-            <p>{project?.beneficiarios || 'No definidos.'}</p>
+            <div className="markdown-content">
+              <ReactMarkdown>{project?.beneficiarios || 'No definidos.'}</ReactMarkdown>
+            </div>
           </div>
           <div className="modal-card">
             <h4>Bibliografía</h4> {/* New field */}
-            <p>{project?.bibliografia || 'No definida.'}</p>
+            <div className="markdown-content">
+              <ReactMarkdown>{project?.bibliografia || 'No definida.'}</ReactMarkdown>
+            </div>
           </div>
         </div>
         <div className="modal-footer">
