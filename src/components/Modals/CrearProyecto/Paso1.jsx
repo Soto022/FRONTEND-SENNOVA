@@ -50,15 +50,19 @@ const Paso1 = ({ data, updateData, semilleros }) => {
         <select 
           id="semillero"
           name="semillero" // Estandarizado a camelCase
-          value={data.semillero || ''}
+          value={String(data.semillero || '')} // Asegurar que el valor sea siempre una cadena
           onChange={handleChange}
         >
           <option value="">Seleccionar...</option>
-          {activeSemilleros.map(semillero => (
-            <option key={semillero.name} value={semillero.name}>
-              {semillero.name}
-            </option>
-          ))}
+          {activeSemilleros.map((semillero, index) => {
+            const optionValue = String(semillero.nombre || semillero.id || ''); // Usar 'nombre'
+            const optionText = semillero.nombre || semillero.id || 'Semillero sin nombre'; // Usar 'nombre'
+            return (
+              <option key={`${optionValue}-${index}`} value={optionValue}>
+                {optionText}
+              </option>
+            );
+          })}
         </select>
       </div>
 
@@ -71,13 +75,11 @@ const Paso1 = ({ data, updateData, semilleros }) => {
           onChange={handleChange}
         >
           <option value="">Seleccionar...</option>
-          <option value="Inteligencia Artificial">Inteligencia Artificial</option>
-          <option value="Desarrollo de Software">Desarrollo de Software</option>
-          <option value="Ciberseguridad">Ciberseguridad</option>
-          <option value="Big Data">Big Data</option>
-          <option value="Internet de las Cosas (IoT)">Internet de las Cosas (IoT)</option>
-          <option value="Robótica">Robótica</option>
-          <option value="Realidad Virtual/Aumentada">Realidad Virtual/Aumentada</option>
+          <option value="Electrónica, automatización, instrumenatción y sistemas inteligentes">Electrónica, automatización, instrumenatción y sistemas inteligentes</option>
+          <option value="Diseño y desarrollo de software y Tecnologías de la información y las comunicaciones">Diseño y desarrollo de software y Tecnologías de la información y las comunicaciones</option>
+          <option value="Logistica, productividad, diseño y manufactura">Logistica, productividad, diseño y manufactura</option>
+          <option value="Investigación formativa y desarrollo humano">Investigación formativa y desarrollo humano</option>
+          <option value="Ciencias básicas aplicadas">Ciencias básicas aplicadas</option>
         </select>
       </div>
 
@@ -123,7 +125,7 @@ Paso1.propTypes = {
   data: PropTypes.object.isRequired,
   updateData: PropTypes.func.isRequired,
   semilleros: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
+    nombre: PropTypes.string.isRequired, // Cambiado de 'name' a 'nombre'
     estado: PropTypes.string.isRequired,
   })),
 };

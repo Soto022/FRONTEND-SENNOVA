@@ -2,22 +2,25 @@ import { Link } from 'react-router-dom';
 import './SemilleroCard.css';
 
 const SemilleroCard = ({ semillero, onToggleEstado }) => {
-  const { name, estado } = semillero;
+
+  const { _id, nombre, estado } = semillero;
   const isActivo = estado === 'activo';
 
   const handleToggle = () => {
-    if (onToggleEstado) {
-      onToggleEstado(semillero);
-    }
+    // Enviar el semillero COMPLETO, no solo el nombre
+    onToggleEstado(semillero);
   };
 
   return (
     <div className={`semillero-card ${!isActivo ? 'semillero-card--inactivo' : ''}`}>
-      <h3 className="semillero-card__nombre">{name}</h3>
+      <h3 className="semillero-card__nombre">{nombre}</h3>
       <p className="semillero-card__estado">Estado: {isActivo ? 'Activo' : 'Inactivo'}</p>
+
       <div className="semillero-card__actions">
         {isActivo ? (
-          <Link to={`/proyectos?semillero=${encodeURIComponent(name)}`} className="semillero-card__btn">
+          <Link 
+            to={`/proyectos?semillero=${encodeURIComponent(nombre)}`} 
+            className="semillero-card__btn">
             Ver proyectos
           </Link>
         ) : (
@@ -25,10 +28,10 @@ const SemilleroCard = ({ semillero, onToggleEstado }) => {
             Ver proyectos
           </span>
         )}
+
         <button 
-          onClick={handleToggle} 
-          className={`semillero-card__btn semillero-card__btn--${isActivo ? 'inactivar' : 'activar'}`}
-        >
+          onClick={handleToggle}
+          className={`semillero-card__btn semillero-card__btn--${isActivo ? 'inactivar' : 'activar'}`}>
           {isActivo ? 'Inactivar' : 'Activar'}
         </button>
       </div>

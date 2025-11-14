@@ -2,33 +2,33 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAprendices } from './useAprendices';
 
-// Opciones para los filtros, se mantienen para la funcionalidad de la UI.
 const mockAprendicesOptions = ["1-2 aprendices", "3-4 aprendices", "5+ aprendices"];
 const mockEstados = ["Todos", "En curso", "Completado", "Pendiente"];
 
-// Función de utilidad para normalizar strings (ignora acentos, mayúsculas y espacios)
+// Normalizar strings
 const normalizeString = (str) => {
   if (typeof str !== 'string') return '';
   return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 };
 
 export const useProjects = () => {
+  // === PROYECTOS ===
   const [projects, setProjects] = useState(() => {
     const savedProjects = localStorage.getItem('sennova_projects');
-    // Si hay datos guardados, los usamos. Si no, inicializa como array vacío.
     return savedProjects ? JSON.parse(savedProjects) : [];
   });
 
+  // === SEMILLEROS ===
   const [semilleros, setSemilleros] = useState(() => {
-    const savedSemilleros = localStorage.getItem('sennova_semilleros');
-    if (savedSemilleros) {
-      const parsedSemilleros = JSON.parse(savedSemilleros);
-      // Asegurarse de que los semilleros sean objetos con name y estado
-      return parsedSemilleros.map(s => 
-        typeof s === 'string' ? { name: s, estado: 'activo' } : { ...s, estado: s.estado || 'activo' }
-      );
-    }
-    return [];
+    const saved = localStorage.getItem('sennova_semilleros');
+    if (!saved) return [];
+    const parsed = JSON.parse(saved);
+
+    return parsed.map(s => ({
+      id: s.id ?? Date.now() + Math.random(), 
+      nombre: String(s.nombre ?? s.name ?? 'Semillero sin nombre').trim(),
+      estado: s.estado ?? 'activo'    // ✔ CORREGIDO: respetar estado real
+    }));
   });
 
   const { aprendices } = useAprendices();
@@ -41,163 +41,152 @@ export const useProjects = () => {
     estado: 'Todos'
   });
 
-  // Guardar proyectos en localStorage cada vez que cambien
+  // Guardar
   useEffect(() => {
     localStorage.setItem('sennova_projects', JSON.stringify(projects));
   }, [projects]);
 
-  // Guardar semilleros en localStorage cada vez que cambien
   useEffect(() => {
     localStorage.setItem('sennova_semilleros', JSON.stringify(semilleros));
   }, [semilleros]);
 
-    // Cargar proye
-    // ctos iniciales
-    useEffect(() => {
-        setFilteredProjects(projects);
-      }, [projects]);
+  useEffect(() => {
+    setFilteredProjects(projects);
+  }, [projects]);
 
-  // Aplicar filtros
+  // === FILTROS ===
   useEffect(() => {
     let result = projects;
 
-    // Filtrar por nombre (compatible con 'name' y 'nombreProyecto')
+    // Por nombre
     if (filters.nombre) {
       result = result.filter(project =>
-        normalizeString(project.nombreProyecto || project.name).includes(normalizeString(filters.nombre))
+        normalizeString(project.nombreProyecto).includes(normalizeString(filters.nombre))
       );
     }
 
-    // Filtrar por semillero
+    // Por semillero
     if (filters.semillero !== 'Todos') {
       result = result.filter(project =>
         normalizeString(project.semillero) === normalizeString(filters.semillero)
       );
-    };
+    }
 
-    // Filtrar por estado de semillero (si el semillero está inactivo, no mostrar sus proyectos)
+    // Ocultar proyectos de semilleros inactivos
     result = result.filter(project => {
-      const associatedSemillero = semilleros.find(s => normalizeString(s.name) === normalizeString(project.semillero));
-      return !associatedSemillero || associatedSemillero.estado === 'activo';
+      const s = semilleros.find(
+        sem => normalizeString(sem.nombre) === normalizeString(project.semillero)
+      );
+      return !s || s.estado === "activo";
     });
 
-    // Filtrar por aprendices
-    
-
-    // Filtrar por estado
+    // Por estado
     if (filters.estado !== 'Todos') {
       const estadoMap = {
         'En curso': 'en-curso',
         'Completado': 'completado',
         'Pendiente': 'pendiente'
       };
-      result = result.filter(project =>
-        project.estado === estadoMap[filters.estado]
-      );
+
+      result = result.filter(p => p.estado === estadoMap[filters.estado]);
     }
 
     setFilteredProjects(result);
   }, [projects, filters, semilleros]);
 
-  // Actualizar filtros
-  const updateFilter = useCallback((filterName, value) => {
-    setFilters(prev => ({
-      ...prev,
-      [filterName]: value
-    }));
+  // === ACTUALIZAR FILTRO ===
+  const updateFilter = useCallback((name, value) => {
+    setFilters(prev => ({ ...prev, [name]: value }));
   }, []);
 
-  // Crear semillero
-  const createSemillero = useCallback((semilleroName) => {
-    if (semilleroName) {
-      setSemilleros(prev => {
-        const normalizedNewSemilleroName = normalizeString(semilleroName);
-        if (!prev.find(s => normalizeString(s.name) === normalizedNewSemilleroName)) {
-          return [...prev, { name: semilleroName, estado: 'activo' }];
+  // === CREAR SEMILLERO ===
+  const createSemillero = useCallback((nombre) => {
+    if (!nombre) return;
+
+    const normalized = normalizeString(nombre);
+
+    setSemilleros(prev => {
+      if (prev.some(s => normalizeString(s.nombre) === normalized)) return prev;
+
+      return [
+        ...prev,
+        {
+          id: Date.now(),
+          nombre,
+          estado: "activo"
         }
-        return prev;
-      });
-    }
+      ];
+    });
   }, []);
 
-  // Alternar estado de semillero (activo/inactivo)
-  const toggleSemilleroEstado = useCallback((semilleroName) => {
-    try {
-      setSemilleros(prev => 
-        prev.map(s => {
-          if (normalizeString(s.name) === normalizeString(semilleroName)) {
-            return { ...s, estado: s.estado === 'activo' ? 'inactivo' : 'activo' };
-          }
-          return s;
-        })
+  // === ACTIVAR / INACTIVAR SEMILLERO ===
+  const toggleSemilleroEstado = useCallback((nombre) => {
+    console.log('toggleSemilleroEstado - Nombre recibido:', nombre);
+    setSemilleros(prev => {
+      console.log('toggleSemilleroEstado - Estado previo:', prev);
+      const next = prev.map(s =>
+        normalizeString(s.nombre) === normalizeString(nombre)
+          ? { ...s, estado: s.estado === 'activo' ? 'inactivo' : 'activo' }
+          : s
       );
-    } catch (error) {
-      console.error("Error al alternar el estado del semillero:", error);
-    }
+      console.log('toggleSemilleroEstado - Estado siguiente:', next);
+      return next;
+    });
   }, []);
 
-  // Crear proyecto
-  const createProject = useCallback((projectData) => {
-    const normalizedNewProjectName = normalizeString(projectData.nombreProyecto);
+  // === CRUD PROYECTOS ===
+  const createProject = useCallback((data) => {
+    const normalized = normalizeString(data.nombreProyecto);
+
     let newProject;
 
     setProjects(prev => {
-      const isDuplicate = prev.some(project => normalizeString(project.nombreProyecto || project.name) === normalizedNewProjectName);
-      if (isDuplicate) {
-        console.warn('Intento de crear un proyecto duplicado:', projectData.nombreProyecto);
+      if (prev.some(p => normalizeString(p.nombreProyecto) === normalized)) {
         return prev;
       }
-      
+
       newProject = {
         id: Date.now(),
-        ...projectData,
+        ...data,
         progreso: 0,
-        estado: 'en-curso'
+        estado: "en-curso"
       };
-      
+
       return [...prev, newProject];
     });
 
-    if (newProject) {
-      return newProject;
-    } else {
-      return { error: 'Ya existe un proyecto con este nombre.' };
-    }
+    return newProject;
   }, []);
 
-  // Editar proyecto
   const updateProject = useCallback((id, updatedData) => {
-    setProjects(prev => 
-      prev.map(project => 
-        project.id === id ? { ...project, ...updatedData } : project
-      )
+    setProjects(prev =>
+      prev.map(p => p.id === id ? { ...p, ...updatedData } : p)
     );
   }, []);
 
-  // Eliminar proyecto
   const deleteProject = useCallback((id) => {
-    setProjects(prev => prev.filter(project => project.id !== id));
+    setProjects(prev => prev.filter(p => p.id !== id));
   }, []);
 
-  // Obtener opciones para filtros
+  // === OPCIONES DE FILTROS ===
   const getFilterOptions = useCallback(() => ({
-    semilleros: ['Todos', ...semilleros.map(s => s.name)],
-    aprendices: ['Todos', ...mockAprendicesOptions],
+    semilleros: ["Todos", ...semilleros.map(s => s.nombre)],
+    aprendices: ["Todos", ...mockAprendicesOptions],
     estados: mockEstados
   }), [semilleros]);
 
   return {
     projects: filteredProjects,
     allProjects: projects,
-    semilleros, // Exportar semilleros
-    aprendices, // Exportar aprendices
+    semilleros,
+    aprendices,
     filters,
     updateFilter,
     createProject,
     updateProject,
     deleteProject,
     getFilterOptions,
-    createSemillero, // Exportar nueva función
+    createSemillero,
     toggleSemilleroEstado,
   };
 };

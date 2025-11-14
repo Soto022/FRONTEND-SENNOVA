@@ -4,22 +4,22 @@ import SemilleroCard from '../../components/SemilleroCard/SemilleroCard.jsx';
 import CrearSemilleroModal from '../../components/Modals/CrearSemillero/CrearSemilleroModal.jsx';
 import Button from '../../components/Button/Button.jsx';
 import { useProjects } from '../../hook/useProjects';
-import '../../components/Modals/ConfirmationModal/ConfirmationModal.css'; // Importar el CSS del modal de confirmación
+import '../../components/Modals/ConfirmationModal/ConfirmationModal.css';
 
-// Componente Modal de Confirmación simple (se puede mover a un archivo separado si es necesario)
-const ConfirmationModal = ({ isOpen, onClose, onConfirm, semillero }) => {
+// Modal de Confirmación
+const ConfirmationModal = ({ isOpen, onClose, onConfirm, semillero, actionText }) => {
   if (!isOpen) return null;
-
-  const actionText = semillero.estado === 'activo' ? 'inactivar' : 'activar';
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>Confirmar Acción</h2>
-        <p>¿Estás seguro de que quieres {actionText} el semillero "{semillero.name}"?</p>
+        <p>¿Estás seguro de que quieres {actionText} el semillero "{semillero.nombre}"?</p>
         <div className="modal-actions">
           <Button variant="secondary" onClick={onClose}>Cancelar</Button>
-          <Button variant="primary" onClick={onConfirm}>{actionText.charAt(0).toUpperCase() + actionText.slice(1)}</Button>
+          <Button variant="primary" onClick={onConfirm}>
+            {actionText.charAt(0).toUpperCase() + actionText.slice(1)}
+          </Button>
         </div>
       </div>
     </div>
@@ -29,9 +29,11 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, semillero }) => {
 const Home = () => {
   const userName = "Diana Carolina"; 
   const { semilleros, createSemillero, toggleSemilleroEstado } = useProjects();
+
   const [isCrearSemilleroModalOpen, setIsCrearSemilleroModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [selectedSemillero, setSelectedSemillero] = useState(null);
+  const [confirmationActionText, setConfirmationActionText] = useState('');
 
   const handleSaveSemillero = (semilleroName) => {
     createSemillero(semilleroName);
@@ -40,20 +42,34 @@ const Home = () => {
 
   const handleOpenToggleSemilleroModal = (semillero) => {
     setSelectedSemillero(semillero);
+
+    setConfirmationActionText(
+      semillero.estado === 'activo' ? 'inactivar' : 'activar'
+    );
+
     setIsConfirmationModalOpen(true);
   };
 
   const handleConfirmToggleSemillero = () => {
     if (selectedSemillero) {
-      toggleSemilleroEstado(selectedSemillero.name);
+      console.log('handleConfirmToggleSemillero - selectedSemillero.id:', selectedSemillero.id);
+      // Buscar el semillero actualizado del array global 'semilleros'
+      const currentSemillero = semilleros.find(s => s.id === selectedSemillero.id);
+      console.log('handleConfirmToggleSemillero - currentSemillero:', currentSemillero);
+
+      if (currentSemillero) {
+        toggleSemilleroEstado(currentSemillero.nombre); // Usar el nombre del semillero actualizado
+      }
       setIsConfirmationModalOpen(false);
       setSelectedSemillero(null);
+      setConfirmationActionText(''); // Limpiar actionText
     }
   };
 
   const handleCloseConfirmationModal = () => {
     setIsConfirmationModalOpen(false);
     setSelectedSemillero(null);
+    setConfirmationActionText('');
   };
 
   return (
@@ -68,12 +84,13 @@ const Home = () => {
             + Crear semillero
           </Button>
         </div>
+
         <div className="home-page__semilleros-grid">
-          {semilleros.map(semillero => (
+          {semilleros.map((semillero, index) => (
             <SemilleroCard 
-              key={semillero.name} 
-              semillero={semillero} // Pasar el objeto semillero completo
-              onToggleEstado={handleOpenToggleSemilleroModal} // Nueva prop para alternar estado
+              key={`${semillero._id}-${index}`}
+              semillero={semillero}
+              onToggleEstado={handleOpenToggleSemilleroModal}
             />
           ))}
         </div>
@@ -91,6 +108,7 @@ const Home = () => {
           onClose={handleCloseConfirmationModal}
           onConfirm={handleConfirmToggleSemillero}
           semillero={selectedSemillero}
+          actionText={confirmationActionText}
         />
       )}
     </div>

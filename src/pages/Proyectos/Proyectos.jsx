@@ -16,7 +16,7 @@ const Proyectos = () => {
     updateProject,
     deleteProject,
     getFilterOptions,
-    semilleros,
+    semilleros, // <-- Obtener semilleros directamente
     aprendices
   } = useProjects();
 
@@ -33,11 +33,11 @@ const Proyectos = () => {
 
   const filterOptions = getFilterOptions();
 
-  // Transforma la lista de semilleros (strings) a un formato de objeto para el modal
-  const semillerosForModal = semilleros.map((nombre, index) => ({
-    id: index + 1, // Se usa el índice como ID para el key
-    nombre: nombre
-  }));
+  // Eliminar la transformación semillerosForModal, pasar 'semilleros' directamente
+  // const semillerosForModal = semilleros.map((nombre, index) => ({
+  //   id: index + 1, // Se usa el índice como ID para el key
+  //   nombre: nombre
+  // }));
 
   const handleCreateProject = () => {
     setEditingProject(null);
@@ -174,7 +174,7 @@ const Proyectos = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveProject}
-        semilleros={semillerosForModal}
+        semilleros={semilleros} 
         aprendices={aprendices}
         projectToEdit={editingProject}
       />
