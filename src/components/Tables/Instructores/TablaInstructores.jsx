@@ -12,14 +12,7 @@ const TablaInstructores = ({ instructores }) => {
       <h3>Instructores participantes</h3>
       <table className="custom-table">
         <thead>
-          <tr>
-            <th>Nombre del instructor</th>
-            <th>Contacto</th>
-            <th>Rol</th>
-            <th>Correo electrónico</th>
-            <th>Estado</th> {/* Nueva columna */}
-            <th>Fecha de inactivación</th> {/* Nueva columna */}
-          </tr>
+          <tr><th>Nombre del instructor</th><th>Contacto</th><th>Rol</th><th>Correo electrónico</th><th>Estado</th><th>Fecha de inactivación</th></tr>
         </thead>
         <tbody>
           {instructoresData.length > 0 ? (
@@ -33,20 +26,14 @@ const TablaInstructores = ({ instructores }) => {
                   <span className={`estado-aprendiz ${instructor.estado ? instructor.estado.toLowerCase() : 'desconocido'}`}>
                     {instructor.estado || 'Desconocido'}
                   </span>
-                </td> {/* Celda para el estado */}
+                </td>
                 <td>
-                  {instructor.estado === 'Inactivo' && instructor.fechaInactivacion ? (
-                    instructor.fechaInactivacion
-                  ) : (
-                    '-'
-                  )}
-                </td> {/* Celda para la nueva columna */}
+                  {instructor.estado === 'Inactivo' && instructor.fechaInactivacion ? (instructor.fechaInactivacion) : ('-')}
+                </td>
               </tr>
             ))
           ) : (
-            <tr>
-              <td colSpan="6" style={{ textAlign: 'center' }}>No hay instructores vinculados a este proyecto.</td> {/* Colspan ajustado */}
-            </tr>
+            <tr><td colSpan="6" style={{ textAlign: 'center' }}>No hay instructores vinculados a este proyecto.</td></tr>
           )}
         </tbody>
       </table>

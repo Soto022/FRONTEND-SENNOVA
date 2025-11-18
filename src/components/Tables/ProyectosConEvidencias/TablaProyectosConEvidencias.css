@@ -1,6 +1,6 @@
-/* src/components/Tables/Evidencias/TablaEvidencias.css */
+/* src/components/Tables/ProyectosConEvidencias/TablaProyectosConEvidencias.css */
 
-.evidencias-table-container {
+.tabla-proyectos-evidencias-container {
   overflow-x: auto;
   margin-top: 20px;
   border-radius: 8px;
@@ -8,19 +8,19 @@
   background-color: #fff;
 }
 
-.evidencias-table {
+.tabla-proyectos-evidencias {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
 }
 
-.evidencias-table th,
-.evidencias-table td {
+.tabla-proyectos-evidencias th,
+.tabla-proyectos-evidencias td {
   padding: 12px 15px;
   border-bottom: 1px solid #ddd;
 }
 
-.evidencias-table th {
+.tabla-proyectos-evidencias th {
   background-color: #f7f9fc;
   font-weight: 600;
   color: #333;
@@ -28,31 +28,23 @@
   font-size: 12px;
 }
 
-.evidencias-table tbody tr:hover {
+.tabla-proyectos-evidencias tbody tr:hover {
   background-color: #f1f1f1;
 }
 
-.actions-cell {
-  display: flex;
-  gap: 10px;
-}
-
-.btn-ver {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.btn-descargar {
+.btn-ver-evidencias {
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border-radius: 5px;
   cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-ver-evidencias:hover {
+  background-color: #0056b3;
 }
 
 .no-results {

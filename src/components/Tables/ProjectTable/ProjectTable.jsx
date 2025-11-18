@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Table from '../Table/Table';
 
-const ProjectTable = ({ projects, onEdit, onDelete }) => {
+const ProjectTable = ({ projects, onEdit, onDelete, onUploadClick }) => {
   const headers = [
     'Proyecto',
     'Semillero',
@@ -66,6 +66,13 @@ const ProjectTable = ({ projects, onEdit, onDelete }) => {
           aria-label="Editar proyecto"
         >
           ✏️
+        </button>
+        <button
+          className="action-button action-button--upload"
+          onClick={() => onUploadClick(project)}
+          aria-label="Subir evidencia"
+        >
+          📄
         </button>
         <button
           className="action-button action-button--delete"

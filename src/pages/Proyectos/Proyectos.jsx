@@ -6,6 +6,7 @@ import ProjectTable from '../../components/Tables/ProjectTable/ProjectTable.jsx'
 import Button from '../../components/Button/Button.jsx';
 import { useProjects } from '../../hook/useProjects';
 import CrearProyectoModal from '../../components/Modals/CrearProyecto/CrearProyectoModal.jsx';
+import UploadEvidenciaModal from '../../components/Modals/UploadEvidencia/UploadEvidenciaModal.jsx';
 
 const Proyectos = () => {
   const {
@@ -16,13 +17,17 @@ const Proyectos = () => {
     updateProject,
     deleteProject,
     getFilterOptions,
-    semilleros, // <-- Obtener semilleros directamente
-    aprendices
+    semilleros,
+    aprendices,
+    addEvidenciaToProject // CAMBIO: Obtener la función para añadir evidencias
   } = useProjects();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [searchParams] = useSearchParams();
+
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [selectedProyecto, setSelectedProyecto] = useState(null);
 
   useEffect(() => {
     const semilleroParam = searchParams.get('semillero');
@@ -32,12 +37,6 @@ const Proyectos = () => {
   }, [searchParams, updateFilter]);
 
   const filterOptions = getFilterOptions();
-
-  // Eliminar la transformación semillerosForModal, pasar 'semilleros' directamente
-  // const semillerosForModal = semilleros.map((nombre, index) => ({
-  //   id: index + 1, // Se usa el índice como ID para el key
-  //   nombre: nombre
-  // }));
 
   const handleCreateProject = () => {
     setEditingProject(null);
@@ -61,8 +60,8 @@ const Proyectos = () => {
     } else {
       const result = createProject(projectData);
       if (result && result.error) {
-        alert(result.error); // Mostrar el error al usuario
-        return; // No cerrar el modal si hay un error
+        alert(result.error);
+        return;
       }
     }
     setIsModalOpen(false);
@@ -77,6 +76,23 @@ const Proyectos = () => {
     updateFilter('semillero', 'Todos');
     updateFilter('aprendices', 'Todos');
     updateFilter('estado', 'Todos');
+  };
+
+  const openUploadModal = (proyecto) => {
+    setSelectedProyecto(proyecto);
+    setIsUploadModalOpen(true);
+  };
+
+  const closeUploadModal = () => {
+    setIsUploadModalOpen(false);
+    setSelectedProyecto(null);
+  };
+
+  // CAMBIO: Lógica para manejar la subida de la evidencia
+  const handleUploadEvidencia = (evidenciaData) => {
+    addEvidenciaToProject(evidenciaData.proyectoId, evidenciaData);
+    alert(`Evidencia(s) para la actividad "${evidenciaData.actividad}" subidas con éxito.`);
+    closeUploadModal(); // Cerrar el modal después de subir
   };
 
   return (
@@ -98,7 +114,6 @@ const Proyectos = () => {
         </div>
       </div>
       
-      {/* Filtros funcionales */}
       <div className="proyectos__filters">
         <div className="filter-group">
           <label className="filter-group__label">Nombre del proyecto</label>
@@ -154,7 +169,6 @@ const Proyectos = () => {
         </div>
       </div>
 
-      {/* Contador de resultados */}
       <div className="proyectos__results">
         <p className="results__count">
           Mostrando {projects.length} proyecto{projects.length !== 1 ? 's' : ''}
@@ -166,10 +180,10 @@ const Proyectos = () => {
           projects={projects}
           onEdit={handleEditProject}
           onDelete={handleDeleteProject}
+          onUploadClick={openUploadModal}
         />
       </div>
 
-      {/* Renderizar el modal */}
       <CrearProyectoModal 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -178,6 +192,15 @@ const Proyectos = () => {
         aprendices={aprendices}
         projectToEdit={editingProject}
       />
+
+      {selectedProyecto && (
+        <UploadEvidenciaModal
+          isOpen={isUploadModalOpen}
+          onClose={closeUploadModal}
+          proyecto={selectedProyecto}
+          onUpload={handleUploadEvidencia}
+        />
+      )}
     </div>
   );
 };

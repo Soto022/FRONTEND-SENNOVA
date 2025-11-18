@@ -9,11 +9,11 @@ import Paso5 from './Paso5';
 import { useInstructores } from '../../../hook/useInstructores';
 import { useAprendices } from '../../../hook/useAprendices'; // Import useAprendices
 
-const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, aprendices, projectToEdit }) => {
+const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, projectToEdit }) => { // Eliminar 'aprendices' de las props
   const [step, setStep] = useState(1);
   const [projectData, setProjectData] = useState({});
   const { instructores, updateInstructor } = useInstructores(); // Get instructores and updateInstructor
-  const { updateAprendiz } = useAprendices(); // Get updateAprendiz
+  const { aprendices, updateAprendiz } = useAprendices(); // Extraer 'aprendices' del hook
 
   useEffect(() => {
     if (isOpen) {

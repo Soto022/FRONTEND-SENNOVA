@@ -1,5 +1,5 @@
 // src/hooks/useProjects.js
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAprendices } from './useAprendices';
 
 const mockAprendicesOptions = ["1-2 aprendices", "3-4 aprendices", "5+ aprendices"];
@@ -15,6 +15,7 @@ export const useProjects = () => {
   // === PROYECTOS ===
   const [projects, setProjects] = useState(() => {
     const savedProjects = localStorage.getItem('sennova_projects');
+    console.log('HOOK INICIALIZADO: Proyectos leídos de localStorage:', savedProjects ? JSON.parse(savedProjects) : 'Nada.');
     return savedProjects ? JSON.parse(savedProjects) : [];
   });
 
@@ -27,7 +28,7 @@ export const useProjects = () => {
     return parsed.map(s => ({
       id: s.id ?? Date.now() + Math.random(), 
       nombre: String(s.nombre ?? s.name ?? 'Semillero sin nombre').trim(),
-      estado: s.estado ?? 'activo'    // ✔ CORREGIDO: respetar estado real
+      estado: s.estado ?? 'activo'
     }));
   });
 
@@ -43,6 +44,7 @@ export const useProjects = () => {
 
   // Guardar
   useEffect(() => {
+    console.log('GUARDANDO EN LOCALSTORAGE: Proyectos a guardar:', projects);
     localStorage.setItem('sennova_projects', JSON.stringify(projects));
   }, [projects]);
 
@@ -58,21 +60,18 @@ export const useProjects = () => {
   useEffect(() => {
     let result = projects;
 
-    // Por nombre
     if (filters.nombre) {
       result = result.filter(project =>
         normalizeString(project.nombreProyecto).includes(normalizeString(filters.nombre))
       );
     }
 
-    // Por semillero
     if (filters.semillero !== 'Todos') {
       result = result.filter(project =>
         normalizeString(project.semillero) === normalizeString(filters.semillero)
       );
     }
 
-    // Ocultar proyectos de semilleros inactivos
     result = result.filter(project => {
       const s = semilleros.find(
         sem => normalizeString(sem.nombre) === normalizeString(project.semillero)
@@ -80,14 +79,12 @@ export const useProjects = () => {
       return !s || s.estado === "activo";
     });
 
-    // Por estado
     if (filters.estado !== 'Todos') {
       const estadoMap = {
         'En curso': 'en-curso',
         'Completado': 'completado',
         'Pendiente': 'pendiente'
       };
-
       result = result.filter(p => p.estado === estadoMap[filters.estado]);
     }
 
@@ -102,65 +99,53 @@ export const useProjects = () => {
   // === CREAR SEMILLERO ===
   const createSemillero = useCallback((nombre) => {
     if (!nombre) return;
-
     const normalized = normalizeString(nombre);
-
     setSemilleros(prev => {
       if (prev.some(s => normalizeString(s.nombre) === normalized)) return prev;
-
-      return [
-        ...prev,
-        {
-          id: Date.now(),
-          nombre,
-          estado: "activo"
-        }
-      ];
+      return [...prev, { id: Date.now(), nombre, estado: "activo" }];
     });
   }, []);
 
   // === ACTIVAR / INACTIVAR SEMILLERO ===
   const toggleSemilleroEstado = useCallback((nombre) => {
-    console.log('toggleSemilleroEstado - Nombre recibido:', nombre);
-    setSemilleros(prev => {
-      console.log('toggleSemilleroEstado - Estado previo:', prev);
-      const next = prev.map(s =>
+    setSemilleros(prev =>
+      prev.map(s =>
         normalizeString(s.nombre) === normalizeString(nombre)
           ? { ...s, estado: s.estado === 'activo' ? 'inactivo' : 'activo' }
           : s
-      );
-      console.log('toggleSemilleroEstado - Estado siguiente:', next);
-      return next;
-    });
+      )
+    );
   }, []);
 
   // === CRUD PROYECTOS ===
   const createProject = useCallback((data) => {
     const normalized = normalizeString(data.nombreProyecto);
-
     let newProject;
-
     setProjects(prev => {
       if (prev.some(p => normalizeString(p.nombreProyecto) === normalized)) {
         return prev;
       }
-
       newProject = {
         id: Date.now(),
         ...data,
         progreso: 0,
-        estado: "en-curso"
+        estado: "en-curso",
+        evidencias: [],
       };
-
       return [...prev, newProject];
     });
-
     return newProject;
   }, []);
 
   const updateProject = useCallback((id, updatedData) => {
     setProjects(prev =>
-      prev.map(p => p.id === id ? { ...p, ...updatedData } : p)
+      prev.map(p => {
+        if (p.id === id) {
+          // Si updatedData es una función, la llamamos con el proyecto actual
+          return typeof updatedData === 'function' ? updatedData(p) : { ...p, ...updatedData };
+        }
+        return p;
+      })
     );
   }, []);
 
@@ -170,13 +155,28 @@ export const useProjects = () => {
 
   // === OPCIONES DE FILTROS ===
   const getFilterOptions = useCallback(() => ({
-    semilleros: ["Todos", ...semilleros.map(s => s.nombre)],
+    semilleros: ["Todos", ...semilleros.filter(s => s.estado === 'activo').map(s => s.nombre)],
     aprendices: ["Todos", ...mockAprendicesOptions],
-    estados: mockEstados
+    estados: mockEstados // Incluir los estados aquí
   }), [semilleros]);
 
+  const projectsWithUpdatedAprendices = useMemo(() => {
+    return filteredProjects.map(project => {
+      if (!project.aprendices || project.aprendices.length === 0) {
+        return project;
+      }
+      const updatedProjectAprendices = project.aprendices.map(pa => {
+        const currentAprendiz = aprendices.find(a => a.id === pa.id);
+        // Si el aprendiz global existe, actualiza el estado del aprendiz en el proyecto
+        // De lo contrario, mantiene el estado existente en el proyecto
+        return currentAprendiz ? { ...pa, estado: currentAprendiz.estado } : pa;
+      });
+      return { ...project, aprendices: updatedProjectAprendices };
+    });
+  }, [filteredProjects, aprendices]); // Depende de filteredProjects y del estado global de aprendices
+
   return {
-    projects: filteredProjects,
+    projects: projectsWithUpdatedAprendices, // Devolver los proyectos actualizados
     allProjects: projects,
     semilleros,
     aprendices,
@@ -190,3 +190,4 @@ export const useProjects = () => {
     toggleSemilleroEstado,
   };
 };
+

@@ -13,9 +13,7 @@ const Table = ({ headers, data, renderRow }) => {
           ))}
         </tr>
       </thead>
-      <tbody className="table__body">
-        {data.map((item) => renderRow(item))}
-      </tbody>
+      <tbody className="table__body">{data.map((item) => renderRow(item))}</tbody>
     </table>
   );
 };

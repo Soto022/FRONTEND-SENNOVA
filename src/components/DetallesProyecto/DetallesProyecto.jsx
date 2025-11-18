@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useProjects } from '../../hook/useProjects';
-import { useAprendices } from '../../hook/useAprendices'; 
-import { useInstructores } from '../../hook/useInstructores'; // Importar el hook de instructores
+import { useInstructores } from '../../hook/useInstructores';
+import ModalVerContenido from '../Modals/VerContenido/ModalVerContenido'; // Importar el modal de contenido
 
 import './DetallesProyecto.css';
 
@@ -15,16 +15,16 @@ import ModalCronograma from '../Modals/Cronograma/ModalCronograma';
 
 const DetallesProyecto = () => {
   const { id } = useParams();
-  const { allProjects } = useProjects();
-  const { aprendices: allAprendices } = useAprendices(); 
-  const { instructores: allInstructores } = useInstructores(); // Obtener la lista global de instructores
+  const { allProjects, aprendices: allAprendices } = useProjects(); 
+  const { instructores: allInstructores } = useInstructores();
   const [isEstructuracionOpen, setEstructuracionOpen] = useState(false);
   const [isCronogramaOpen, setCronogramaOpen] = useState(false);
 
-  // Encontrar el proyecto actual basado en el ID de la URL
+  const [verContenidoOpen, setVerContenidoOpen] = useState(false); // Estado para el modal de contenido
+  const [selectedEvidencia, setSelectedEvidencia] = useState(null); // Evidencia seleccionada para ver
+
   const project = allProjects.find(p => p.id === parseInt(id));
 
-  // Si el proyecto no se encuentra, mostrar un mensaje
   if (!project) {
     return (
       <div className="detalles-proyecto-container">
@@ -39,11 +39,9 @@ const DetallesProyecto = () => {
     );
   }
 
-  // Usar los datos del proyecto encontrado en lugar de mockProject
   const projectData = {
     ...project,
-    // Asegurarse de que los campos que espera TarjetaProyecto existan
-    nombre: project.name || 'Sin nombre',
+    nombre: project.nombreProyecto || 'Sin nombre',
     lineaTecnologica: project.lineaTecnologica || 'No especificada',
     semillero: project.semillero || 'No asignado',
     lider: project.lider || 'No asignado',
@@ -52,62 +50,104 @@ const DetallesProyecto = () => {
     estado: project.estado || 'desconocido',
   };
 
-  // Mapear los aprendices del proyecto para incluir su estado actual y fechaInactivacion
-  const aprendicesConEstadoActualizado = project.aprendices.map(projAprendiz => {
+  const aprendicesConEstadoActualizado = (project.aprendices || []).map(projAprendiz => {
     const aprendizGlobal = allAprendices.find(a => a.id === projAprendiz.id);
     return {
       ...projAprendiz,
-      estado: aprendizGlobal ? aprendizGlobal.estado : projAprendiz.estado, // Usar el estado global si existe, sino el del proyecto
-      fechaInactivacion: aprendizGlobal ? aprendizGlobal.fechaInactivacion : projAprendiz.fechaInactivacion // Incluir fechaInactivacion
+      estado: aprendizGlobal ? aprendizGlobal.estado : projAprendiz.estado,
+      fechaInactivacion: aprendizGlobal ? aprendizGlobal.fechaInactivacion : projAprendiz.fechaInactivacion
     };
   });
 
-  // Mapear los instructores del proyecto para incluir su estado actual y fechaInactivacion
-  const instructoresConEstadoActualizado = project.instructores.map(projInstructor => {
+  const instructoresConEstadoActualizado = (project.instructores || []).map(projInstructor => {
     const instructorGlobal = allInstructores.find(i => i.id === projInstructor.id);
     return {
       ...projInstructor,
-      estado: instructorGlobal ? instructorGlobal.estado : projInstructor.estado, // Usar el estado global si existe, sino el del proyecto
-      fechaInactivacion: instructorGlobal ? instructorGlobal.fechaInactivacion : projInstructor.fechaInactivacion // Incluir fechaInactivacion
+      estado: instructorGlobal ? instructorGlobal.estado : projInstructor.estado,
+      fechaInactivacion: instructorGlobal ? instructorGlobal.fechaInactivacion : projInstructor.fechaInactivacion
     };
   });
 
+  const evidenciasEnriquecidas = (project.evidencias || []).map(evidencia => ({
+    ...evidencia,
+    proyecto: evidencia.proyecto || project.nombreProyecto,
+    semillero: evidencia.semillero || project.semillero,
+  }));
+
+  const handleViewEvidencia = (evidencia) => {
+    if (evidencia.contenido) {
+      setSelectedEvidencia(evidencia);
+      setVerContenidoOpen(true);
+    } else {
+      alert(`La vista previa no está disponible para evidencias antiguas.`);
+    }
+  };
+
+  const handleDownloadEvidencia = (evidencia) => {
+    if (evidencia.contenido) {
+      const link = document.createElement('a');
+      link.href = evidencia.contenido;
+      link.download = evidencia.archivo;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      alert(`La descarga no está disponible para evidencias antiguas.`);
+    }
+  };
+
+  const handleCloseContenido = () => {
+    setVerContenidoOpen(false);
+    setSelectedEvidencia(null);
+  };
+
   return (
-    <div className="detalles-proyecto-container">
-      <header className="detalles-header">
-        <h1>Detalles del proyecto</h1>
-      </header>
+    <>
+      <div className="detalles-proyecto-container">
+        <header className="detalles-header">
+          <h1>Detalles del proyecto</h1>
+        </header>
 
-      <main className="detalles-main-content">
-        <TarjetaProyecto proyecto={projectData} />
+        <main className="detalles-main-content">
+          <TarjetaProyecto proyecto={projectData} />
 
-        <div className="tablas-y-botones">
-          <div className="tablas-container">
-            <TablaAprendices aprendices={aprendicesConEstadoActualizado} /> {/* Pasar aprendices actualizados */}
+          <div className="tablas-y-botones">
+            <div className="tablas-container">
+              <TablaAprendices aprendices={aprendicesConEstadoActualizado} />
+            </div>
+            <div className="botones-laterales">
+              <button onClick={() => setCronogramaOpen(true)}>Ver cronograma del proyecto</button>
+              <button onClick={() => setEstructuracionOpen(true)}>Ver estructuración del proyecto</button>
+            </div>
           </div>
-          <div className="botones-laterales">
-            <button onClick={() => setCronogramaOpen(true)}>Ver cronograma del proyecto</button>
-            <button onClick={() => setEstructuracionOpen(true)}>Ver estructuración del proyecto</button>
-          </div>
-        </div>
 
-        <TablaInstructores instructores={instructoresConEstadoActualizado} /> {/* Pasar instructores actualizados */}
-        <TablaEvidencias />
-      </main>
+          <TablaInstructores instructores={instructoresConEstadoActualizado} />
+          <TablaEvidencias 
+            evidencias={evidenciasEnriquecidas} 
+            onView={handleViewEvidencia} // Pasar la función de vista
+            onDownload={handleDownloadEvidencia} // Pasar la función de descarga
+          />
+        </main>
 
+        <ModalEstructuracion 
+          isOpen={isEstructuracionOpen} 
+          onClose={() => setEstructuracionOpen(false)}
+          project={project}
+        />
+        <ModalCronograma 
+          isOpen={isCronogramaOpen} 
+          onClose={() => setCronogramaOpen(false)}
+          project={project}
+        />
+      </div>
 
-
-      <ModalEstructuracion 
-        isOpen={isEstructuracionOpen} 
-        onClose={() => setEstructuracionOpen(false)}
-        project={project}
+      {/* Modal para ver el contenido de la evidencia */}
+      <ModalVerContenido
+        isOpen={verContenidoOpen}
+        onClose={handleCloseContenido}
+        evidencia={selectedEvidencia}
       />
-      <ModalCronograma 
-        isOpen={isCronogramaOpen} 
-        onClose={() => setCronogramaOpen(false)}
-        project={project}
-      />
-    </div>
+    </>
   );
 };
 

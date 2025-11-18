@@ -1,39 +1,57 @@
 import React from 'react';
-import '../Aprendices/TablaAprendices.css'; // Reusing styles
-import './TablaEvidencias.css';
+import './TablaEvidencias.css'; // Asegúrate de que este CSS exista y sea relevante
 
-const evidenciasData = [
-  { id: 1, archivo: 'documento_fase1.pdf', actividad: 'Fase de análisis', subidoPor: 'Juan Martinez', fecha: '2025-03-15' },
-  { id: 2, archivo: 'prototipo_v1.fig', actividad: 'Diseño de prototipo', subidoPor: 'Angelica Rodriguez', fecha: '2025-04-22' },
-  { id: 3, archivo: 'codigo_fuente_sprint1.zip', actividad: 'Desarrollo Sprint 1', subidoPor: 'Carlos Perez', fecha: '2025-05-30' },
-];
+const TablaEvidencias = ({ searchTerm = '', evidencias = [], onView, onDownload }) => {
 
-const TablaEvidencias = () => {
+  const filteredEvidencias = evidencias.filter((evidencia) =>
+    (evidencia.archivo || '').toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="tabla-card">
-      <h3>Evidencias del proyecto</h3>
-      <table className="custom-table">
+    <div className="evidencias-table-container">
+      <table className="evidencias-table">
         <thead>
           <tr>
             <th>Archivo</th>
             <th>Actividad</th>
+            <th>Proyecto</th>
+            <th>Semillero</th>
             <th>Subido por</th>
-            <th>Fecha</th>
-            <th>Acción</th>
+            <th>Fecha de subida</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {evidenciasData.map((evidencia) => (
-            <tr key={evidencia.id}>
-              <td>{evidencia.archivo}</td>
-              <td>{evidencia.actividad}</td>
-              <td>{evidencia.subidoPor}</td>
-              <td>{evidencia.fecha}</td>
-              <td>
-                <button className="button-ver">Ver</button>
-              </td>
+          {filteredEvidencias.length > 0 ? (
+            filteredEvidencias.map((evidencia, index) => (
+              <tr key={evidencia.id} className={index % 2 === 0 ? 'row-even' : 'row-odd'}>
+                <td data-label="Archivo">{evidencia.archivo}</td>
+                <td data-label="Actividad">{evidencia.actividad}</td>
+                <td data-label="Proyecto">{evidencia.proyecto}</td>
+                <td data-label="Semillero">{evidencia.semillero}</td>
+                <td data-label="Subido por">{evidencia.subidoPor}</td>
+                <td data-label="Fecha de subida">{evidencia.fecha}</td>
+                <td data-label="Acciones" className="actions-cell">
+                  <button
+                    className="btn-ver"
+                    onClick={() => onView(evidencia)}
+                  >
+                    Ver
+                  </button>
+                  <button
+                    className="btn-descargar"
+                    onClick={() => onDownload(evidencia)}
+                  >
+                    Descargar
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7" className="no-results">No se encontraron evidencias.</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>

@@ -88,7 +88,7 @@ const Home = () => {
         <div className="home-page__semilleros-grid">
           {semilleros.map((semillero, index) => (
             <SemilleroCard 
-              key={`${semillero._id}-${index}`}
+              key={`${semillero.id}-${index}`}
               semillero={semillero}
               onToggleEstado={handleOpenToggleSemilleroModal}
             />
