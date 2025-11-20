@@ -3,21 +3,53 @@ import './UploadEvidenciaModal.css';
 
 const UploadEvidenciaModal = ({ isOpen, onClose, proyecto, onUpload }) => {
   const [actividad, setActividad] = useState('');
-  const [descripcion, setDescripcion] = useState('');
   const [archivos, setArchivos] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (!isOpen) {
       setActividad('');
-      setDescripcion('');
       setArchivos([]);
       setError('');
     }
   }, [isOpen]);
 
   const handleFileChange = (e) => {
-    setArchivos(Array.from(e.target.files));
+    const files = Array.from(e.target.files);
+    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
+    const oversizedFiles = files.filter(file => file.size > MAX_SIZE);
+    if (oversizedFiles.length > 0) {
+      setError(`Los siguientes archivos son demasiado grandes (máx. 5MB): ${oversizedFiles.map(f => f.name).join(', ')}`);
+      e.target.value = ''; // Limpiar el input
+      return;
+    }
+    setError('');
+
+    const filePromises = files.map(file => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          resolve({
+            name: file.name,
+            content: event.target.result, // Contenido en Base64
+          });
+        };
+        reader.onerror = (error) => {
+          reject(error);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(filePromises)
+      .then(fileData => {
+        setArchivos(fileData);
+      })
+      .catch(err => {
+        console.error("Error al leer los archivos:", err);
+        setError("Hubo un error al procesar los archivos.");
+      });
   };
 
   const handleRemoveFile = (fileIndex) => {
@@ -38,14 +70,11 @@ const UploadEvidenciaModal = ({ isOpen, onClose, proyecto, onUpload }) => {
 
     const evidenciaData = {
       actividad,
-      descripcion,
       archivos,
       proyectoId: proyecto.id,
-      proyectoNombre: proyecto.nombreProyecto,
     };
 
     onUpload(evidenciaData);
-    onClose();
   };
 
   if (!isOpen) {
@@ -71,7 +100,7 @@ const UploadEvidenciaModal = ({ isOpen, onClose, proyecto, onUpload }) => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="archivos">Archivos *</label>
+            <label htmlFor="archivos">Archivos (Máx. 5MB por archivo) *</label>
             <input
               id="archivos"
               type="file"

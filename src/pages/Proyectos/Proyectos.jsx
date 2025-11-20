@@ -5,6 +5,7 @@ import './Proyectos.css';
 import ProjectTable from '../../components/Tables/ProjectTable/ProjectTable.jsx';
 import Button from '../../components/Button/Button.jsx';
 import { useProjects } from '../../hook/useProjects';
+import { useEvidencias } from '../../hook/useEvidencias'; // Importar el hook de evidencias
 import CrearProyectoModal from '../../components/Modals/CrearProyecto/CrearProyectoModal.jsx';
 import UploadEvidenciaModal from '../../components/Modals/UploadEvidencia/UploadEvidenciaModal.jsx';
 
@@ -19,8 +20,9 @@ const Proyectos = () => {
     getFilterOptions,
     semilleros,
     aprendices,
-    addEvidenciaToProject // CAMBIO: Obtener la función para añadir evidencias
   } = useProjects();
+
+  const { addEvidencia } = useEvidencias(updateProject); // Inicializar el hook de evidencias
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
@@ -88,9 +90,9 @@ const Proyectos = () => {
     setSelectedProyecto(null);
   };
 
-  // CAMBIO: Lógica para manejar la subida de la evidencia
+  // Lógica para manejar la subida de la evidencia
   const handleUploadEvidencia = (evidenciaData) => {
-    addEvidenciaToProject(evidenciaData.proyectoId, evidenciaData);
+    addEvidencia(evidenciaData.proyectoId, evidenciaData); // Usar la función correcta
     alert(`Evidencia(s) para la actividad "${evidenciaData.actividad}" subidas con éxito.`);
     closeUploadModal(); // Cerrar el modal después de subir
   };

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useProjects } from '../../../hook/useProjects';
 import ModalVerContenido from '../VerContenido/ModalVerContenido';
 import './ModalVerEvidencias.css';
 
-const ModalVerEvidencias = ({ isOpen, onClose, proyecto, onSubirEvidencia }) => {
-  const { deleteEvidenciaFromProject } = useProjects();
+const ModalVerEvidencias = ({ isOpen, onClose, proyecto, onSubirEvidencia, onDeleteEvidencia }) => {
   const [verContenidoOpen, setVerContenidoOpen] = useState(false);
   const [selectedEvidencia, setSelectedEvidencia] = useState(null);
 
@@ -41,7 +39,7 @@ const ModalVerEvidencias = ({ isOpen, onClose, proyecto, onSubirEvidencia }) => 
 
   const handleDelete = (evidencia) => {
     if (window.confirm(`¿Estás seguro de que quieres eliminar la evidencia "${evidencia.archivo}"?`)) {
-      deleteEvidenciaFromProject(proyecto.id, evidencia.id);
+      onDeleteEvidencia(proyecto.id, evidencia.id);
     }
   };
 

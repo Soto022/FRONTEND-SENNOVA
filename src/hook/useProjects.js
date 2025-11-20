@@ -44,8 +44,12 @@ export const useProjects = () => {
 
   // Guardar
   useEffect(() => {
-    console.log('GUARDANDO EN LOCALSTORAGE: Proyectos a guardar:', projects);
-    localStorage.setItem('sennova_projects', JSON.stringify(projects));
+    try {
+      localStorage.setItem('sennova_projects', JSON.stringify(projects));
+    } catch (e) {
+      console.error("Error guardando en localStorage:", e);
+      alert("No se pudieron guardar los cambios. El almacenamiento local podría estar lleno.");
+    }
   }, [projects]);
 
   useEffect(() => {

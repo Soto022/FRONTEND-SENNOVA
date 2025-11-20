@@ -10,7 +10,7 @@ import './Evidencias.css';
 const Evidencias = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { allProjects, updateProject } = useProjects();
-  const { addEvidencia } = useEvidencias(updateProject); // Inicializar useEvidencias con updateProject
+  const { addEvidencia, deleteEvidencia } = useEvidencias(updateProject); // Obtener deleteEvidencia
 
   const [modalVerEvidenciasOpen, setModalVerEvidenciasOpen] = useState(false);
   const [modalSubirEvidenciaOpen, setModalSubirEvidenciaOpen] = useState(false);
@@ -49,16 +49,24 @@ const Evidencias = () => {
   };
 
   const handleOpenSubirEvidencia = () => {
-    setModalSubirEvidenciaOpen(true);
+    setModalVerEvidenciasOpen(false); // Cierra el modal de ver evidencias
+    setModalSubirEvidenciaOpen(true); // Abre el modal de subir evidencias
   };
 
   const handleCloseSubirEvidencia = () => {
     setModalSubirEvidenciaOpen(false);
+    setSelectedProjectId(null); // Limpia el proyecto seleccionado
   };
 
   const handleUpload = (evidenciaData) => {
-    addEvidencia(evidenciaData.proyectoId, evidenciaData); // Usar la función del nuevo hook
-    alert('Evidencia subida con éxito');
+    addEvidencia(evidenciaData.proyectoId, evidenciaData); // Usa la función del hook
+    alert('Evidencia subida con éxito'); // Muestra una alerta de éxito
+    handleCloseSubirEvidencia(); // Cierra el modal y limpia la selección
+  };
+
+  const handleDeleteEvidencia = (proyectoId, evidenciaId) => {
+    deleteEvidencia(proyectoId, evidenciaId);
+    alert('Evidencia eliminada con éxito');
   };
 
   return (
@@ -92,6 +100,7 @@ const Evidencias = () => {
           onClose={handleCloseVerEvidencias}
           proyecto={selectedProject}
           onSubirEvidencia={handleOpenSubirEvidencia}
+          onDeleteEvidencia={handleDeleteEvidencia} // Pasar la función de borrado
         />
       )}
 

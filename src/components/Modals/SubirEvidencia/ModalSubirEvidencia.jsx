@@ -61,7 +61,6 @@ const ModalSubirEvidencia = ({ isOpen, onClose, proyecto, onUpload }) => {
     };
 
     onUpload(evidenciaData);
-    onClose();
   };
 
   if (!isOpen) {

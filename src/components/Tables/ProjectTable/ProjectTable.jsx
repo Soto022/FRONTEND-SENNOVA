@@ -7,7 +7,6 @@ const ProjectTable = ({ projects, onEdit, onDelete, onUploadClick }) => {
     'Proyecto',
     'Semillero',
     'Aprendices',
-    'Fecha inicio',
     'Progreso',
     'Estado',
     'Acciones',
@@ -39,7 +38,7 @@ const ProjectTable = ({ projects, onEdit, onDelete, onUploadClick }) => {
           return count === 1 ? '1 aprendiz' : `${count} aprendices`;
         })()}
       </td>
-      <td className="table__cell">{formatDate(project.fechaInicio)}</td>
+      
       <td className="table__cell">
         <div className="progress">
           <div className="progress__bar">
