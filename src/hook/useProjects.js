@@ -121,6 +121,59 @@ export const useProjects = () => {
     );
   }, []);
 
+
+  // === ACTUALIZAR SEMILLERO Y SUS PROYECTOS RELACIONADOS ===
+  const updateSemillero = useCallback((id, newName) => {
+    let oldSemilleroName = '';
+    
+    // Primero, encuentra el semillero actual para obtener su nombre antiguo
+    const semilleroToUpdate = semilleros.find(s => s.id === id);
+    if (semilleroToUpdate) {
+      oldSemilleroName = semilleroToUpdate.nombre;
+    }
+
+    // Actualiza el nombre del semillero
+    setSemilleros(prevSemilleros =>
+      prevSemilleros.map(s =>
+        s.id === id
+          ? { ...s, nombre: newName }
+          : s
+      )
+    );
+
+    // Si encontramos el nombre antiguo, actualiza los proyectos relacionados
+    if (oldSemilleroName) {
+      setProjects(prevProjects =>
+        prevProjects.map(p =>
+          normalizeString(p.semillero) === normalizeString(oldSemilleroName)
+            ? { ...p, semillero: newName }
+            : p
+        )
+      );
+    }
+  }, [semilleros]); // Agregado semilleros como dependencia para que el find sea con el estado actual.
+
+  // === ELIMINAR SEMILLERO Y SUS PROYECTOS RELACIONADOS ===
+  const deleteSemillero = useCallback((id) => {
+    let deletedSemilleroName = '';
+
+    // Primero, encuentra el semillero actual para obtener su nombre
+    const semilleroToDelete = semilleros.find(s => s.id === id);
+    if (semilleroToDelete) {
+      deletedSemilleroName = semilleroToDelete.nombre;
+    }
+
+    // Elimina el semillero del estado
+    setSemilleros(prevSemilleros => prevSemilleros.filter(s => s.id !== id));
+
+    // Si encontramos el nombre del semillero eliminado, elimina los proyectos relacionados
+    if (deletedSemilleroName) {
+      setProjects(prevProjects =>
+        prevProjects.filter(p => normalizeString(p.semillero) !== normalizeString(deletedSemilleroName))
+      );
+    }
+  }, [semilleros]); // Agregado semilleros como dependencia para que el find sea con el estado actual.
+
   // === CRUD PROYECTOS ===
   const createProject = useCallback((data) => {
     const normalized = normalizeString(data.nombreProyecto);
@@ -192,6 +245,8 @@ export const useProjects = () => {
     getFilterOptions,
     createSemillero,
     toggleSemilleroEstado,
+    updateSemillero,
+    deleteSemillero,
   };
 };
 

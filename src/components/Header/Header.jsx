@@ -16,7 +16,7 @@ const Header = ({ onToggleSidebar, isSidebarOpen }) => {
           <span className="hamburger-btn__line"></span>
         </button>
         <div className="header__logo">
-          <span className="header__logo-text">SENNOVA</span>
+          <span className="header__logo-text">APPNOVA</span>
         </div>
       </div>
       <button className="header__logout-btn">

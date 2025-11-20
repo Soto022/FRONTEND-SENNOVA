@@ -1,7 +1,7 @@
 import React from 'react';
 // Se utiliza el mismo CSS que TablaAprendices para mantener la consistencia.
 // Si se necesitan estilos específicos, se pueden añadir en TablaInstructores.css.
-import '../Aprendices/TablaAprendices.css'; 
+
 import './TablaInstructores.css';
 
 const TablaInstructores = ({ instructores }) => {

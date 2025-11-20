@@ -4,7 +4,6 @@ import SemilleroCard from '../../components/SemilleroCard/SemilleroCard.jsx';
 import CrearSemilleroModal from '../../components/Modals/CrearSemillero/CrearSemilleroModal.jsx';
 import Button from '../../components/Button/Button.jsx';
 import { useProjects } from '../../hook/useProjects';
-import '../../components/Modals/ConfirmationModal/ConfirmationModal.css';
 
 // Modal de Confirmación
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, semillero, actionText }) => {
@@ -28,7 +27,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, semillero, actionText }
 
 const Home = () => {
   const userName = "Diana Carolina"; 
-  const { semilleros, createSemillero, toggleSemilleroEstado } = useProjects();
+  const { semilleros, createSemillero, toggleSemilleroEstado, updateSemillero, deleteSemillero } = useProjects();
 
   const [isCrearSemilleroModalOpen, setIsCrearSemilleroModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
@@ -91,6 +90,8 @@ const Home = () => {
               key={`${semillero.id}-${index}`}
               semillero={semillero}
               onToggleEstado={handleOpenToggleSemilleroModal}
+              onEdit={updateSemillero}
+              onDelete={deleteSemillero}
             />
           ))}
         </div>
