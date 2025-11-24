@@ -43,7 +43,7 @@ const Home = () => {
     setSelectedSemillero(semillero);
 
     setConfirmationActionText(
-      semillero.estado === 'activo' ? 'inactivar' : 'activar'
+      semillero.estado === 'activo' ? 'desactivar' : 'activar'
     );
 
     setIsConfirmationModalOpen(true);

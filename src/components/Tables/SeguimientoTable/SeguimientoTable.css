@@ -1,0 +1,80 @@
+/* src/components/Tables/SeguimientoTable/SeguimientoTable.css */
+
+.status {
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--border-radius-small);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: capitalize;
+}
+
+.status--in-progress {
+    background-color: var(--color-warning-light);
+    color: var(--color-warning-dark);
+}
+
+.status--completed {
+    background-color: var(--color-success-light);
+    color: var(--color-success-dark);
+}
+
+.status--pending {
+    background-color: var(--color-secondary-light);
+    color: var(--color-secondary-dark);
+}
+
+.progress {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 120px;
+}
+
+.progress__bar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--color-grey-light);
+    border-radius: var(--border-radius-large);
+    overflow: hidden;
+}
+
+.progress__fill {
+    height: 100%;
+    background-color: var(--color-primary);
+    border-radius: var(--border-radius-large);
+    transition: width 0.3s ease;
+}
+
+.progress__text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color-light);
+}
+
+.action-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--border-radius-small);
+    font-size: 1.2rem;
+    color: var(--text-color-light);
+    transition: background-color 0.2s, color 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-button:hover {
+    background-color: var(--color-grey-light);
+    color: var(--text-color);
+}
+
+.action-button--view:hover {
+    color: var(--color-primary);
+}
+
+.action-button--follow-up:hover {
+    color: var(--color-success-dark);
+}

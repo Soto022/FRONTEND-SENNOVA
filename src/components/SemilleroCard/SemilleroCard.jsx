@@ -28,7 +28,7 @@ const SemilleroCard = ({ semillero, onToggleEstado, onEdit, onDelete }) => {
   };
 
   return (
-    <div className={`semillero-card ${!isActivo ? 'semillero-card--inactivo' : ''}`}>
+    <div className={`semillero-card ${!isActivo ? 'semillero-card--desactivado' : ''}`}>
       <div className="semillero-card__header">
         <h3 className="semillero-card__nombre">{nombre}</h3>
         <div className="semillero-card__icon-actions">
@@ -36,7 +36,7 @@ const SemilleroCard = ({ semillero, onToggleEstado, onEdit, onDelete }) => {
           <button onClick={handleDelete} className="semillero-card__icon-btn" aria-label="Eliminar semillero">🗑️</button>
         </div>
       </div>
-      <p className="semillero-card__estado">Estado: {isActivo ? 'Activo' : 'Inactivo'}</p>
+      <p className="semillero-card__estado">Estado: {isActivo ? 'Activo' : 'desactivado'}</p>
 
       <div className="semillero-card__actions">
         {isActivo ? (
@@ -53,8 +53,8 @@ const SemilleroCard = ({ semillero, onToggleEstado, onEdit, onDelete }) => {
 
         <button
           onClick={handleToggle}
-          className={`semillero-card__btn semillero-card__btn--${isActivo ? 'inactivar' : 'activar'}`}>
-          {isActivo ? 'Inactivar' : 'Activar'}
+          className={`semillero-card__btn semillero-card__btn--${isActivo ? 'desactivar' : 'activar'}`}>
+          {isActivo ? 'desactivar' : 'Activar'}
         </button>
       </div>
     </div>

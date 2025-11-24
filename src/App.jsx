@@ -7,6 +7,7 @@ import Aprendices from './pages/Aprendices/Aprendices.jsx';
 import Instructores from './pages/Instructores/Instructores.jsx';
 import Cronograma from './pages/Cronograma/Cronograma.jsx';
 import Evidencias from './pages/Evidencias/Evidencias.jsx';
+import Seguimiento from './pages/Seguimiento/Seguimiento.jsx';
 import Sidebar from './components/Sidebar/Sidebar.jsx';
 import Header from './components/Header/Header.jsx';
 import Footer from './components/Footer/Footer.jsx';
@@ -35,6 +36,7 @@ function App() {
               <Route path="/instructores" element={<Instructores />} />
               <Route path="/evidencias" element={<Evidencias />} />
               <Route path="/cronograma" element={<Cronograma />} />
+              <Route path="/seguimiento" element={<Seguimiento />} />
               <Route path="/detalles-proyecto/:id" element={<DetallesProyecto />} />
             </Routes>
           </main>

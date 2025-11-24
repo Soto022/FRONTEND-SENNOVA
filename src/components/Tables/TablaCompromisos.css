@@ -1,0 +1,98 @@
+/* src/components/Tables/TablaCompromisos.css */
+.compromisos-table-container {
+    margin-bottom: 20px;
+  }
+  
+  .compromisos-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+  }
+  
+  .compromisos-table th,
+  .compromisos-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top; /* Align content to the top for textarea */
+  }
+  
+  .compromisos-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .compromisos-table input[type="text"],
+  .compromisos-table input[type="date"],
+  .compromisos-table textarea { /* Added textarea here */
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensures padding doesn't increase width */
+    resize: vertical; /* Allow vertical resizing for textarea */
+    min-height: 50px; /* Minimum height for textarea */
+    -webkit-user-select: text; /* Allow selection on WebKit browsers */
+    -moz-user-select: text;    /* Allow selection on Firefox */
+    -ms-user-select: text;     /* Allow selection on Internet Explorer/Edge */
+    user-select: text;         /* Standard property */
+    pointer-events: auto;      /* Ensure pointer events are not blocked */
+  }
+  
+  .compromisos-table .btn-remove {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .compromisos-table .btn-remove:hover {
+    background-color: #cc0000;
+  }
+  
+  .btn-add-row {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .btn-add-row:hover {
+    background-color: #45a049;
+  }
+
+  .firma-preview {
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid #eee;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .firma-image-preview {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+  }
+
+  .btn-clear-firma {
+    background-color: #ffc107;
+    color: #333;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .btn-clear-firma:hover {
+    background-color: #e0a800;
+  }

@@ -14,6 +14,7 @@
   --color-accent: #3b82f6;
   --color-success: #10b981;
   --color-warning: #f59e0b;
+  --color-warning-dark: #d9820a; /* Defined a dark warning color */
   --color-error: #ef4444;
   --color-danger: #ef4444;
   --color-danger-dark: #d93737;

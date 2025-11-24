@@ -65,11 +65,11 @@
   background-color: var(--color-gray); /* No cambiar al pasar el ratón */
 }
 
-.semillero-card__btn--inactivar {
+.semillero-card__btn--desactivar {
   background-color: var(--color-danger); /* Color para inactivar */
 }
 
-.semillero-card__btn--inactivar:hover {
+.semillero-card__btn--desactivar:hover {
   background-color: var(--color-danger-dark);
 }
 

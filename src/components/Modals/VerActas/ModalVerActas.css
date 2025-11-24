@@ -1,0 +1,84 @@
+/* src/components/Modals/VerActas/ModalVerActas.css */
+.modal-container-large {
+    background-color: var(--sena-light-gray, #F5F5F5);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    width: 90%;
+    max-width: 900px; /* Make modal wider for table */
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+.actas-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.actas-table th,
+.actas-table td {
+    padding: var(--space-md);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.actas-table th {
+    background-color: var(--color-primary-bg);
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.actas-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.actas-actions button {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: var(--border-radius);
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: opacity 0.2s;
+}
+
+.actas-actions button:hover {
+    opacity: 0.8;
+}
+
+.action-btn-ver {
+    background-color: var(--color-primary);
+}
+
+.action-btn-editar {
+    background-color: var(--color-warning-dark);
+}
+
+.action-btn-descargar {
+    background-color: var(--color-accent);
+}
+
+.action-btn-eliminar {
+    background-color: var(--color-error);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end; /* Align button to the right */
+    padding: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    margin-top: auto; /* Push to the bottom */
+}
+
+.btn-cerrar {
+    background-color: var(--color-secondary);
+    color: var(--text-color);
+    padding: var(--space-sm) var(--space-lg);
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+}

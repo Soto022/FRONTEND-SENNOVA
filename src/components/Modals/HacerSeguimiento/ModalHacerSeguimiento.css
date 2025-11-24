@@ -1,0 +1,58 @@
+/* src/components/Modals/HacerSeguimiento/ModalHacerSeguimiento.css */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000; /* Consistent z-index */
+}
+
+.modal-container { /* Renamed from modal-content for consistency */
+    background-color: var(--sena-light-gray, #F5F5F5); /* Use specific modal background */
+    border-radius: var(--border-radius-lg); /* Consistent border-radius */
+    box-shadow: var(--shadow-md); /* Consistent shadow */
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.modal-close-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--text-color-light); /* Adjusted color for visibility */
+    cursor: pointer;
+    line-height: 1;
+    z-index: 2001; /* Ensure close button is above other content */
+}
+
+.modal-header { /* Added for consistent header styling */
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    padding: var(--space-md);
+    border-top-left-radius: var(--border-radius-lg);
+    border-top-right-radius: var(--border-radius-lg);
+    text-align: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.modal-content { /* Renamed from modal-body for consistency */
+    overflow-y: auto;
+    padding: var(--space-xl); /* Consistent padding */
+}

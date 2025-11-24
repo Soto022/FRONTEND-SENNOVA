@@ -1,0 +1,145 @@
+/* src/components/Modals/HacerSeguimiento/FormularioActa.css */
+.formulario-acta {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem; /* Removed background-color as it's handled by modal-container */
+    background-color: transparent; /* Ensure it's transparent to show modal-container background */
+}
+
+/* Removed h2 styling as it's now in modal-header */
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.form-group.half {
+    width: 50%;
+}
+.form-group.third {
+    width: 33.33%;
+}
+
+
+.form-group label {
+    font-weight: 500; /* Adjusted from 600 for consistency */
+    color: var(--color-text-light); /* Consistent color */
+}
+
+.form-group .required {
+    color: var(--color-error); /* Consistent error color */
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group textarea {
+    width: 100%;
+    padding: var(--space-sm); /* Using global var for padding */
+    border: 1px solid var(--color-border); /* Consistent border */
+    border-radius: var(--border-radius);
+    background-color: var(--background-color); /* Consistent background */
+    color: var(--text-color);
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
+
+.agenda-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.btn-add-point, .btn-add-row {
+    background-color: var(--color-primary-bg); /* Use consistent accent color */
+    color: var(--color-primary); /* Use consistent accent color */
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    align-self: flex-start;
+}
+
+.editable-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+}
+
+.editable-table th,
+.editable-table td {
+    border: 1px solid var(--color-border); /* Consistent border */
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.editable-table th {
+    background-color: var(--background-color-light); /* Consistent header background */
+}
+
+.editable-table input {
+    width: 100%;
+    border: none;
+    padding: 0.25rem;
+    background-color: transparent;
+}
+
+.editable-table input:focus {
+    outline: 1px solid var(--color-primary);
+}
+
+.btn-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-error); /* Consistent error color */
+    font-size: 1.2rem;
+}
+
+.data-protection-text {
+    font-size: 0.8rem;
+    color: var(--color-text-light); /* Consistent color */
+    line-height: 1.4;
+    text-align: justify;
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--background-color-light); /* Consistent background */
+    border-radius: var(--border-radius);
+}
+
+.form-footer {
+    /* Styles will be managed by modal-footer in parent modal */
+    padding-top: var(--space-md);
+    margin-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-md); /* Consistent spacing */
+    margin-top: 1rem;
+}
+
+/* Replaced .btn .btn-primary .btn-secondary with global styles */
+/* The buttons will now use .btn-cancel and .btn-save classes from global scope */
+
