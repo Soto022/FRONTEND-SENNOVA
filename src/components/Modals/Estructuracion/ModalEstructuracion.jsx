@@ -48,7 +48,10 @@ const ModalEstructuracion = ({ isOpen, onClose, project }) => {
           <div className="modal-card">
             <h4>Objetivos específicos</h4>
             <div className="markdown-content">
-              <ReactMarkdown>{project?.objetivosEspecificos || 'No definidos.'}</ReactMarkdown>
+              {Array.isArray(project?.objetivosEspecificos) && project.objetivosEspecificos.length > 0
+                ? <ReactMarkdown>{project.objetivosEspecificos.map(o => `- ${o}`).join('\n')}</ReactMarkdown>
+                : <p>No definidos.</p>
+              }
             </div>
           </div>
           <div className="modal-card">

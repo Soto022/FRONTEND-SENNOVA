@@ -1,8 +1,22 @@
-// src/components/Modals/CrearProyecto/Paso2.jsx
 const Paso2 = ({ data, updateData }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     updateData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleObjetivoEspecificoChange = (index, value) => {
+    const newObjetivos = [...(data.objetivosEspecificos || [])];
+    newObjetivos[index] = value;
+    updateData(prev => ({ ...prev, objetivosEspecificos: newObjetivos }));
+  };
+
+  const addObjetivoEspecifico = () => {
+    updateData(prev => ({ ...prev, objetivosEspecificos: [...(prev.objetivosEspecificos || []), ''] }));
+  };
+
+  const removeObjetivoEspecifico = (index) => {
+    const newObjetivos = (data.objetivosEspecificos || []).filter((_, i) => i !== index);
+    updateData(prev => ({ ...prev, objetivosEspecificos: newObjetivos }));
   };
 
   return (
@@ -40,13 +54,22 @@ const Paso2 = ({ data, updateData }) => {
       </div>
       <div className="form-group">
         <label htmlFor="objetivosEspecificos">Objetivos Específicos</label>
-        <textarea 
-          id="objetivosEspecificos"
-          name="objetivosEspecificos"
-          rows="3" 
-          value={data.objetivosEspecificos || ''}
-          onChange={handleChange}
-        ></textarea>
+        {(data.objetivosEspecificos || []).map((objetivo, index) => (
+          <div key={index} className="dynamic-field-item">
+            <input
+              type="text"
+              value={objetivo}
+              onChange={(e) => handleObjetivoEspecificoChange(index, e.target.value)}
+              placeholder={`Objetivo Específico ${index + 1}`}
+            />
+            {(data.objetivosEspecificos || []).length > 1 && (
+              <button type="button" onClick={() => removeObjetivoEspecifico(index)} className="btn-remove">
+                🗑️
+              </button>
+            )}
+          </div>
+        ))}
+        <button type="button" onClick={addObjetivoEspecifico} className="btn-add-point">+ Añadir Objetivo Específico</button>
       </div>
       <div className="form-group">
         <label htmlFor="justificacion">Justificación</label>

@@ -1,4 +1,4 @@
-// src/components/Header/Header.jsx
+import { Link } from 'react-router-dom'; // Importar Link
 import './Header.css';
 
 const Header = ({ onToggleSidebar, isSidebarOpen }) => {
@@ -16,7 +16,9 @@ const Header = ({ onToggleSidebar, isSidebarOpen }) => {
           <span className="hamburger-btn__line"></span>
         </button>
         <div className="header__logo">
-          <span className="header__logo-text">APPNOVA</span>
+          <Link to="/" className="header__logo-link"> {/* Envolver con Link */}
+            <span className="header__logo-text">APPNOVA</span>
+          </Link>
         </div>
       </div>
       <button className="header__logout-btn">

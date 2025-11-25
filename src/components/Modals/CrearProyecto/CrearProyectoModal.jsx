@@ -27,9 +27,12 @@ const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, projectToEdit
           fechaInicio: projectToEdit['fecha-inicio'] || projectToEdit.fechaInicio,
           fechaFin: projectToEdit['fecha-fin'] || projectToEdit.fechaFin,
           liderProyecto: projectToEdit.lider || projectToEdit.liderProyecto,
-          // Asegura que los arrays existan
+          // Asegura que los arrays existan y maneja objetivosEspecificos
           aprendices: projectToEdit.aprendices || [],
           instructores: projectToEdit.instructores || [],
+          objetivosEspecificos: Array.isArray(projectToEdit.objetivosEspecificos)
+            ? projectToEdit.objetivosEspecificos
+            : (projectToEdit.objetivosEspecificos ? [projectToEdit.objetivosEspecificos] : ['']),
           // Nuevos campos
           impactos: projectToEdit.impactos || '',
           palabrasClave: projectToEdit.palabrasClave || '',
@@ -53,7 +56,7 @@ const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, projectToEdit
           resumen: '',
           problema: '',
           objetivo: '',
-          objetivosEspecificos: '',
+          objetivosEspecificos: [''], // Corrección: inicializado como array
           justificacion: '',
           metodologia: '',
           alcance: '',
