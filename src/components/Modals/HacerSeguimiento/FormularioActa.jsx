@@ -1,13 +1,14 @@
 // src/components/Modals/HacerSeguimiento/FormularioActa.jsx
 import React, { useState, useEffect } from 'react';
 import './FormularioActa.css';
-import TablaImpactoAprendices from '../../Tables/TablaImpactoAprendices'; // Importar el nuevo componente
-import TablaCompromisos from '../../Tables/TablaCompromisos'; // Importar el nuevo componente
-import TablaAsistentes from '../../Tables/TablaAsistentes'; // Importar el nuevo componente
+import TablaImpactoAprendices from '../../Tables/TablaImpactoAprendices';
+import TablaCompromisos from '../../Tables/TablaCompromisos';
+import TablaAsistentes from '../../Tables/TablaAsistentes';
 
-const initialCompromiso = { actividad: '', fecha: '', responsable: '', firma: '' }; // Nueva estructura
-const initialAsistente = { nombre: '', dependencia: '', aprueba: false, observacion: '', firma: '' }; // Nueva estructura
+const initialCompromiso = { actividad: '', fecha: '', responsable: '', firma: '' };
+const initialAsistente = { nombre: '', dependencia: '', aprueba: false, observacion: '', firma: '' };
 
+// --- INICIO MODIFICACIÓN: Estado inicial con nuevos campos ---
 const initialFormData = {
   actaNo: '',
   reunion: '',
@@ -27,7 +28,11 @@ const initialFormData = {
   conclusiones: [''],
   compromisos: [initialCompromiso],
   asistentes: [initialAsistente],
+  // Nuevos campos para el seguimiento del proyecto
+  avancePorcentaje: '',
+  estadoProyecto: 'pendiente', // Valor por defecto
 };
+// --- FIN MODIFICACIÓN ---
 
 const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
   const [formData, setFormData] = useState(initialFormData);
@@ -48,12 +53,20 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
         asistentes: actaToEdit.asistentes && actaToEdit.asistentes.length > 0 ? actaToEdit.asistentes : [initialAsistente],
         fecha: actaToEdit.fecha ? new Date(actaToEdit.fecha).toISOString().split('T')[0] : initialFormData.fecha,
         centroFormacion: actaToEdit.centroFormacion || initialFormData.centroFormacion,
+        // Cargar los nuevos campos si existen en el acta a editar
+        avancePorcentaje: actaToEdit.avancePorcentaje || '',
+        estadoProyecto: actaToEdit.estadoProyecto || 'pendiente',
       };
       setFormData(mergedData);
     } else {
-      setFormData(initialFormData);
+      // Al crear un nuevo seguimiento, usar el estado y progreso actual del proyecto como valor inicial
+      setFormData({
+        ...initialFormData,
+        avancePorcentaje: proyecto?.progreso || '',
+        estadoProyecto: proyecto?.estado || 'pendiente',
+      });
     }
-  }, [actaToEdit]);
+  }, [actaToEdit, proyecto]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -86,19 +99,30 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
   const handleAsistentesTableChange = (newTableData) => {
     setFormData(prev => ({ ...prev, asistentes: newTableData }));
   };
-  
+
+  // --- INICIO MODIFICACIÓN: Lógica de envío con validación de nuevos campos ---
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.actaNo || !formData.reunion || !formData.horaInicio || !formData.horaFin) {
       alert('Por favor, complete los campos obligatorios: ACTA No., Nombre de la reunión, Hora de Inicio y Hora Fin.');
       return;
     }
+    // Validación para los nuevos campos
+    if (formData.avancePorcentaje === '' || formData.avancePorcentaje < 0 || formData.avancePorcentaje > 100) {
+        alert('Por favor, ingrese un Avance de proyecto válido (0–100).');
+        return;
+    }
+    if (!formData.estadoProyecto) {
+        alert('Por favor, seleccione un Estado del proyecto.');
+        return;
+    }
     onSave({ ...formData, proyectoId: proyecto.id, proyectoNombre: proyecto.nombreProyecto });
   };
+  // --- FIN MODIFICACIÓN ---
 
   return (
     <form onSubmit={handleSubmit} className="formulario-acta">
-      
+
       <div className="form-row">
         <div className="form-group half">
           <label>ACTA No. <span className="required">*</span></label>
@@ -139,7 +163,42 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
           <input type="time" name="horaFin" value={formData.horaFin} onChange={handleChange} required />
         </div>
       </div>
-      
+
+      {/* --- INICIO MODIFICACIÓN: Nuevos campos de formulario --- */}
+      <fieldset className="form-fieldset">
+        <legend>Actualización del Proyecto</legend>
+        <div className="form-row">
+            <div className="form-group half">
+                <label>Avance del proyecto (%) <span className="required">*</span></label>
+                <input
+                    type="number"
+                    name="avancePorcentaje"
+                    value={formData.avancePorcentaje}
+                    onChange={handleChange}
+                    min="0"
+                    max="100"
+                    placeholder="0-100"
+                    required
+                />
+            </div>
+            <div className="form-group half">
+                <label>Estado del proyecto <span className="required">*</span></label>
+                <select
+                    name="estadoProyecto"
+                    value={formData.estadoProyecto}
+                    onChange={handleChange}
+                    required
+                >
+                    <option value="pendiente">Pendiente</option>
+                    <option value="en-curso">En Curso</option>
+                    <option value="completado">Completado</option>
+                    <option value="pausado">Pausado</option>
+                </select>
+            </div>
+        </div>
+      </fieldset>
+      {/* --- FIN MODIFICACIÓN --- */}
+
       <div className="form-group">
         <label>Agenda o puntos a desarrollar</label>
         {formData.agenda.map((punto, index) => (
@@ -159,7 +218,7 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
         ))}
         <button type="button" onClick={() => addDynamicFieldPoint('agenda')} className="btn-add-point">+ Añadir punto</button>
       </div>
-      
+
 
       <div className="form-group">
         <label>Objetivo(s) de la reunión</label>
@@ -253,7 +312,7 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
         ))}
         <button type="button" onClick={() => addDynamicFieldPoint('decisiones')} className="btn-add-point">+ Añadir Decisión</button>
       </div>
-      
+
       <div className="form-group">
         <label>Establecimiento y aceptación de compromisos</label>
         <TablaCompromisos
@@ -261,7 +320,7 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
           onChange={handleCompromisosTableChange}
         />
       </div>
-      
+
       <div className="form-group">
         <label>Asistentes y aprobación de decisiones</label>
         <TablaAsistentes
