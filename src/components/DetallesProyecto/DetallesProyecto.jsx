@@ -15,7 +15,7 @@ import ModalCronograma from '../Modals/Cronograma/ModalCronograma';
 
 const DetallesProyecto = () => {
   const { id } = useParams();
-  const { allProjects, aprendices: allAprendices } = useProjects(); 
+  const { allProjects, aprendices: allAprendices, semilleros } = useProjects(); 
   const { instructores: allInstructores } = useInstructores();
   const [isEstructuracionOpen, setEstructuracionOpen] = useState(false);
   const [isCronogramaOpen, setCronogramaOpen] = useState(false);
@@ -39,11 +39,15 @@ const DetallesProyecto = () => {
     );
   }
 
+  // Find the current semillero name from the global state
+  const currentSemillero = semilleros.find(s => s.nombre === project.semillero || s.id === project.semillero);
+  const semilleroNombre = currentSemillero ? currentSemillero.nombre : project.semillero;
+
   const projectData = {
     ...project,
     nombre: project.nombreProyecto || 'Sin nombre',
     lineaTecnologica: project.lineaTecnologica || 'No especificada',
-    semillero: project.semillero || 'No asignado',
+    semillero: semilleroNombre, // Use the resolved, up-to-date name
     lider: project.lider || 'No asignado',
     fechaInicio: project.fechaInicio || 'N/A',
     fechaFin: project.fechaFin || 'N/A',
@@ -52,26 +56,30 @@ const DetallesProyecto = () => {
 
   const aprendicesConEstadoActualizado = (project.aprendices || []).map(projAprendiz => {
     const aprendizGlobal = allAprendices.find(a => a.id === projAprendiz.id);
-    return {
-      ...projAprendiz,
-      estado: aprendizGlobal ? aprendizGlobal.estado : projAprendiz.estado,
-      fechaInactivacion: aprendizGlobal ? aprendizGlobal.fechaInactivacion : projAprendiz.fechaInactivacion
-    };
+    // If the global apprentice is found, merge its data.
+    // The global data (with an updated name, etc.) will overwrite the older data from projAprendiz.
+    if (aprendizGlobal) {
+      return { ...projAprendiz, ...aprendizGlobal };
+    }
+    // If for some reason the apprentice isn't in the global list, return the original data.
+    return projAprendiz;
   });
 
   const instructoresConEstadoActualizado = (project.instructores || []).map(projInstructor => {
     const instructorGlobal = allInstructores.find(i => i.id === projInstructor.id);
-    return {
-      ...projInstructor,
-      estado: instructorGlobal ? instructorGlobal.estado : projInstructor.estado,
-      fechaInactivacion: instructorGlobal ? instructorGlobal.fechaInactivacion : projInstructor.fechaInactivacion
-    };
+    // If the global instructor is found, merge its data.
+    // The global data (with an updated name, etc.) will overwrite the older data from projInstructor.
+    if (instructorGlobal) {
+      return { ...projInstructor, ...instructorGlobal };
+    }
+    // If for some reason the instructor isn't in the global list, return the original data.
+    return projInstructor;
   });
 
   const evidenciasEnriquecidas = (project.evidencias || []).map(evidencia => ({
     ...evidencia,
     proyecto: evidencia.proyecto || project.nombreProyecto,
-    semillero: evidencia.semillero || project.semillero,
+    semillero: projectData.semillero, // ALWAYS use the updated semillero name from projectData
   }));
 
   const handleViewEvidencia = (evidencia) => {

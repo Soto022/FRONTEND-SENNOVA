@@ -30,6 +30,8 @@ const Proyectos = () => {
 
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [selectedProyecto, setSelectedProyecto] = useState(null);
+  const [evidenciaFiles, setEvidenciaFiles] = useState([]);
+  const [uploadError, setUploadError] = useState('');
 
   useEffect(() => {
     const semilleroParam = searchParams.get('semillero');
@@ -88,14 +90,49 @@ const Proyectos = () => {
   const closeUploadModal = () => {
     setIsUploadModalOpen(false);
     setSelectedProyecto(null);
+    setEvidenciaFiles([]);
+    setUploadError('');
   };
 
-  // Lógica para manejar la subida de la evidencia
-  const handleUploadEvidencia = (evidenciaData) => {
-    addEvidencia(evidenciaData.proyectoId, evidenciaData); // Usar la función correcta
-    alert(`Evidencia(s) para la actividad "${evidenciaData.actividad}" subidas con éxito.`);
-    closeUploadModal(); // Cerrar el modal después de subir
+  const handleEvidenciaFileChange = (e) => {
+    const newFiles = Array.from(e.target.files);
+    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
+    const oversizedFiles = newFiles.filter(file => file.size > MAX_SIZE);
+    if (oversizedFiles.length > 0) {
+      setUploadError(`Los siguientes archivos son demasiado grandes (máx. 5MB): ${oversizedFiles.map(f => f.name).join(', ')}`);
+      e.target.value = '';
+      return;
+    }
+    setUploadError('');
+
+    const filePromises = newFiles.map(file => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => resolve({ name: file.name, content: event.target.result });
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(filePromises).then(processedFiles => {
+      setEvidenciaFiles(currentFiles => [...currentFiles, ...processedFiles]);
+    });
+
+    e.target.value = null;
   };
+
+  const handleRemoveEvidenciaFile = (fileIndex) => {
+    setEvidenciaFiles(currentFiles => currentFiles.filter((_, index) => index !== fileIndex));
+  };
+
+  const handleUploadEvidencia = (evidenciaData) => {
+    addEvidencia(evidenciaData.proyectoId, { ...evidenciaData, archivos: evidenciaFiles });
+    alert(`Evidencia(s) para la actividad "${evidenciaData.actividad}" subidas con éxito.`);
+    closeUploadModal();
+  };
+
+  const totalAprendices = projects.reduce((sum, project) => sum + (project.aprendices?.length || 0), 0);
 
   return (
     <div className="proyectos">
@@ -173,7 +210,7 @@ const Proyectos = () => {
 
       <div className="proyectos__results">
         <p className="results__count">
-          Mostrando {projects.length} proyecto{projects.length !== 1 ? 's' : ''}
+          Mostrando {projects.length} proyecto{projects.length !== 1 ? 's' : ''} y {totalAprendices} aprendices
         </p>
       </div>
       
@@ -201,6 +238,10 @@ const Proyectos = () => {
           onClose={closeUploadModal}
           proyecto={selectedProyecto}
           onUpload={handleUploadEvidencia}
+          archivos={evidenciaFiles}
+          onFileChange={handleEvidenciaFileChange}
+          onRemoveFile={handleRemoveEvidenciaFile}
+          error={uploadError}
         />
       )}
     </div>

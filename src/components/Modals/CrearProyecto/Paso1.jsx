@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const Paso1 = ({ data, updateData, semilleros }) => {
+const Paso1 = ({ data, updateData, semilleros, errors }) => {
   // Un solo manejador para todos los inputs, basado en el atributo 'name'
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,6 +43,7 @@ const Paso1 = ({ data, updateData, semilleros }) => {
           value={data.nombreProyecto || ''}
           onChange={handleChange} 
         />
+        {errors.nombreProyecto && <span className="error-message">{errors.nombreProyecto}</span>}
       </div>
 
       <div className="form-group">
@@ -64,6 +65,7 @@ const Paso1 = ({ data, updateData, semilleros }) => {
             );
           })}
         </select>
+        {errors.semillero && <span className="error-message">{errors.semillero}</span>}
       </div>
 
       <div className="form-group">
@@ -81,6 +83,7 @@ const Paso1 = ({ data, updateData, semilleros }) => {
           <option value="Investigación formativa y desarrollo humano">Investigación formativa y desarrollo humano</option>
           <option value="Ciencias básicas aplicadas">Ciencias básicas aplicadas</option>
         </select>
+        {errors.lineaInvestigacion && <span className="error-message">{errors.lineaInvestigacion}</span>}
       </div>
 
       <div className="form-row">
@@ -93,6 +96,7 @@ const Paso1 = ({ data, updateData, semilleros }) => {
             value={data.fechaInicio || ''}
             onChange={handleChange}
           />
+          {errors.fechaInicio && <span className="error-message">{errors.fechaInicio}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="fechaFin">Fecha de fin</label>
@@ -103,6 +107,7 @@ const Paso1 = ({ data, updateData, semilleros }) => {
             value={data.fechaFin || ''}
             onChange={handleChange}
           />
+          {errors.fechaFin && <span className="error-message">{errors.fechaFin}</span>}
         </div>
       </div>
 
@@ -115,6 +120,7 @@ const Paso1 = ({ data, updateData, semilleros }) => {
           value={data.liderProyecto || ''}
           onChange={handleChange}
         />
+        {errors.liderProyecto && <span className="error-message">{errors.liderProyecto}</span>}
       </div>
     </form>
   );
@@ -128,6 +134,7 @@ Paso1.propTypes = {
     nombre: PropTypes.string.isRequired, // Cambiado de 'name' a 'nombre'
     estado: PropTypes.string.isRequired,
   })),
+  errors: PropTypes.object.isRequired,
 };
 
 // Valor por defecto para semilleros para evitar errores si no se carga

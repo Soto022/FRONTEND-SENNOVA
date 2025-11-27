@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 // --- INICIO MODIFICACIÓN: Importar 'updateProject' desde el hook ---
 import { useProjects } from '../../hook/useProjects';
 // --- FIN MODIFICACIÓN ---
@@ -15,6 +15,20 @@ const Seguimiento = () => {
   const [isVerActasModalOpen, setIsVerActasModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [editingActa, setEditingActa] = useState(null); // Will store {acta, index}
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredProjects = useMemo(() => {
+    if (!searchTerm) {
+      return projects;
+    }
+    return projects.filter(project =>
+      project.nombreProyecto.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [projects, searchTerm]);
 
   const handleOpenCreateModal = (proyecto) => {
     setSelectedProject(proyecto);
@@ -94,17 +108,26 @@ const Seguimiento = () => {
     <div className="page-container seguimiento-page">
       <div className="seguimiento-header">
         <h1 className="page-title">Seguimiento de Proyectos</h1>
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Buscar por nombre del proyecto..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+          <span className="search-icon">🔍</span>
+        </div>
       </div>
 
       <div className="seguimiento-results">
         <p className="results-count">
-          Mostrando {projects.length} proyecto{projects.length !== 1 ? 's' : ''} en total.
+          Mostrando {filteredProjects.length} proyecto{filteredProjects.length !== 1 ? 's' : ''} en total.
         </p>
       </div>
 
       <div className="seguimiento-content">
         <SeguimientoTable
-          projects={projects}
+          projects={filteredProjects}
           onHacerSeguimiento={handleOpenCreateModal}
           onVerActas={handleOpenVerActasModal}
         />

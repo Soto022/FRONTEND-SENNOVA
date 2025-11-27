@@ -1,4 +1,4 @@
-const Paso2 = ({ data, updateData }) => {
+const Paso2 = ({ data, updateData, errors }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     updateData(prev => ({ ...prev, [name]: value }));
@@ -31,6 +31,7 @@ const Paso2 = ({ data, updateData }) => {
           value={data.resumen || ''}
           onChange={handleChange}
         ></textarea>
+        {errors.resumen && <span className="error-message">{errors.resumen}</span>}
       </div>
       <div className="form-group">
         <label htmlFor="problema">Planteamiento del problema</label>
@@ -41,6 +42,7 @@ const Paso2 = ({ data, updateData }) => {
           value={data.problema || ''}
           onChange={handleChange}
         ></textarea>
+        {errors.problema && <span className="error-message">{errors.problema}</span>}
       </div>
       <div className="form-group">
         <label htmlFor="objetivo">Objetivo General</label>
@@ -51,6 +53,7 @@ const Paso2 = ({ data, updateData }) => {
           value={data.objetivo || ''}
           onChange={handleChange}
         ></textarea>
+        {errors.objetivo && <span className="error-message">{errors.objetivo}</span>}
       </div>
       <div className="form-group">
         <label htmlFor="objetivosEspecificos">Objetivos Específicos</label>
@@ -70,6 +73,7 @@ const Paso2 = ({ data, updateData }) => {
           </div>
         ))}
         <button type="button" onClick={addObjetivoEspecifico} className="btn-add-point">+ Añadir Objetivo Específico</button>
+        {errors.objetivosEspecificos && <span className="error-message">{errors.objetivosEspecificos}</span>}
       </div>
       <div className="form-group">
         <label htmlFor="justificacion">Justificación</label>
@@ -80,6 +84,7 @@ const Paso2 = ({ data, updateData }) => {
           value={data.justificacion || ''}
           onChange={handleChange}
         ></textarea>
+        {errors.justificacion && <span className="error-message">{errors.justificacion}</span>}
       </div>
       <div className="form-group">
         <label htmlFor="metodologia">Metodología</label> {/* Changed label */}
@@ -90,6 +95,7 @@ const Paso2 = ({ data, updateData }) => {
           value={data.metodologia || ''}
           onChange={handleChange}
         ></textarea>
+        {errors.metodologia && <span className="error-message">{errors.metodologia}</span>}
       </div>
       <div className="form-group">
         <label htmlFor="impactos">Impactos</label> {/* New field */}
@@ -100,6 +106,7 @@ const Paso2 = ({ data, updateData }) => {
           value={data.impactos || ''}
           onChange={handleChange}
         ></textarea>
+        {errors.impactos && <span className="error-message">{errors.impactos}</span>}
       </div>
       <div className="form-group">
         <label htmlFor="alcance">Alcance del Proyecto</label>
@@ -110,6 +117,7 @@ const Paso2 = ({ data, updateData }) => {
           value={data.alcance || ''}
           onChange={handleChange}
         ></textarea>
+        {errors.alcance && <span className="error-message">{errors.alcance}</span>}
       </div>
       <div className="form-group">
         <label htmlFor="palabrasClave">Palabras Clave</label> {/* New field */}
@@ -120,6 +128,7 @@ const Paso2 = ({ data, updateData }) => {
           value={data.palabrasClave || ''}
           onChange={handleChange}
         ></textarea>
+        {errors.palabrasClave && <span className="error-message">{errors.palabrasClave}</span>}
       </div>
       <div className="form-group">
         <label htmlFor="beneficiarios">Beneficiarios</label> {/* New field */}
@@ -130,6 +139,7 @@ const Paso2 = ({ data, updateData }) => {
           value={data.beneficiarios || ''}
           onChange={handleChange}
         ></textarea>
+        {errors.beneficiarios && <span className="error-message">{errors.beneficiarios}</span>}
       </div>
       <div className="form-group">
         <label htmlFor="bibliografia">Bibliografía</label> {/* New field */}
@@ -140,6 +150,7 @@ const Paso2 = ({ data, updateData }) => {
           value={data.bibliografia || ''}
           onChange={handleChange}
         ></textarea>
+        {errors.bibliografia && <span className="error-message">{errors.bibliografia}</span>}
       </div>
     </form>
   );

@@ -1,46 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './ModalSubirEvidencia.css';
 
-const ModalSubirEvidencia = ({ isOpen, onClose, proyecto, onUpload }) => {
+const ModalSubirEvidencia = ({ isOpen, onClose, proyecto, onUpload, archivos, onFileChange }) => {
   const [actividad, setActividad] = useState('');
-  const [archivos, setArchivos] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // Reset local state when the modal opens or closes
     if (!isOpen) {
       setActividad('');
-      setArchivos([]);
       setError('');
     }
   }, [isOpen]);
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    const filePromises = files.map(file => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          resolve({
-            name: file.name,
-            content: event.target.result, // Contenido en Base64
-          });
-        };
-        reader.onerror = (error) => {
-          reject(error);
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-
-    Promise.all(filePromises)
-      .then(fileData => {
-        setArchivos(fileData);
-      })
-      .catch(err => {
-        console.error("Error al leer los archivos:", err);
-        setError("Hubo un error al procesar los archivos.");
-      });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -54,9 +25,9 @@ const ModalSubirEvidencia = ({ isOpen, onClose, proyecto, onUpload }) => {
       return;
     }
 
+    // The parent now handles the file data, so we just pass up the activity.
     const evidenciaData = {
       actividad,
-      archivos, // Ahora contiene nombre y contenido
       proyectoId: proyecto.id,
     };
 
@@ -91,10 +62,22 @@ const ModalSubirEvidencia = ({ isOpen, onClose, proyecto, onUpload }) => {
               id="archivos"
               type="file"
               multiple
-              onChange={handleFileChange}
+              onChange={onFileChange} // Use the handler from props
             />
           </div>
           
+          {/* Display the list of selected files */}
+          {archivos && archivos.length > 0 && (
+            <div className="file-list">
+              <h4>Archivos seleccionados:</h4>
+              <ul>
+                {archivos.map((file, index) => (
+                  <li key={index}>{file.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {error && <p className="error-message">{error}</p>}
 
           <div className="modal-subir-evidencia-footer">
