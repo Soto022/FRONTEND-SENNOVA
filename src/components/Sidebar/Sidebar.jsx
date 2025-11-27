@@ -56,6 +56,12 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <span className="sidebar__text">Evidencias</span>
               </Link>
             </li>
+            <li className={`sidebar__item ${isItemActive('/seguimiento') ? 'sidebar__item--active' : ''}`}>
+              <Link to="/seguimiento" onClick={onClose}>
+                <span className="sidebar__icon"></span>
+                <span className="sidebar__text">Seguimiento</span>
+              </Link>
+            </li>
           </ul>
         </nav>
         

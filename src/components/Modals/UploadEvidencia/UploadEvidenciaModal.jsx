@@ -1,76 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import './UploadEvidenciaModal.css';
 
-const UploadEvidenciaModal = ({ isOpen, onClose, proyecto, onUpload }) => {
+const UploadEvidenciaModal = ({
+  isOpen,
+  onClose,
+  proyecto,
+  onUpload,
+  archivos,
+  onFileChange,
+  onRemoveFile,
+  error: parentError,
+}) => {
   const [actividad, setActividad] = useState('');
-  const [archivos, setArchivos] = useState([]);
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
+
+  const error = parentError || localError;
 
   useEffect(() => {
     if (!isOpen) {
       setActividad('');
-      setArchivos([]);
-      setError('');
+      setLocalError('');
     }
   }, [isOpen]);
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
-
-    const oversizedFiles = files.filter(file => file.size > MAX_SIZE);
-    if (oversizedFiles.length > 0) {
-      setError(`Los siguientes archivos son demasiado grandes (máx. 5MB): ${oversizedFiles.map(f => f.name).join(', ')}`);
-      e.target.value = ''; // Limpiar el input
-      return;
-    }
-    setError('');
-
-    const filePromises = files.map(file => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          resolve({
-            name: file.name,
-            content: event.target.result, // Contenido en Base64
-          });
-        };
-        reader.onerror = (error) => {
-          reject(error);
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-
-    Promise.all(filePromises)
-      .then(fileData => {
-        setArchivos(fileData);
-      })
-      .catch(err => {
-        console.error("Error al leer los archivos:", err);
-        setError("Hubo un error al procesar los archivos.");
-      });
-  };
-
-  const handleRemoveFile = (fileIndex) => {
-    setArchivos(archivos.filter((_, index) => index !== fileIndex));
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    setLocalError('');
     if (!actividad.trim()) {
-      setError('El campo "Actividad" es obligatorio.');
+      setLocalError('El campo "Actividad" es obligatorio.');
       return;
     }
     if (archivos.length === 0) {
-      setError('Debe seleccionar al menos un archivo.');
+      setLocalError('Debe seleccionar al menos un archivo.');
       return;
     }
 
     const evidenciaData = {
       actividad,
-      archivos,
       proyectoId: proyecto.id,
     };
 
@@ -105,7 +72,7 @@ const UploadEvidenciaModal = ({ isOpen, onClose, proyecto, onUpload }) => {
               id="archivos"
               type="file"
               multiple
-              onChange={handleFileChange}
+              onChange={onFileChange}
             />
           </div>
 
@@ -119,7 +86,7 @@ const UploadEvidenciaModal = ({ isOpen, onClose, proyecto, onUpload }) => {
                     <button
                       type="button"
                       className="remove-file-btn"
-                      onClick={() => handleRemoveFile(index)}
+                      onClick={() => onRemoveFile(index)}
                     >
                       &times;
                     </button>

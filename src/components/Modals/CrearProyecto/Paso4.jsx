@@ -1,7 +1,7 @@
 // src/components/Modals/CrearProyecto/Paso4.jsx
 import { useState, useEffect } from 'react';
 
-const Paso4 = ({ data, updateData, instructores, updateInstructor }) => {
+const Paso4 = ({ data, updateData, instructores, updateInstructor, errors }) => {
   const [showInstructorTable, setShowInstructorTable] = useState(false);
   const [selectedInstructores, setSelectedInstructores] = useState(data.instructores || []);
 
@@ -43,6 +43,7 @@ const Paso4 = ({ data, updateData, instructores, updateInstructor }) => {
       <button className="btn-add" type="button" onClick={handleToggleInstructorTable}>
         {showInstructorTable ? 'Ocultar instructores' : 'Agregar instructor'}
       </button>
+      {errors.instructores && <span className="error-message">{errors.instructores}</span>}
 
       {selectedInstructores.length > 0 && (
         <div className="table-container">

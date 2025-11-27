@@ -1,0 +1,70 @@
+/* src/components/Tables/TablaAsistentes.css */
+.asistentes-table-container {
+    margin-bottom: 20px;
+  }
+  
+  .asistentes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+  }
+  
+  .asistentes-table th,
+  .asistentes-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top; /* Align content to the top for textarea */
+  }
+  
+  .asistentes-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .asistentes-table input[type="text"],
+  .asistentes-table input[type="checkbox"],
+  .asistentes-table textarea { /* Added textarea here */
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensures padding doesn't increase width */
+    resize: vertical; /* Allow vertical resizing for textarea */
+    min-height: 50px; /* Minimum height for textarea */
+    -webkit-user-select: text; /* Allow selection on WebKit browsers */
+    -moz-user-select: text;    /* Allow selection on Firefox */
+    -ms-user-select: text;     /* Allow selection on Internet Explorer/Edge */
+    user-select: text;         /* Standard property */
+    pointer-events: auto;      /* Ensure pointer events are not blocked */
+  }
+
+  .asistentes-table input[type="checkbox"] {
+    width: auto; /* Checkbox should not take full width */
+  }
+  
+  .asistentes-table .btn-remove {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .asistentes-table .btn-remove:hover {
+    background-color: #cc0000;
+  }
+  
+  .btn-add-row {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .btn-add-row:hover {
+    background-color: #45a049;
+  }
