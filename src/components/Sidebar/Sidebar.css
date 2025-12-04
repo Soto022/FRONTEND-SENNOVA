@@ -1,10 +1,10 @@
 /* src/components/Sidebar/Sidebar.css */
 .sidebar {
-  background-color: var(--color-primary);
+  background-color: var(--color-sidebar);
   color: var(--color-text);
   width: var(--sidebar-width, 240px);
   padding: var(--space-xl);
-  box-shadow: var(--shadow-md);
+  box-shadow: 4px 0 8px rgba(9, 196, 37, 0.749); /* Sombra suave para profesionalidad */
   display: flex;
   flex-direction: column;
 
@@ -32,7 +32,7 @@
   background-color: var(--color-primary-bg);
   border-radius: var(--border-radius);
   padding: var(--space-md);
-  margin-bottom: var(--space-xl);
+  margin-bottom: 50px;
 }
 
 .sidebar__profile-avatar {
@@ -91,8 +91,8 @@
 }
 
 .sidebar__item--active a {
-  background-color: var(--color-primary);
-  color: rgb(226, 206, 206);
+  background-color: var(--color-sidebar-hover);
+  color: rgb(255, 254, 254);
   font-weight: bold;
 }
 

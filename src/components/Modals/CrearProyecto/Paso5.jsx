@@ -18,6 +18,7 @@ const Paso5 = ({ data, updateData }) => {
           name: file.name,
           content: event.target.result.split(',')[1] // Extraer solo la data Base64
         };
+        console.log('[Paso 5] Archivo procesado. Llamando a updateData con:', { cronogramaFile: fileData });
         updateData(prev => ({ ...prev, cronogramaFile: fileData }));
       };
       reader.readAsDataURL(file); // Inicia la lectura
@@ -29,9 +30,9 @@ const Paso5 = ({ data, updateData }) => {
       <h3 className="step-title">Subir cronograma del proyecto</h3>
       <p className="step-subtitle">Sube el cronograma del proyecto aquí</p>
       <div className="file-upload-container">
-        <input type="file" id="file-upload" accept=".xlsx, .xls" onChange={handleFileChange} />
+        <input type="file" id="file-upload" accept=".pdf, .png, .jpg, .jpeg, .gif" onChange={handleFileChange} />
         <label htmlFor="file-upload" className="file-upload-label">
-          Seleccionar archivo (.xlsx, .xls)
+          Seleccionar archivo (.pdf, .png, .jpg, .jpeg, .gif)
         </label>
       </div>
       {fileName && (

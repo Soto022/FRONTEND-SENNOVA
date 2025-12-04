@@ -7,9 +7,7 @@
 
 /* --- Layout Principal (Push Sidebar debajo del Header) --- */
 
-.app {
-  /* No se necesita un layout flex o grid aquí, el sidebar es fijo y el contenido principal tiene padding. */
-}
+
 
 .app-content-wrapper {
   padding-top: var(--header-height); /* Espacio para el header fijo */

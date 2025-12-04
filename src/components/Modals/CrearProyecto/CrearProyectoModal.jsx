@@ -7,79 +7,74 @@ import Paso3 from './Paso3';
 import Paso4 from './Paso4';
 import Paso5 from './Paso5';
 import { useInstructores } from '../../../hook/useInstructores';
-import { useAprendices } from '../../../hook/useAprendices'; // Import useAprendices
+import { useAprendices } from '../../../hook/useAprendices';
 
-const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, projectToEdit }) => { // Eliminar 'aprendices' de las props
+const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, projectToEdit }) => {
   const [step, setStep] = useState(1);
   const [projectData, setProjectData] = useState({});
-  const [errors, setErrors] = useState({}); // State for validation errors
-  const { instructores, updateInstructor } = useInstructores(); // Get instructores and updateInstructor
-  const { aprendices, updateAprendiz } = useAprendices(); // Extraer 'aprendices' del hook
+  const [errors, setErrors] = useState({});
+  const { instructores, updateInstructor } = useInstructores();
+  const { aprendices, updateAprendiz } = useAprendices();
 
   useEffect(() => {
     if (isOpen) {
       if (projectToEdit) {
-        // Mapea los datos del proyecto a editar a la nueva estructura camelCase
         const mappedData = {
-          ...projectToEdit, // Conserva todos los demás datos como están
+          ...projectToEdit,
           nombreProyecto: projectToEdit.name || projectToEdit.nombreProyecto,
-          programaFormacion: projectToEdit['programa-formacion'] || projectToEdit.programaFormacion,
+          programaFormacion: projectToEdit["programa-formacion"] || projectToEdit.programaFormacion,
           lineaInvestigacion: projectToEdit.lineaTecnologica || projectToEdit.lineaInvestigacion,
-          fechaInicio: projectToEdit['fecha-inicio'] || projectToEdit.fechaInicio,
-          fechaFin: projectToEdit['fecha-fin'] || projectToEdit.fechaFin,
+          fechaInicio: projectToEdit["fecha-inicio"] || projectToEdit.fechaInicio,
+          fechaFin: projectToEdit["fecha-fin"] || projectToEdit.fechaFin,
           liderProyecto: projectToEdit.lider || projectToEdit.liderProyecto,
-          // Asegura que los arrays existan y maneja objetivosEspecificos
           aprendices: projectToEdit.aprendices || [],
           instructores: projectToEdit.instructores || [],
           objetivosEspecificos: Array.isArray(projectToEdit.objetivosEspecificos)
             ? projectToEdit.objetivosEspecificos
-            : (projectToEdit.objetivosEspecificos ? [projectToEdit.objetivosEspecificos] : ['']),
-          // Nuevos campos
-          impactos: projectToEdit.impactos || '',
-          palabrasClave: projectToEdit.palabrasClave || '',
-          beneficiarios: projectToEdit.beneficiarios || '',
-          bibliografia: projectToEdit.bibliografia || '',
+            : (projectToEdit.objetivosEspecificos ? [projectToEdit.objetivosEspecificos] : [""]),
+          impactos: projectToEdit.impactos || "",
+          palabrasClave: projectToEdit.palabrasClave || "",
+          beneficiarios: projectToEdit.beneficiarios || "",
+          bibliografia: projectToEdit.bibliografia || "",
+          cronogramaFile: projectToEdit.cronogramaFile || null,
         };
         setProjectData(mappedData);
       } else {
-        // Estado inicial con claves camelCase para consistencia
         setProjectData({
-          programaFormacion: '',
-          nombreProyecto: '',
-          semillero: '',
-          lineaInvestigacion: '',
-          fechaInicio: '',
-          fechaFin: '',
-          liderProyecto: '',
+          programaFormacion: "",
+          nombreProyecto: "",
+          semillero: "",
+          lineaInvestigacion: "",
+          fechaInicio: "",
+          fechaFin: "",
+          liderProyecto: "",
           aprendices: [],
           instructores: [],
-          // Campos existentes de Paso2
-          resumen: '',
-          problema: '',
-          objetivo: '',
-          objetivosEspecificos: [''], // Corrección: inicializado como array
-          justificacion: '',
-          metodologia: '',
-          alcance: '',
-          // Nuevos campos de Paso2
-          impactos: '', 
-          palabrasClave: '', 
-          beneficiarios: '', 
-          bibliografia: '', 
+          resumen: "",
+          problema: "",
+          objetivo: "",
+          objetivosEspecificos: [""],
+          justificacion: "",
+          metodologia: "",
+          alcance: "",
+          impactos: "",
+          palabrasClave: "",
+          beneficiarios: "",
+          bibliografia: "",
+          cronogramaFile: null,
         });
       }
-      setStep(1); // Reinicia al primer paso cada vez que se abre el modal
-      setErrors({}); // Clear errors when modal opens
+      setStep(1);
+      setErrors({});
     }
   }, [isOpen, projectToEdit]);
 
 
   if (!isOpen) return null;
 
-  // Validation logic
   const validateStep = (currentStep) => {
     const newErrors = {};
-    const requiredError = 'Este campo es requerido.';
+    const requiredError = "Este campo es requerido.";
 
     switch (currentStep) {
       case 1:
@@ -94,8 +89,8 @@ const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, projectToEdit
         if (!projectData.resumen) newErrors.resumen = requiredError;
         if (!projectData.problema) newErrors.problema = requiredError;
         if (!projectData.objetivo) newErrors.objetivo = requiredError;
-        if (!projectData.objetivosEspecificos || projectData.objetivosEspecificos.some(obj => !obj || obj.trim() === '')) {
-          newErrors.objetivosEspecificos = 'Debe haber al menos un objetivo específico y no puede estar vacío.';
+        if (!projectData.objetivosEspecificos || projectData.objetivosEspecificos.some(obj => !obj.trim())) {
+          newErrors.objetivosEspecificos = "Debe haber al menos un objetivo específico y no puede estar vacío.";
         }
         if (!projectData.justificacion) newErrors.justificacion = requiredError;
         if (!projectData.metodologia) newErrors.metodologia = requiredError;
@@ -106,23 +101,10 @@ const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, projectToEdit
         if (!projectData.bibliografia) newErrors.bibliografia = requiredError;
         break;
       case 3:
-        if (!projectData.aprendices || projectData.aprendices.length === 0) {
-          newErrors.aprendices = 'Debe seleccionar al menos un aprendiz.';
-        }
+        if (!projectData.aprendices.length) newErrors.aprendices = "Debe seleccionar al menos un aprendiz.";
         break;
       case 4:
-        if (!projectData.instructores || projectData.instructores.length === 0) {
-          newErrors.instructores = 'Debe seleccionar al menos un instructor.';
-        }
-        break;
-      case 5: {
-        const step1Errors = validateStep(1);
-        const step2Errors = validateStep(2);
-        const step3Errors = validateStep(3);
-        const step4Errors = validateStep(4);
-        return { ...step1Errors, ...step2Errors, ...step3Errors, ...step4Errors };
-      }
-      default:
+        if (!projectData.instructores.length) newErrors.instructores = "Debe seleccionar al menos un instructor.";
         break;
     }
     return newErrors;
@@ -131,37 +113,29 @@ const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, projectToEdit
   const nextStep = () => {
     const newErrors = validateStep(step);
     setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      setStep(prev => prev + 1);
-    }
+    if (Object.keys(newErrors).length === 0) setStep(prev => prev + 1);
   };
+
   const prevStep = () => {
-    setErrors({}); // Clear errors when going back
+    setErrors({});
     setStep(prev => prev - 1);
   };
 
   const handleSave = () => {
     const finalErrors = validateStep(5);
     setErrors(finalErrors);
+
     if (Object.keys(finalErrors).length === 0) {
       onSave(projectData);
-      // After saving the project, update the assigned apprentices' projectAsignado field
-      if (projectData.aprendices && projectData.aprendices.length > 0) {
-        projectData.aprendices.forEach(aprendiz => {
-          updateAprendiz(aprendiz.id, { proyectoAsignado: projectData.nombreProyecto });
-        });
-      }
-      // Also update assigned instructors' proyectoAsignado field
-      if (projectData.instructores && projectData.instructores.length > 0) {
-        projectData.instructores.forEach(instructor => {
-          updateInstructor(instructor.id, { proyectoAsignado: projectData.nombreProyecto });
-        });
-      }
+      projectData.aprendices?.forEach(a =>
+        updateAprendiz(a.id, { proyectoAsignado: projectData.nombreProyecto })
+      );
+      projectData.instructores?.forEach(i =>
+        updateInstructor(i.id, { proyectoAsignado: projectData.nombreProyecto })
+      );
     } else {
-      // Find the first step with an error and navigate to it
       for (let i = 1; i <= 4; i++) {
-        const stepErrors = validateStep(i);
-        if (Object.keys(stepErrors).length > 0) {
+        if (Object.keys(validateStep(i)).length > 0) {
           setStep(i);
           break;
         }
@@ -171,33 +145,27 @@ const CrearProyectoModal = ({ isOpen, onClose, onSave, semilleros, projectToEdit
 
   const renderStep = () => {
     switch (step) {
-      // Se pasa 'updateData' y 'errors' a todos los pasos
-      case 1:
-        return <Paso1 data={projectData} updateData={setProjectData} semilleros={semilleros} errors={errors} />;
-      case 2:
-        return <Paso2 data={projectData} updateData={setProjectData} errors={errors} />;
-      case 3:
-        const activeAprendices = aprendices.filter(ap => ap.estado === 'Activo');
-        return <Paso3 data={projectData} updateData={setProjectData} aprendices={activeAprendices} updateAprendiz={updateAprendiz} errors={errors} />;
-      case 4:
-        const activeInstructores = instructores.filter(inst => inst.estado === 'Activo');
-        return <Paso4 data={projectData} updateData={setProjectData} instructores={activeInstructores} updateInstructor={updateInstructor} errors={errors} />;
-      case 5:
-        return <Paso5 data={projectData} updateData={setProjectData} errors={errors} />;
-      default:
-        return <Paso1 data={projectData} updateData={setProjectData} semilleros={semilleros} errors={errors} />;
+      case 1: return <Paso1 data={projectData} updateData={setProjectData} semilleros={semilleros} errors={errors} />;
+      case 2: return <Paso2 data={projectData} updateData={setProjectData} errors={errors} />;
+      case 3: return <Paso3 data={projectData} updateData={setProjectData} aprendices={aprendices.filter(a => a.estado === "Activo")} updateAprendiz={updateAprendiz} errors={errors} />;
+      case 4: return <Paso4 data={projectData} updateData={setProjectData} instructores={instructores.filter(i => i.estado === "Activo")} updateInstructor={updateInstructor} errors={errors} />;
+      case 5: return <Paso5 data={projectData} updateData={setProjectData} errors={errors} />;
+      default: return null;
     }
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay crear-proyecto-wrapper">
       <div className="modal-container">
         <div className="modal-header">
-          <h2>{projectToEdit ? 'Editar Proyecto' : 'Crear Proyecto'} - Paso {step} de 5</h2>
+          <h2>{projectToEdit ? "Editar Proyecto" : "Crear Proyecto"} - Paso {step} de 5</h2>
         </div>
-        <div className="modal-content">
+
+        {/* 🔥 ESTA ES LA LÍNEA QUE ASEGURA EL ANCHO CORRECTO */}
+        <div className="modal-content modal-content-fix">
           {renderStep()}
         </div>
+
         <div className="modal-footer">
           <button className="btn-cancel" onClick={onClose}>Cancelar X</button>
           <div className="step-navigation">

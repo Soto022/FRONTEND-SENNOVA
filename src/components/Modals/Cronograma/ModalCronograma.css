@@ -1,82 +1,118 @@
-.modal-overlay {
+/* Overlay to cover the screen */
+.mc-overlay {
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000; /* Ensure it's above sidebar */
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  padding: 1rem;
 }
 
-.modal-content-viewer-downloader {
+/* The modal itself */
+.mc-modal {
   width: 90%;
-  max-width: 1400px;
+  max-width: 1200px;
   height: 90vh;
   background-color: #fff;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  position: relative;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
+  overflow: hidden; /* Prevents content from spilling out */
 }
 
-.modal-close-button-top-right {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  color: #6b7280;
-  font-size: 1.5rem;
-  line-height: 1;
-  background: none;
-  border: none;
-  cursor: pointer;
+/* Header section with title and buttons */
+.mc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f9fafb;
 }
 
-.modal-title-downloader {
-  font-size: 1.5rem;
+.mc-title {
+  font-size: 1.25rem;
   font-weight: 600;
-  text-align: center;
-  margin-bottom: 1rem;
-  color: #333;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.modal-viewer-container {
-  flex-grow: 1; /* This makes the viewer take up most of the space */
-  min-height: 0; /* Important for flex children */
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-.modal-download-section {
+.mc-actions {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  gap: 0.75rem;
 }
 
-.modal-download-button {
-  background-color: #10b981;
-  color: #fff;
-  padding: 0.625rem 1.5rem;
-  border-radius: 0.5rem;
-  text-decoration: none;
-  transition: background-color 0.2s ease-in-out;
+.mc-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #fff;
+  cursor: pointer;
   font-weight: 500;
+  transition: background-color 0.2s;
 }
 
-.modal-download-button:hover {
-  background-color: #059669;
+.mc-btn:hover {
+  background-color: #f9fafb;
 }
 
-.modal-no-cronograma-message {
-  text-align: center;
-  color: #6b7280;
-  padding: 2rem;
-  font-size: 1.1rem;
-  flex-grow: 1;
+.mc-btn.mc-close {
+  background-color: #e5e7eb;
+}
+.mc-btn.mc-close:hover {
+  background-color: #d1d5db;
+}
+
+.mc-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Main body for the preview content */
+.mc-body {
+  flex-grow: 1; /* Makes this section fill available space */
+  padding: 0;
+  margin: 0;
+  overflow: auto; /* Add scroll if content is too big */
+  background-color: #f3f4f6;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+}
+
+/* Styling for the embedded content */
+.mc-iframe,
+.mc-image,
+.mc-video {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  border: none;
+}
+
+.mc-image {
+  object-fit: contain; /* Prevents stretching for images */
+}
+
+.mc-loading,
+.mc-error,
+.mc-no-preview {
+  color: #4b5563;
+  font-size: 1.1rem;
+}
+
+/* Footer section */
+.mc-footer {
+  padding: 0.75rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
 }

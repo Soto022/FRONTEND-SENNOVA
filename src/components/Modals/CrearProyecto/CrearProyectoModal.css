@@ -1,247 +1,318 @@
-/* Estilos para el Modal de Crear Proyecto */
+/* ========================================================================== */
+/* --- CSS Organizado y Refactorizado para Modal de Crear Proyecto --- */
+/* ========================================================================== */
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+/* Se utiliza .crear-proyecto-wrapper para aislar todos los estilos
+   y evitar conflictos con otros modales. Asumo que el JSX tiene
+   un div padre con la clase .crear-proyecto-wrapper. */
+
+/* 1. Estructura Principal del Modal
+/* ========================================================================== */
+
+.crear-proyecto-wrapper .modal-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
-
-.modal-container {
-  background-color: var(--sena-light-gray, #F5F5F5);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-md);
-  width: 90%;
-  max-width: 800px;
+  max-width: 850px; /* Ancho principal del modal */
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
-  max-height: 90vh;
+  overflow: hidden;
 }
 
-/* Estilo para modales más pequeños */
-.small-modal {
-  max-width: 450px;
+.crear-proyecto-wrapper .modal-header {
+  flex-shrink: 0;
+  padding: 0.7rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.modal-header {
-  background-color: var(--color-primary);
-  color: var(--color-text-inverse);
-  padding: var(--space-md);
-  border-top-left-radius: var(--border-radius-lg);
-  border-top-right-radius: var(--border-radius-lg);
-  text-align: center;
+.crear-proyecto-wrapper .modal-content {
+  flex-grow: 1;
+  overflow-y: auto; /* El scroll solo aplica aquí */
+  padding: 3.9rem;
+  text-align: center; /* << AÑADIDO: Habilita Flexbox para centrar */
+  
 }
 
-.modal-header h2 {
-  margin: 0;
-  font-size: 1.25rem;
-}
-
-.modal-content {
-  padding: var(--space-xl);
-  overflow-y: auto;
-}
-
-.modal-footer {
+.crear-proyecto-wrapper .modal-footer {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
-  background-color: #f7f7f7;
-  border-top: 1px solid #ccc;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  padding: 0.9rem 0;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
 }
 
-/* New style for validation error messages */
-.error-message {
-  color: red;
-  font-size: 0.8rem;
-  margin-top: 4px;
-}
+/* 2. Contenido del Formulario (Todos los pasos)
+/* ========================================================================== */
 
-/* Estilos de los botones de navegación */
-.btn-cancel, .btn-prev, .btn-next, .btn-save, .btn-add {
-  padding: var(--space-sm) var(--space-lg);
-  border: none;
-  border-radius: var(--border-radius);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-cancel {
-  background-color: var(--color-error);
-  color: white;
-}
-.btn-cancel:hover { background-color: #c0392b; }
-
-.btn-prev, .btn-next {
-  background-color: var(--color-primary);
-  color: white;
-}
-.btn-prev:hover, .btn-next:hover { background-color: var(--color-primary-dark); }
-
-.btn-save {
-  background-color: var(--color-primary-dark);
-  color: white;
-}
-.btn-save:hover { background-color: #0F8A1F; }
-
-.btn-add {
-  background-color: var(--color-accent);
-  color: white;
-  margin-bottom: var(--space-lg);
-}
-.btn-add:hover { background-color: #2980b9; }
-
-.btn-remove {
-  background-color: #ff6b6b; /* Similar to inactive status */
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.btn-remove:hover {
-  background-color: #e53935; /* A slightly darker red on hover */
-}
-
-.step-navigation {
-  display: flex;
-  gap: var(--space-md);
-}
-
-/* Estilos de los formularios */
-.form-step {
+.crear-proyecto-wrapper .form-step {
+  width: 100%;
+  max-width: 700px; /* Ancho del contenido del formulario */
+  margin: auto; /* << CAMBIADO: Centra en ambos ejes dentro del contenedor flex */
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
-  width: 100%;
+  gap: 2.5rem; /* Espacio entre cada sección del formulario */
 }
 
-.step-title {
+/* Títulos y Subtítulos */
+.crear-proyecto-wrapper .step-title {
   font-size: 1.5rem;
-  color: var(--color-primary);
-  margin: 0 0 var(--space-md) 0;
+  font-weight: 600;
   text-align: center;
+  color: #111827;
+  margin: 0;
 }
 
-.form-group {
+.crear-proyecto-wrapper .step-subtitle {
+  text-align: center;
+  font-size: 1rem;
+  color: #6b7280;
+  margin-top: -2rem; /* Acerca el subtítulo al título */
+}
+
+/* Grupos de Formulario (Label + Input) */
+.crear-proyecto-wrapper .form-group {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 0.5rem;
 }
 
-.form-group label {
+.crear-proyecto-wrapper .form-group label {
   font-weight: 500;
-  color: var(--color-text-light);
+  font-size: 0.9rem;
+  color: #374151;
 }
 
-.form-group input[type="text"], 
-.form-group input[type="date"], 
-.form-group select, 
-.form-group textarea {
+/* Inputs, Selects, Textareas */
+.crear-proyecto-wrapper .form-group input[type="text"],
+.crear-proyecto-wrapper .form-group input[type="date"],
+.crear-proyecto-wrapper .form-group select,
+.crear-proyecto-wrapper .form-group textarea {
   width: 100%;
-  padding: var(--space-sm);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  font-family: var(--font-family-base);
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
   font-size: 1rem;
+  color: #111827;
+  background-color: #ffffff;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.form-row {
-  display: flex;
-  gap: var(--space-lg);
-}
-.form-row .form-group {
-  flex: 1;
+.crear-proyecto-wrapper .form-group textarea {
+  min-height: 75px;
+  resize: vertical;
 }
 
-/* Estilos de las tablas */
-.table-container {
-  overflow-x: auto;
+.crear-proyecto-wrapper .form-group input:focus,
+.crear-proyecto-wrapper .form-group select:focus,
+.crear-proyecto-wrapper .form-group textarea:focus {
+  outline: none;
+  border-color: #2563eb; /* Azul para el foco */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
-table {
+.crear-proyecto-wrapper .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.crear-proyecto-wrapper .error-message {
+  color: #ef4444;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.crear-proyecto-wrapper .static-info {
+  background-color: #f3f4f6;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+}
+
+/* 3. Elementos Específicos de los Pasos
+/* ========================================================================== */
+
+/* Subtítulos de sección (Paso 3 y 4) */
+.crear-proyecto-wrapper .form-step h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 1rem 0 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+/* Tablas (Paso 3 y 4) */
+.crear-proyecto-wrapper .table-container {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.crear-proyecto-wrapper table {
   width: 100%;
   border-collapse: collapse;
 }
 
-th, td {
-  padding: var(--space-md);
+.crear-proyecto-wrapper th,
+.crear-proyecto-wrapper td {
+  padding: 0.75rem 1rem;
   text-align: left;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.95rem;
 }
 
-th {
-  background-color: var(--color-primary-bg);
+.crear-proyecto-wrapper thead th {
+  background-color: #f9fafb;
   font-weight: 600;
+  color: #4b5563;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.chip-active {
-  background-color: var(--color-success);
-  color: white;
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: 50px;
-  font-size: 0.8rem;
-  font-weight: 600;
+.crear-proyecto-wrapper tbody tr:last-child td {
+  border-bottom: none;
 }
 
-.btn-delete {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2rem;
-  color: var(--color-error);
+.crear-proyecto-wrapper tbody tr:hover {
+  background-color: #f9fafb;
 }
 
-/* Estilos para carga de archivos */
-.step-subtitle { text-align: center; color: var(--color-text-light); }
+.crear-proyecto-wrapper td input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+}
 
-.file-upload-container {
-  border: 2px dashed var(--color-primary);
-  border-radius: var(--border-radius-lg);
-  padding: var(--space-xl);
+/* Campos dinámicos (Paso 2) */
+.crear-proyecto-wrapper .dynamic-field-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.crear-proyecto-wrapper .dynamic-field-item input {
+  flex-grow: 1;
+}
+
+/* Área de subir archivos (Paso 5) */
+.crear-proyecto-wrapper .file-upload-container {
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 2.5rem;
   text-align: center;
-  background-color: var(--color-primary-bg);
+  background-color: #f9fafb;
+  transition: background-color 0.2s, border-color 0.2s;
+  cursor: pointer;
 }
-
-.file-upload-container input[type="file"] {
+.crear-proyecto-wrapper .file-upload-container:hover {
+  background-color: #f3f4f6;
+  border-color: #2563eb;
+}
+.crear-proyecto-wrapper .file-upload-label {
+  color: #2563eb;
+  font-weight: 600;
+}
+.crear-proyecto-wrapper .file-upload-container input[type="file"] {
   display: none;
 }
-
-.file-upload-label {
-  cursor: pointer;
-  color: var(--color-primary);
-  font-weight: 600;
+.crear-proyecto-wrapper .file-info {
+  margin-top: 1rem;
+  font-weight: 500;
+  color: #374151;
+  background-color: #e5e7eb;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
 }
 
-.file-info {
+/* 4. Botones
+/* ========================================================================== */
+
+/* Botones de Navegación del Footer */
+.crear-proyecto-wrapper .step-navigation {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--space-sm);
-  margin-top: var(--space-md);
-  font-weight: 500;
+  gap: 0.75rem;
 }
 
-.check-icon { color: var(--color-success); }
+.crear-proyecto-wrapper .btn-cancel,
+.crear-proyecto-wrapper .btn-prev,
+.crear-proyecto-wrapper .btn-next,
+.crear-proyecto-wrapper .btn-save {
+  padding: 0.6rem 1.25rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
 
-.static-info {
-  background-color: #eee;
-  padding: var(--space-sm);
-  border-radius: var(--border-radius);
-  font-weight: 500;
-  color: #555;
-  margin: 0;
+.crear-proyecto-wrapper .btn-cancel {
+  background-color: transparent;
+  color: #4b5563;
+}
+.crear-proyecto-wrapper .btn-cancel:hover { background-color: #f3f4f6; }
+
+.crear-proyecto-wrapper .btn-prev {
+  background-color: #ffffff;
+  color: #374151;
+}
+.crear-proyecto-wrapper .btn-prev:hover { background-color: #f9fafb; }
+
+.crear-proyecto-wrapper .btn-next,
+.crear-proyecto-wrapper .btn-save {
+  background-color: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+.crear-proyecto-wrapper .btn-next:hover,
+.crear-proyecto-wrapper .btn-save:hover { 
+  background-color: #1d4ed8; 
+  border-color: #1d4ed8; 
+}
+
+/* Botones de Acción dentro del formulario */
+.crear-proyecto-wrapper .btn-add,
+.crear-proyecto-wrapper .btn-remove,
+.crear-proyecto-wrapper .btn-add-point {
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.25rem;
+}
+
+.crear-proyecto-wrapper .btn-add {
+  background-color: #dbeafe;
+  color: #1e40af;
+  align-self: flex-start;
+}
+.crear-proyecto-wrapper .btn-add:hover { background-color: #bfdbfe; }
+
+.crear-proyecto-wrapper .btn-remove {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 0.5rem; /* Botón de eliminar más pequeño */
+  line-height: 1;
+}
+.crear-proyecto-wrapper .btn-remove:hover { background-color: #fecaca; }
+
+.crear-proyecto-wrapper .btn-add-point {
+  background-color: transparent;
+  color: #1d4ed8;
+  align-self: flex-start;
+  padding: 0.5rem 0; /* Sin padding lateral */
+}
+.crear-proyecto-wrapper .btn-add-point:hover { 
+  color: #1e3a8a;
+  text-decoration: underline;
 }
