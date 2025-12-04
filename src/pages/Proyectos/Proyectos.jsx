@@ -60,8 +60,10 @@ const Proyectos = () => {
 
   const handleSaveProject = (projectData) => {
     if (editingProject) {
+      console.log('[Proyectos] Llamando a updateProject con ID:', editingProject.id, 'y projectData (cronogramaFile):', projectData.cronogramaFile ? { name: projectData.cronogramaFile.name, content: '[contenido base64...]' } : null);
       updateProject(editingProject.id, projectData);
     } else {
+      console.log('[Proyectos] Llamando a createProject con projectData (cronogramaFile):', projectData.cronogramaFile ? { name: projectData.cronogramaFile.name, content: '[contenido base64...]' } : null);
       const result = createProject(projectData);
       if (result && result.error) {
         alert(result.error);

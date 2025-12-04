@@ -1,147 +1,198 @@
-import React, { useState, useEffect } from 'react';
-import * as XLSX from 'xlsx';
-import { AgGridReact } from 'ag-grid-react';
-import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-import './ModalCronograma.css'; // Import specific styles
+// src/components/ModalCronograma/ModalCronograma.jsx
+import React, { useEffect, useMemo, useState } from "react";
+import PropTypes from "prop-types";
+import "./ModalCronograma.css";
 
-// Register AG Grid modules
-ModuleRegistry.registerModules([AllCommunityModule]);
+const getMimeType = (fileName = "") => {
+  const ext = (fileName || "").toLowerCase().split(".").pop();
+  const map = {
+    pdf: "application/pdf",
+    png: "image/png",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    gif: "image/gif",
+    mp4: "video/mp4",
+    webm: "video/webm",
+    mov: "video/quicktime",
+    doc: "application/msword",
+    docx:
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    xls: "application/vnd.ms-excel",
+    xlsx:
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ppt: "application/vnd.ms-powerpoint",
+    pptx:
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  };
+  return map[ext] || "application/octet-stream";
+};
 
-const ModalCronograma = ({ isOpen, onClose, project }) => { // isOpen prop added back
-  // State for AG-Grid
-  const [rowData, setRowData] = useState(null);
-  const [columnDefs, setColumnDefs] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+const isPdf = (mimeOrName) =>
+  (mimeOrName || "").toLowerCase().includes("pdf") ||
+  (mimeOrName || "").toLowerCase().endsWith(".pdf");
 
-  // Derived data for downloader
-  const nombreProyecto = project?.name || 'Proyecto Desconocido';
-  const cronogramaFile = project?.cronogramaFile;
+const isImage = (mimeOrName) =>
+  (mimeOrName || "").toLowerCase().startsWith("image/") ||
+  [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".svg"].some((e) =>
+    (mimeOrName || "").toLowerCase().endsWith(e)
+  );
 
-  let dataUrl = '';
-  if (cronogramaFile && typeof cronogramaFile === 'object' && cronogramaFile.content && cronogramaFile.name) {
-    const fileName = cronogramaFile.name.toLowerCase();
-    const mimeType = fileName.endsWith('.xlsx') 
-      ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
-      : 'application/vnd.ms-excel';
-    dataUrl = `data:${mimeType};base64,${cronogramaFile.content}`;
-  }
+const isVideo = (mimeOrName) =>
+  (mimeOrName || "").toLowerCase().startsWith("video/") ||
+  [".mp4", ".webm", ".mov"].some((e) =>
+    (mimeOrName || "").toLowerCase().endsWith(e)
+  );
 
-  // Effect to parse Excel data for AG-Grid
+const isOfficeDocument = (mimeOrName) =>
+  [".doc", ".docx", ".xls", ".xlsx"].some((e) =>
+    (mimeOrName || "").toLowerCase().endsWith(e)
+  );
+
+export default function ModalCronograma({ isOpen, onClose, cronogramaFile }) {
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [objectUrl, setObjectUrl] = useState(null);
+
+  const fileName = cronogramaFile?.name || (typeof cronogramaFile === "string" ? cronogramaFile.split("/").pop() : "");
+  const mimeType = useMemo(() => getMimeType(fileName), [fileName]);
+
   useEffect(() => {
-    // This effect now runs when the component mounts or project/dataUrl changes
-    if (!isOpen) { // Check isOpen here again
-      setRowData(null);
-      setColumnDefs(null);
-      setIsLoading(false);
-      setError('');
+    setError("");
+    setObjectUrl(null);
+
+    if (!isOpen) return;
+
+    if (!cronogramaFile) {
+      setError("No hay archivo para mostrar.");
       return;
     }
+    
+    setLoading(true);
 
-    if (dataUrl) {
-      setIsLoading(true);
+    if (typeof cronogramaFile === "string") {
+      setObjectUrl(cronogramaFile);
+    } else if (cronogramaFile?.content && cronogramaFile?.name) {
       try {
-        const workbook = XLSX.read(cronogramaFile.content, { type: 'base64' });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-        if (json.length > 0) {
-          const header = json[0];
-          const rows = json.slice(1);
-
-          const cols = header.map(h => ({
-            field: h,
-            headerName: h,
-            sortable: true,
-            filter: true,
-            resizable: true,
-          }));
-
-          const rData = rows.map(row => {
-            const rowObject = {};
-            header.forEach((h, index) => {
-              rowObject[h] = row[index];
-            });
-            return rowObject;
-          });
-
-          setColumnDefs(cols);
-          setRowData(rData);
-        } else {
-          setError('El archivo de Excel está vacío.');
+        const byteCharacters = atob(cronogramaFile.content);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        setObjectUrl(url);
       } catch (e) {
-        console.error('Error parsing Excel file:', e);
-        setError('No se pudo leer el archivo de Excel.');
-      } finally {
-        setIsLoading(false);
+        console.error("Error creating blob:", e);
+        setError("No se pudo procesar el archivo.");
       }
     } else {
-      // Reset if dataUrl becomes empty
-      setRowData(null);
-      setColumnDefs(null);
-      setIsLoading(false);
-      setError('');
+      setError("Formato de archivo no soportado.");
     }
-  }, [isOpen, cronogramaFile, dataUrl]); // isOpen added back to dependency array
+    
+    setLoading(false);
 
-  // Effect for Escape key (added back)
+  }, [isOpen, cronogramaFile, fileName, mimeType]);
+
   useEffect(() => {
-    const handleEsc = (event) => {
-      if (event.keyCode === 27) onClose();
+    return () => {
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
     };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
-  }, [onClose]);
+  }, [objectUrl]);
 
-  if (!isOpen) return null; // Guard added back
+  if (!isOpen) return null;
 
-  const renderViewer = () => {
-    if (isLoading) return <p>Cargando vista previa...</p>;
-    if (error) return <p className="modal-no-cronograma-message">{error}</p>;
-    if (rowData && columnDefs) {
+  const handleDownload = () => {
+    if (!objectUrl) return;
+    const a = document.createElement("a");
+    a.href = objectUrl;
+    a.download = fileName || "descarga";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+
+  const handleOpenNewTab = () => {
+    if (!objectUrl) return;
+    window.open(objectUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const renderPreview = () => {
+    if (loading) return <div className="mc-loading">Cargando...</div>;
+    if (error) return <div className="mc-error">{error}</div>;
+    if (!objectUrl) return <div className="mc-error">Sin archivo para previsualizar.</div>;
+
+    if (isPdf(fileName, mimeType)) {
+      return <iframe className="mc-iframe" src={objectUrl} title={fileName} />;
+    }
+
+    if (isImage(fileName, mimeType)) {
+      return <img className="mc-image" src={objectUrl} alt={fileName} />;
+    }
+
+    if (isVideo(fileName, mimeType)) {
+      return <video className="mc-video" src={objectUrl} controls />;
+    }
+
+    if (isOfficeDocument(fileName)) {
+      if (typeof cronogramaFile === 'string') {
+        const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(cronogramaFile)}&embedded=true`;
+        return <iframe src={viewerUrl} style={{ width: '100%', height: '80vh', border: 'none' }} title={fileName} />;
+      }
+      return <div className="mc-no-preview">La vista previa para documentos de Office solo está disponible para archivos remotos. Intenta descargándolo.</div>;
+    }
+    
+    if (typeof cronogramaFile === "string") {
       return (
-        <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }}>
-          <AgGridReact
-            rowData={rowData}
-            columnDefs={columnDefs}
-            defaultColDef={{ flex: 1, minWidth: 150 }}
-          />
-        </div>
+        <iframe
+          className="mc-iframe"
+          src={`https://docs.google.com/gview?url=${encodeURIComponent(objectUrl)}&embedded=true`}
+          title={fileName}
+        />
       );
     }
-    return null; // Don't render anything if there's no data to show
+
+    return <div className="mc-no-preview">No hay vista previa disponible para este tipo de archivo. Intenta descargándolo.</div>;
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}> {/* Class name changed */}
-      <div className="modal-content-viewer-downloader" onClick={(e) => e.stopPropagation()}> {/* Class name changed */}
-        <button onClick={onClose} className="modal-close-button-top-right">✕</button> {/* Class name changed */}
-        
-        <h2 className="modal-title-downloader">{nombreProyecto}</h2> {/* Class name changed */}
+    <div className="mc-overlay" onClick={onClose}>
+      <div className="mc-modal" onClick={(e) => e.stopPropagation()}>
+        <header className="mc-header">
+          <div className="mc-title">{fileName || "Cronograma"}</div>
+          <div className="mc-actions">
+            <button className="mc-btn" onClick={handleOpenNewTab} disabled={!objectUrl}>
+              Abrir en nueva pestaña
+            </button>
+            <button className="mc-btn" onClick={handleDownload} disabled={!objectUrl}>
+              Descargar
+            </button>
+            <button className="mc-btn mc-close" onClick={onClose}>Cerrar</button>
+          </div>
+        </header>
 
-        {dataUrl ? (
-          <>
-            <div className="modal-viewer-container"> {/* Class name changed */}
-              {renderViewer()}
-            </div>
-            <div className="modal-download-section"> {/* Class name changed */}
-              <a href={dataUrl} download={cronogramaFile.name} className="modal-download-button"> {/* Class name changed */}
-                Descargar cronograma
-              </a>
-            </div>
-          </>
-        ) : (
-          <p className="modal-no-cronograma-message"> {/* Class name changed */}
-            Este proyecto aún no tiene un cronograma cargado.
-          </p>
-        )}
+        <main className="mc-body">
+          {renderPreview()}
+        </main>
+
+        <footer className="mc-footer">
+          <small>Si el archivo no se previsualiza, intenta abrirlo en una nueva pestaña o descargarlo.</small>
+        </footer>
       </div>
     </div>
   );
+}
+
+ModalCronograma.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+  cronogramaFile: PropTypes.any,
 };
 
-export default ModalCronograma;
+ModalCronograma.defaultProps = {
+  isOpen: false,
+  onClose: () => {},
+  cronogramaFile: null,
+};

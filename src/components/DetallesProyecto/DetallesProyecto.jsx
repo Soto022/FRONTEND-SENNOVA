@@ -124,7 +124,13 @@ const DetallesProyecto = () => {
               <TablaAprendices aprendices={aprendicesConEstadoActualizado} />
             </div>
             <div className="botones-laterales">
-              <button onClick={() => setCronogramaOpen(true)}>Ver cronograma del proyecto</button>
+              <button 
+                onClick={() => setCronogramaOpen(true)}
+                disabled={!project.cronogramaFile}
+                title={!project.cronogramaFile ? "Este proyecto no tiene un cronograma adjunto" : "Ver cronograma del proyecto"}
+              >
+                Ver cronograma del proyecto
+              </button>
               <button onClick={() => setEstructuracionOpen(true)}>Ver estructuración del proyecto</button>
             </div>
           </div>
@@ -145,7 +151,7 @@ const DetallesProyecto = () => {
         <ModalCronograma 
           isOpen={isCronogramaOpen} 
           onClose={() => setCronogramaOpen(false)}
-          project={project}
+          cronogramaFile={project.cronogramaFile}
         />
       </div>
 

@@ -71,7 +71,9 @@ const Cronograma = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="no-results">No se encontraron proyectos.</td>
+                  <td colSpan="3" className="no-results">
+                    No se encontraron proyectos.
+                  </td>
                 </tr>
               )}
             </tbody>
@@ -83,7 +85,7 @@ const Cronograma = () => {
         <ModalCronograma
           isOpen={isModalOpen}
           onClose={handleCloseModal}
-          project={selectedProject}
+          cronogramaFile={selectedProject.cronogramaFile || null}
         />
       )}
     </>
