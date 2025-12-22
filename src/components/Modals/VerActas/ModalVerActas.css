@@ -82,3 +82,38 @@
     font-weight: 600;
     cursor: pointer;
 }
+
+/* Estilos para el modal de descarga */
+.modal-container-small {
+    background-color: var(--sena-light-gray, #F5F5F5);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    width: 90%;
+    max-width: 400px;
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.download-options {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: var(--space-lg) 0;
+}
+
+.btn-download-option {
+    background-color: var(--color-primary);
+    color: white;
+    padding: var(--space-md) var(--space-xl);
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-download-option:hover {
+    background-color: var(--color-primary-dark);
+}

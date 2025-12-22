@@ -1,3 +1,17 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Changed from center to flex-start */
+  z-index: 1000;
+  
+}
+
 /* ========================================================================== */
 /* --- CSS Organizado y Refactorizado para Modal de Crear Proyecto --- */
 /* ========================================================================== */
@@ -10,39 +24,47 @@
 /* ========================================================================== */
 
 .crear-proyecto-wrapper .modal-container {
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  background-color: #e2e1e1;
+  border-radius: 5x;
+  box-shadow: 0 10px 25px rgb(0, 0, 0);
   width: 100%;
-  max-width: 850px; /* Ancho principal del modal */
-  max-height: 90vh;
+  max-width: 890px; /* Ancho principal del modal */
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  align-items: center;
+  margin-top: 9vh; /* Added margin-top */
 }
 
 .crear-proyecto-wrapper .modal-header {
-  flex-shrink: 0;
-  padding: 0.7rem 2rem;
-  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 1;
+  justify-content: center;
+  text-align: center;
+  padding: 0.3rem 2rem;
+  border-bottom: 1px solid #0bb308;
+  width: 90%;
+  margin-bottom: 1%;
 }
 
 .crear-proyecto-wrapper .modal-content {
   flex-grow: 1;
+  margin-bottom: 1%;
   overflow-y: auto; /* El scroll solo aplica aquí */
-  padding: 3.9rem;
-  text-align: center; /* << AÑADIDO: Habilita Flexbox para centrar */
+  padding: 3.8rem;
   
 }
 
 .crear-proyecto-wrapper .modal-footer {
   flex-shrink: 0;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.9rem 0;
-  background-color: #f9fafb;
+  padding: 0.1rem 0;
+  background-color: #e2e2e2;
   border-top: 1px solid #e5e7eb;
+  width: 90%;
 }
 
 /* 2. Contenido del Formulario (Todos los pasos)
@@ -54,7 +76,7 @@
   margin: auto; /* << CAMBIADO: Centra en ambos ejes dentro del contenedor flex */
   display: flex;
   flex-direction: column;
-  gap: 2.5rem; /* Espacio entre cada sección del formulario */
+  gap: 2.3rem; /* Espacio entre cada sección del formulario */
 }
 
 /* Títulos y Subtítulos */
@@ -62,14 +84,14 @@
   font-size: 1.5rem;
   font-weight: 600;
   text-align: center;
-  color: #111827;
-  margin: 0;
+  color: #0b6404;
+  
 }
 
 .crear-proyecto-wrapper .step-subtitle {
   text-align: center;
   font-size: 1rem;
-  color: #6b7280;
+  color: #000000;
   margin-top: -2rem; /* Acerca el subtítulo al título */
 }
 
@@ -82,8 +104,8 @@
 
 .crear-proyecto-wrapper .form-group label {
   font-weight: 500;
-  font-size: 0.9rem;
-  color: #374151;
+  font-size: 1.0rem;
+  color: #000000;
 }
 
 /* Inputs, Selects, Textareas */
@@ -92,11 +114,11 @@
 .crear-proyecto-wrapper .form-group select,
 .crear-proyecto-wrapper .form-group textarea {
   width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 1rem;
-  color: #111827;
+  padding: 0.55rem 1rem;
+  border: 1px solid #096d05;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #063514;
   background-color: #ffffff;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -110,8 +132,8 @@
 .crear-proyecto-wrapper .form-group select:focus,
 .crear-proyecto-wrapper .form-group textarea:focus {
   outline: none;
-  border-color: #2563eb; /* Azul para el foco */
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  border-color: #088c32; /* Azul para el foco */
+  box-shadow: 0 0 0 3px rgba(9, 192, 103, 0.15);
 }
 
 .crear-proyecto-wrapper .form-row {
@@ -127,10 +149,10 @@
 }
 
 .crear-proyecto-wrapper .static-info {
-  background-color: #f3f4f6;
-  padding: 0.75rem 1rem;
+  background-color: #e9eaec;
+  padding: 0.50rem 1rem;
   border-radius: 8px;
-  color: #4b5563;
+  color: #646566;
   border: 1px solid #e5e7eb;
 }
 
@@ -239,6 +261,7 @@
 .crear-proyecto-wrapper .step-navigation {
   display: flex;
   gap: 0.75rem;
+  margin-top: 0%;
 }
 
 .crear-proyecto-wrapper .btn-cancel,
@@ -246,7 +269,7 @@
 .crear-proyecto-wrapper .btn-next,
 .crear-proyecto-wrapper .btn-save {
   padding: 0.6rem 1.25rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid #040404;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
@@ -268,9 +291,9 @@
 
 .crear-proyecto-wrapper .btn-next,
 .crear-proyecto-wrapper .btn-save {
-  background-color: #2563eb;
+  background-color: #0f7808;
   color: white;
-  border-color: #2563eb;
+  border-color: #000000;
 }
 .crear-proyecto-wrapper .btn-next:hover,
 .crear-proyecto-wrapper .btn-save:hover { 
@@ -292,8 +315,8 @@
 }
 
 .crear-proyecto-wrapper .btn-add {
-  background-color: #dbeafe;
-  color: #1e40af;
+  background-color: #d0e0f5;
+  color: #045a13;
   align-self: flex-start;
 }
 .crear-proyecto-wrapper .btn-add:hover { background-color: #bfdbfe; }
@@ -308,11 +331,11 @@
 
 .crear-proyecto-wrapper .btn-add-point {
   background-color: transparent;
-  color: #1d4ed8;
+  color: #188d08;
   align-self: flex-start;
   padding: 0.5rem 0; /* Sin padding lateral */
 }
 .crear-proyecto-wrapper .btn-add-point:hover { 
-  color: #1e3a8a;
+  color: #07960c;
   text-decoration: underline;
 }

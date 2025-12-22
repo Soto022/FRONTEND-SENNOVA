@@ -11,7 +11,7 @@ const ModalHacerSeguimiento = ({ isOpen, onClose, proyecto, onSave, actaToEdit }
   const actaTitle = proyecto ? `Acta de Seguimiento - ${proyecto.nombreProyecto}` : 'Acta de Seguimiento';
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay">
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close-button" onClick={onClose}>
           &times;

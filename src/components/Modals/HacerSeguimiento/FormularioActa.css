@@ -1,16 +1,14 @@
-/* src/components/Modals/HacerSeguimiento/FormularioActa.css */
 .formulario-acta {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    padding: 1rem; /* Removed background-color as it's handled by modal-container */
-    background-color: transparent; /* Ensure it's transparent to show modal-container background */
+    gap: 1rem;
+    padding: 1rem;
+    background-color: transparent;
 }
-
-/* Removed h2 styling as it's now in modal-header */
 
 .form-row {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     width: 100%;
 }
@@ -19,127 +17,179 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    width: 100%;
+    flex-grow: 1;
 }
 
 .form-group.half {
-    width: 50%;
-}
-.form-group.third {
-    width: 33.33%;
+    width: calc(50% - 0.5rem);
 }
 
+.form-group.quarter {
+    width: calc(25% - 0.75rem);
+}
 
 .form-group label {
-    font-weight: 500; /* Adjusted from 600 for consistency */
-    color: var(--color-text-light); /* Consistent color */
+    font-weight: 500;
+    color: var(--color-text-light);
 }
 
 .form-group .required {
-    color: var(--color-error); /* Consistent error color */
+    color: var(--color-error);
 }
 
 .form-group input[type="text"],
 .form-group input[type="date"],
 .form-group input[type="time"],
+.form-group select,
 .form-group textarea {
     width: 100%;
-    padding: var(--space-sm); /* Using global var for padding */
-    border: 1px solid var(--color-border); /* Consistent border */
+    padding: var(--space-sm);
+    border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
-    background-color: var(--background-color); /* Consistent background */
+    background-color: var(--background-color);
     color: var(--text-color);
-    font-size: 1rem;
+    font-size: 0.95rem;
     box-sizing: border-box;
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 2px var(--color-primary-light);
 }
 
-
-.agenda-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+/* --- New Styles for Form Sections --- */
+.form-section {
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background-color: var(--background-color-light);
 }
 
-.btn-add-point, .btn-add-row {
-    background-color: var(--color-primary-bg); /* Use consistent accent color */
-    color: var(--color-primary); /* Use consistent accent color */
-    border: none;
+.form-section legend {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    padding: 0 0.5rem;
+    margin-left: -0.5rem;
+}
+
+.section-description {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+/* --- New Styles for Dynamic Fields --- */
+.dynamic-field-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.dynamic-field-item .item-number {
+    font-weight: 600;
+    color: var(--color-text-light);
+}
+
+.dynamic-field-item input {
+    flex-grow: 1;
+}
+
+.btn-add {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 1px dashed var(--color-primary);
     padding: 0.5rem 1rem;
     border-radius: var(--border-radius);
     cursor: pointer;
     font-weight: 600;
     align-self: flex-start;
-}
-
-.editable-table {
-    width: 100%;
-    border-collapse: collapse;
     margin-top: 0.5rem;
+    transition: all 0.2s ease;
 }
 
-.editable-table th,
-.editable-table td {
-    border: 1px solid var(--color-border); /* Consistent border */
-    padding: 0.5rem;
-    text-align: left;
-}
-
-.editable-table th {
-    background-color: var(--background-color-light); /* Consistent header background */
-}
-
-.editable-table input {
-    width: 100%;
-    border: none;
-    padding: 0.25rem;
-    background-color: transparent;
-}
-
-.editable-table input:focus {
-    outline: 1px solid var(--color-primary);
+.btn-add:hover {
+    background-color: var(--color-primary-bg);
+    border-style: solid;
 }
 
 .btn-remove {
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--color-error); /* Consistent error color */
+    color: var(--color-error);
     font-size: 1.2rem;
+    padding: 0;
+    line-height: 1;
 }
 
+/* --- Table Styles --- */
+.editable-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.editable-table th,
+.editable-table td {
+    border: 1px solid var(--color-border);
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.editable-table th {
+    background-color: var(--background-color-light);
+}
+
+.editable-table input, .editable-table select {
+    width: 100%;
+    border: none;
+    padding: 0.25rem;
+    background-color: transparent;
+    color: var(--text-color);
+}
+
+.editable-table input:focus {
+    outline: 1px solid var(--color-primary);
+}
+
+/* --- Footer --- */
 .data-protection-text {
     font-size: 0.8rem;
-    color: var(--color-text-light); /* Consistent color */
+    color: var(--color-text-light);
     line-height: 1.4;
     text-align: justify;
-    margin-top: 1rem;
-    padding: 1rem;
-    background-color: var(--background-color-light); /* Consistent background */
-    border-radius: var(--border-radius);
+    margin: 0;
+    padding: 0;
 }
 
 .form-footer {
-    /* Styles will be managed by modal-footer in parent modal */
     padding-top: var(--space-md);
     margin-top: var(--space-lg);
     border-top: 1px solid var(--color-border);
 }
 
+.form-footer .form-section {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+.form-footer legend {
+    font-size: 1rem;
+    color: var(--color-text-light);
+}
+
 .form-actions {
     display: flex;
     justify-content: flex-end;
-    gap: var(--space-md); /* Consistent spacing */
-    margin-top: 1rem;
+    gap: var(--space-md);
+    margin-top: 2rem;
 }
-
-/* Replaced .btn .btn-primary .btn-secondary with global styles */
-/* The buttons will now use .btn-cancel and .btn-save classes from global scope */
 

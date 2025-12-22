@@ -10,7 +10,7 @@
   --color-primary-dark: #0F8A1F; /* Tono oscuro del primario */
   --color-primary-light: #20D43A; /* Tono claro del primario */
   --color-primary-bg: #e8f5e9; /* Color de fondo para tarjetas */
-  --color-secondary: #191818;
+  --color-secondary: #0aab32;
   --color-accent: #3b82f6;
   --color-hover: #34d587f1;
   --color-success: #10b981;
@@ -21,10 +21,10 @@
   --color-danger-dark: #d93737;
   --color-background: #f4f0f0;
   --color-surface: #ede6e6;
-  --color-text: #000000;
-  --color-text-light: #333333;
+  --color-text: #020202;
+  --color-text-light: #000000;
   --color-text-inverse: #ffffff; /* Texto blanco para fondos oscuros */
-  --color-border: #e5e7eb;
+  --color-border: #b1b2b4;
   --color-logo: #097317;
   --color-sidebar:rgba(13, 148, 31, 0.975);
   --color-sidebar-hover: #1f2120e4;

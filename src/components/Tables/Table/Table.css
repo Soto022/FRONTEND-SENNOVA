@@ -6,7 +6,7 @@
 
 /* Elemento header dentro de table */
 .table__header {
-  background-color: #000000;
+  background-color: #14952d;
 }
 
 /* Elemento row dentro de table */
@@ -15,7 +15,7 @@
 }
 
 .table__body .table__row {
-  background-color: #f1f5f9;
+  background-color: #f0f0f1;
 }
 
 /* Elemento cell dentro de table */
