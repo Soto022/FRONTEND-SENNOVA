@@ -56,8 +56,9 @@ const SeguimientoTable = ({ projects, onHacerSeguimiento, onVerActas }) => {
           👁️
         </button>
         <button
-          className="action-button action-button--follow-up"
+          className={`action-button action-button--follow-up ${project.progreso >= 100 ? 'action-button--disabled' : ''}`}
           onClick={() => onHacerSeguimiento(project)}
+          disabled={project.progreso >= 100}
           aria-label="Hacer seguimiento al proyecto"
         >
           📝

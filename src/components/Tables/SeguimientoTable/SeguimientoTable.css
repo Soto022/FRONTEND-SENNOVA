@@ -78,3 +78,13 @@
 .action-button--follow-up:hover {
     color: var(--color-success-dark);
 }
+
+.action-button--disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.action-button--disabled:hover {
+    background-color: transparent;
+    color: var(--text-color-light);
+}

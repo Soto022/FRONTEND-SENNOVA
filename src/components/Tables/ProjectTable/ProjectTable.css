@@ -5,9 +5,6 @@
 }
 
 /* Elemento header dentro de table */
-.table__header {
-  background-color: #07ea4f;
-}
 
 /* Elemento row dentro de table */
 .table__row {
@@ -27,8 +24,9 @@
 
 /* Modificador para celdas de header */
 .table__cell--header {
+  background-color: #168439;
+  color: #FFFFFF;
   font-weight: 600;
-  color: var(--color-text-light);
 }
 
 /* Bloque progress */

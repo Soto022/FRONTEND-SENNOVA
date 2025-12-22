@@ -1,19 +1,17 @@
-// src/components/Modals/HacerSeguimiento/FormularioActa.jsx
 import React, { useState, useEffect } from 'react';
 import './FormularioActa.css';
-import TablaImpactoAprendices from '../../Tables/TablaImpactoAprendices';
 import TablaCompromisos from '../../Tables/TablaCompromisos';
 import TablaAsistentes from '../../Tables/TablaAsistentes';
 
 const initialCompromiso = { actividad: '', fecha: '', responsable: '', firma: '' };
-const initialAsistente = { nombre: '', dependencia: '', aprueba: false, observacion: '', firma: '' };
+const initialAsistente = { nombre: '', dependencia: '', aprueba: 'Sí', observacion: '', firma: '' };
 
-// --- INICIO MODIFICACIÓN: Estado inicial con nuevos campos ---
 const initialFormData = {
   actaNo: '',
   reunion: '',
   ciudad: 'Manizales',
-  centroFormacion: 'Centro de Automatizacion Industrial',
+  regional: 'Caldas',
+  centro: 'Centro de Automatización Industrial',
   fecha: new Date().toISOString().split('T')[0],
   horaInicio: '',
   horaFin: '',
@@ -21,18 +19,13 @@ const initialFormData = {
   agenda: [''],
   objetivos: [''],
   desarrollo: '',
-  limitantes: [''],
-  impactoAprendices: [{ aprendiz: '', programa: '', ficha: '' }],
-  presentacionResultados: [''],
-  decisiones: [''],
-  conclusiones: [''],
+  conclusiones: '',
   compromisos: [initialCompromiso],
   asistentes: [initialAsistente],
-  // Nuevos campos para el seguimiento del proyecto
+  anexos: '',
   avancePorcentaje: '',
-  estadoProyecto: 'pendiente', // Valor por defecto
+  estadoProyecto: 'en-curso',
 };
-// --- FIN MODIFICACIÓN ---
 
 const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
   const [formData, setFormData] = useState(initialFormData);
@@ -44,26 +37,22 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
         ...actaToEdit,
         agenda: actaToEdit.agenda && actaToEdit.agenda.length > 0 ? actaToEdit.agenda : [''],
         objetivos: actaToEdit.objetivos && actaToEdit.objetivos.length > 0 ? actaToEdit.objetivos : [''],
-        limitantes: actaToEdit.limitantes && actaToEdit.limitantes.length > 0 ? actaToEdit.limitantes : [''],
-        impactoAprendices: actaToEdit.impactoAprendices && actaToEdit.impactoAprendices.length > 0 ? actaToEdit.impactoAprendices : [{ aprendiz: '', programa: '', ficha: '' }],
-        presentacionResultados: actaToEdit.presentacionResultados && actaToEdit.presentacionResultados.length > 0 ? actaToEdit.presentacionResultados : [''],
-        decisiones: actaToEdit.decisiones && actaToEdit.decisiones.length > 0 ? actaToEdit.decisiones : [''],
-        conclusiones: actaToEdit.conclusiones && actaToEdit.conclusiones.length > 0 ? actaToEdit.conclusiones : [''],
         compromisos: actaToEdit.compromisos && actaToEdit.compromisos.length > 0 ? actaToEdit.compromisos : [initialCompromiso],
         asistentes: actaToEdit.asistentes && actaToEdit.asistentes.length > 0 ? actaToEdit.asistentes : [initialAsistente],
         fecha: actaToEdit.fecha ? new Date(actaToEdit.fecha).toISOString().split('T')[0] : initialFormData.fecha,
-        centroFormacion: actaToEdit.centroFormacion || initialFormData.centroFormacion,
-        // Cargar los nuevos campos si existen en el acta a editar
+        regional: actaToEdit.regional || initialFormData.regional,
+        centro: actaToEdit.centro || initialFormData.centro,
+        conclusiones: actaToEdit.conclusiones || '',
+        anexos: actaToEdit.anexos || '',
         avancePorcentaje: actaToEdit.avancePorcentaje || '',
-        estadoProyecto: actaToEdit.estadoProyecto || 'pendiente',
+        estadoProyecto: actaToEdit.estadoProyecto || 'en-curso',
       };
       setFormData(mergedData);
     } else {
-      // Al crear un nuevo seguimiento, usar el estado y progreso actual del proyecto como valor inicial
       setFormData({
         ...initialFormData,
-        avancePorcentaje: proyecto?.progreso || '',
-        estadoProyecto: proyecto?.estado || 'pendiente',
+        estadoProyecto: proyecto?.estado || 'en-curso',
+        avancePorcentaje: '', 
       });
     }
   }, [actaToEdit, proyecto]);
@@ -85,13 +74,9 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
 
   const removeDynamicFieldPoint = (fieldName, index) => {
     const newField = formData[fieldName].filter((_, i) => i !== index);
-    setFormData(prev => ({ ...prev, [fieldName]: newField }));
+    setFormData(prev => ({ ...prev, [fieldName]: newField.length > 0 ? newField : [''] }));
   };
-
-  const handleImpactoAprendicesTableChange = (newTableData) => {
-    setFormData(prev => ({ ...prev, impactoAprendices: newTableData }));
-  };
-
+  
   const handleCompromisosTableChange = (newTableData) => {
     setFormData(prev => ({ ...prev, compromisos: newTableData }));
   };
@@ -100,16 +85,14 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
     setFormData(prev => ({ ...prev, asistentes: newTableData }));
   };
 
-  // --- INICIO MODIFICACIÓN: Lógica de envío con validación de nuevos campos ---
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.actaNo || !formData.reunion || !formData.horaInicio || !formData.horaFin) {
       alert('Por favor, complete los campos obligatorios: ACTA No., Nombre de la reunión, Hora de Inicio y Hora Fin.');
       return;
     }
-    // Validación para los nuevos campos
     if (formData.avancePorcentaje === '' || formData.avancePorcentaje < 0 || formData.avancePorcentaje > 100) {
-        alert('Por favor, ingrese un Avance de proyecto válido (0–100).');
+        alert('Por favor, ingrese un Avance de seguimiento válido (0–100).');
         return;
     }
     if (!formData.estadoProyecto) {
@@ -118,58 +101,67 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
     }
     onSave({ ...formData, proyectoId: proyecto.id, proyectoNombre: proyecto.nombreProyecto });
   };
-  // --- FIN MODIFICACIÓN ---
 
   return (
     <form onSubmit={handleSubmit} className="formulario-acta">
+      
+      <fieldset className="form-section">
+        <legend>Información General</legend>
+        
+        <div className="form-row">
+          <div className="form-group half">
+            <label>Acta No. <span className="required">*</span></label>
+            <input type="text" name="actaNo" value={formData.actaNo} onChange={handleChange} required />
+          </div>
+          <div className="form-group half">
+            <label>Nombre del comité o reunión <span className="required">*</span></label>
+            <input type="text" name="reunion" value={formData.reunion} onChange={handleChange} required />
+          </div>
+        </div>
 
-      <div className="form-row">
-        <div className="form-group half">
-          <label>ACTA No. <span className="required">*</span></label>
-          <input type="text" name="actaNo" value={formData.actaNo} onChange={handleChange} required />
+        <div className="form-row">
+          <div className="form-group quarter">
+            <label>Ciudad y fecha</label>
+            <input type="text" name="ciudad" value={formData.ciudad} onChange={handleChange} readOnly />
+          </div>
+          <div className="form-group quarter">
+            <label>Fecha</label>
+            <input type="date" name="fecha" value={formData.fecha} onChange={handleChange} />
+          </div>
+          <div className="form-group half">
+            <label>Lugar y/o enlace</label>
+            <input type="text" name="lugar" value={formData.lugar} onChange={handleChange} placeholder="Oficina, Teams, Meet..." />
+          </div>
         </div>
-        <div className="form-group half">
-          <label>Nombre del comité o reunión <span className="required">*</span></label>
-          <input type="text" name="reunion" value={formData.reunion} onChange={handleChange} required />
-        </div>
-      </div>
 
-      <div className="form-row">
-        <div className="form-group quarter">
-          <label>Ciudad</label>
-          <input type="text" name="ciudad" value={formData.ciudad} onChange={handleChange} readOnly />
+        <div className="form-row">
+            <div className="form-group half">
+                <label>Hora inicio <span className="required">*</span></label>
+                <input type="time" name="horaInicio" value={formData.horaInicio} onChange={handleChange} required />
+            </div>
+            <div className="form-group half">
+                <label>Hora fin <span className="required">*</span></label>
+                <input type="time" name="horaFin" value={formData.horaFin} onChange={handleChange} required />
+            </div>
         </div>
-        <div className="form-group quarter">
-          <label>Centro de Formación</label>
-          <input type="text" name="centroFormacion" value={formData.centroFormacion} onChange={handleChange} readOnly />
-        </div>
-        <div className="form-group quarter">
-          <label>Fecha</label>
-          <input type="date" name="fecha" value={formData.fecha} onChange={handleChange} />
-        </div>
-        <div className="form-group quarter">
-          <label>Lugar o Enlace</label>
-          <input type="text" name="lugar" value={formData.lugar} onChange={handleChange} />
-        </div>
-      </div>
 
-      <div className="form-row">
-        <div className="form-group half">
-          <label>Hora Inicio <span className="required">*</span></label>
-          <input type="time" name="horaInicio" value={formData.horaInicio} onChange={handleChange} required />
+        <div className="form-row">
+            <div className="form-group half">
+                <label>Dirección / Regional</label>
+                <input type="text" name="regional" value={formData.regional} onChange={handleChange} readOnly />
+            </div>
+            <div className="form-group half">
+                <label>Centro</label>
+                <input type="text" name="centro" value={formData.centro} onChange={handleChange} readOnly />
+            </div>
         </div>
-        <div className="form-group half">
-          <label>Hora Fin <span className="required">*</span></label>
-          <input type="time" name="horaFin" value={formData.horaFin} onChange={handleChange} required />
-        </div>
-      </div>
+      </fieldset>
 
-      {/* --- INICIO MODIFICACIÓN: Nuevos campos de formulario --- */}
-      <fieldset className="form-fieldset">
+      <fieldset className="form-section">
         <legend>Actualización del Proyecto</legend>
         <div className="form-row">
             <div className="form-group half">
-                <label>Avance del proyecto (%) <span className="required">*</span></label>
+                <label>Avance de seguimiento (%) <span className="required">*</span></label>
                 <input
                     type="number"
                     name="avancePorcentaje"
@@ -177,7 +169,7 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
                     onChange={handleChange}
                     min="0"
                     max="100"
-                    placeholder="0-100"
+                    placeholder="Avance para esta acta (0-100)"
                     required
                 />
             </div>
@@ -197,17 +189,17 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
             </div>
         </div>
       </fieldset>
-      {/* --- FIN MODIFICACIÓN --- */}
 
-      <div className="form-group">
-        <label>Agenda o puntos a desarrollar</label>
+      <fieldset className="form-section">
+        <legend>Agenda o Puntos a Desarrollar</legend>
         {formData.agenda.map((punto, index) => (
-          <div key={index} className="agenda-item dynamic-field-item">
+          <div key={index} className="dynamic-field-item">
+            <span className="item-number">{index + 1}.</span>
             <input
               type="text"
               value={punto}
               onChange={(e) => handleDynamicFieldChange('agenda', index, e.target.value)}
-              placeholder={`Punto ${index + 1}`}
+              placeholder="Describa el punto de la agenda"
             />
             {formData.agenda.length > 1 && (
               <button type="button" onClick={() => removeDynamicFieldPoint('agenda', index)} className="btn-remove">
@@ -216,19 +208,19 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
             )}
           </div>
         ))}
-        <button type="button" onClick={() => addDynamicFieldPoint('agenda')} className="btn-add-point">+ Añadir punto</button>
-      </div>
+        <button type="button" onClick={() => addDynamicFieldPoint('agenda')} className="btn-add">+ Añadir punto</button>
+      </fieldset>
 
-
-      <div className="form-group">
-        <label>Objetivo(s) de la reunión</label>
+      <fieldset className="form-section">
+        <legend>Objetivo(s) de la Reunión</legend>
         {formData.objetivos.map((objetivo, index) => (
-          <div key={index} className="agenda-item dynamic-field-item">
+          <div key={index} className="dynamic-field-item">
+             <span className="item-number">{index + 1}.</span>
             <input
               type="text"
               value={objetivo}
               onChange={(e) => handleDynamicFieldChange('objetivos', index, e.target.value)}
-              placeholder={`Objetivo ${index + 1}`}
+              placeholder="Redactar en infinitivo (Ej: Evaluar, Definir...)"
             />
             {formData.objetivos.length > 1 && (
               <button type="button" onClick={() => removeDynamicFieldPoint('objetivos', index)} className="btn-remove">
@@ -237,122 +229,72 @@ const FormularioActa = ({ proyecto, onSave, onCancel, actaToEdit }) => {
             )}
           </div>
         ))}
-        <button type="button" onClick={() => addDynamicFieldPoint('objetivos')} className="btn-add-point">+ Añadir Objetivo</button>
-      </div>
+        <button type="button" onClick={() => addDynamicFieldPoint('objetivos')} className="btn-add">+ Añadir objetivo</button>
+      </fieldset>
 
-      <div className="form-group">
-        <label>Desarrollo de la reunión</label>
-        <textarea name="desarrollo" value={formData.desarrollo} onChange={handleChange} rows="5"></textarea>
-      </div>
+      <fieldset className="form-section">
+        <legend>Desarrollo de la Reunión</legend>
+        <p className="section-description">
+            Registre aquí el seguimiento del proyecto, incluyendo avances, revisiones y discusiones relevantes.
+        </p>
+        <textarea 
+            name="desarrollo" 
+            value={formData.desarrollo} 
+            onChange={handleChange} 
+            rows="8"
+            placeholder="Describa detalladamente el desarrollo de la reunión..."
+        ></textarea>
+      </fieldset>
 
-      <div className="form-group">
-        <label>Limitantes del proyecto</label>
-        {formData.limitantes.map((limitante, index) => (
-          <div key={index} className="agenda-item dynamic-field-item">
-            <input
-              type="text"
-              value={limitante}
-              onChange={(e) => handleDynamicFieldChange('limitantes', index, e.target.value)}
-              placeholder={`Limitante ${index + 1}`}
-            />
-            {formData.limitantes.length > 1 && (
-              <button type="button" onClick={() => removeDynamicFieldPoint('limitantes', index)} className="btn-remove">
-                🗑️
-              </button>
-            )}
-          </div>
-        ))}
-        <button type="button" onClick={() => addDynamicFieldPoint('limitantes')} className="btn-add-point">+ Añadir Limitante</button>
-      </div>
+      <fieldset className="form-section">
+        <legend>Conclusiones</legend>
+        <textarea 
+            name="conclusiones" 
+            value={formData.conclusiones} 
+            onChange={handleChange} 
+            rows="5"
+            placeholder="Resuma las conclusiones principales..."
+        ></textarea>
+      </fieldset>
 
-      <div className="form-group">
-        <label>Evaluación del impacto y participación de aprendices</label>
-        <TablaImpactoAprendices
-          value={formData.impactoAprendices}
-          onChange={handleImpactoAprendicesTableChange}
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Presentación de resultados en eventos académicos</label>
-        {formData.presentacionResultados.map((resultado, index) => (
-          <div key={index} className="agenda-item dynamic-field-item">
-            <input
-              type="text"
-              value={resultado}
-              onChange={(e) => handleDynamicFieldChange('presentacionResultados', index, e.target.value)}
-              placeholder={`Resultado ${index + 1}`}
-            />
-            {formData.presentacionResultados.length > 1 && (
-              <button type="button" onClick={() => removeDynamicFieldPoint('presentacionResultados', index)} className="btn-remove">
-                🗑️
-              </button>
-            )}
-          </div>
-        ))}
-        <button type="button" onClick={() => addDynamicFieldPoint('presentacionResultados')} className="btn-add-point">+ Añadir Resultado</button>
-      </div>
-
-      <div className="form-group">
-        <label>Decisiones y acciones a seguir</label>
-        {formData.decisiones.map((decision, index) => (
-          <div key={index} className="agenda-item dynamic-field-item">
-            <input
-              type="text"
-              value={decision}
-              onChange={(e) => handleDynamicFieldChange('decisiones', index, e.target.value)}
-              placeholder={`Decisión ${index + 1}`}
-            />
-            {formData.decisiones.length > 1 && (
-              <button type="button" onClick={() => removeDynamicFieldPoint('decisiones', index)} className="btn-remove">
-                🗑️
-              </button>
-            )}
-          </div>
-        ))}
-        <button type="button" onClick={() => addDynamicFieldPoint('decisiones')} className="btn-add-point">+ Añadir Decisión</button>
-      </div>
-
-      <div className="form-group">
-        <label>Establecimiento y aceptación de compromisos</label>
+      <fieldset className="form-section">
+        <legend>Establecimiento y Aceptación de Compromisos</legend>
         <TablaCompromisos
           value={formData.compromisos}
           onChange={handleCompromisosTableChange}
         />
-      </div>
+      </fieldset>
 
-      <div className="form-group">
-        <label>Asistentes y aprobación de decisiones</label>
+      <fieldset className="form-section">
+        <legend>Asistentes y Aprobación de Decisiones</legend>
         <TablaAsistentes
           value={formData.asistentes}
           onChange={handleAsistentesTableChange}
         />
-      </div>
-
-      <div className="form-group">
-        <label>Conclusiones</label>
-        {formData.conclusiones.map((conclusion, index) => (
-          <div key={index} className="agenda-item dynamic-field-item">
-            <input
-              type="text"
-              value={conclusion}
-              onChange={(e) => handleDynamicFieldChange('conclusiones', index, e.target.value)}
-              placeholder={`Conclusión ${index + 1}`}
-            />
-            {formData.conclusiones.length > 1 && (
-              <button type="button" onClick={() => removeDynamicFieldPoint('conclusiones', index)} className="btn-remove">
-                🗑️
-              </button>
-            )}
-          </div>
-        ))}
-        <button type="button" onClick={() => addDynamicFieldPoint('conclusiones')} className="btn-add-point">+ Añadir Conclusión</button>
-      </div>
+      </fieldset>
 
       <div className="form-footer">
-        <p className="data-protection-text">
-          "En mi calidad de titular de la información, actuando libre y voluntariamente, autorizo de manera previa, explícita e inequívoca al SENA para el tratamiento de mis datos personales aquí consignados, principalmente para fines académicos, de caracterización de la población objeto de la entidad y seguimiento a mis compromisos. Soy consciente de que el tratamiento de mis datos incluye la recolección, almacenamiento, uso, circulación y supresión de los mismos, conforme a la Política de Tratamiento de Datos Personales del SENA, la cual declaro conocer y que puedo consultar en cualquier momento. Declaro que la información aquí suministrada es veraz y que he sido informado sobre el derecho a conocer, actualizar y rectificar mis datos personales, así como los demás derechos establecidos en la Ley 1581 de 2012."
-        </p>
+        <fieldset className="form-section">
+            <legend>Protección de Datos Personales</legend>
+            <p className="data-protection-text">
+              De acuerdo con La Ley 1581 de 2012, Protección de Datos Personales, el Servicio Nacional de Aprendizaje SENA, se compromete a garantizar la seguridad y protección de los datos personales que se encuentran almacenados en este documento, y les dará el tratamiento correspondiente en cumplimiento de lo establecido legalmente.
+            </p>
+        </fieldset>
+
+        <fieldset className="form-section last-section">
+          <legend>Anexos</legend>
+          <p className="section-description">
+              Describa cualquier documento, enlace o evidencia que se anexe a esta acta.
+          </p>
+          <textarea
+              name="anexos"
+              value={formData.anexos}
+              onChange={handleChange}
+              rows="3"
+              placeholder="Ej: Documento de requisitos v1.2, Enlace a la presentación..."
+          ></textarea>
+        </fieldset>
+
         <div className="form-actions">
             <button type="button" onClick={onCancel} className="btn btn-secondary">Cancelar</button>
             <button type="submit" className="btn btn-primary">Guardar Acta</button>

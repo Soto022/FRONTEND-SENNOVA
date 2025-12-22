@@ -23,6 +23,9 @@
 
 .detalle-item {
     font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .detalle-item strong {
@@ -75,4 +78,54 @@
   border: 1px solid #ddd;
   padding: 2px;
   background-color: #fff;
+}
+
+/* --- New Styles for Project Summary --- */
+.project-summary {
+    background-color: var(--background-color-light);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1.5rem;
+}
+
+.status {
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--border-radius-small);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: capitalize;
+    display: inline-block;
+}
+
+.status--in-progress { background-color: var(--color-warning-light); color: var(--color-warning-dark); }
+.status--completed { background-color: var(--color-success-light); color: var(--color-success-dark); }
+.status--pending { background-color: var(--color-secondary-light); color: var(--color-secondary-dark); }
+.status--paused { background-color: #e0e0e0; color: #616161; }
+
+.progress {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.progress__bar {
+    flex-grow: 1;
+    height: 12px;
+    background-color: var(--color-grey-light);
+    border-radius: var(--border-radius-large);
+    overflow: hidden;
+}
+
+.progress__fill {
+    height: 100%;
+    background-color: var(--color-primary);
+    border-radius: var(--border-radius-large);
+    transition: width 0.3s ease;
+}
+
+.progress__text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color-light);
 }

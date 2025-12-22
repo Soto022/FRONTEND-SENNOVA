@@ -1,20 +1,16 @@
 import React, { useState, useMemo } from 'react';
-// --- INICIO MODIFICACIÓN: Importar 'updateProject' desde el hook ---
 import { useProjects } from '../../hook/useProjects';
-// --- FIN MODIFICACIÓN ---
 import SeguimientoTable from '../../components/Tables/SeguimientoTable/SeguimientoTable';
 import ModalHacerSeguimiento from '../../components/Modals/HacerSeguimiento/ModalHacerSeguimiento';
 import ModalVerActas from '../../components/Modals/VerActas/ModalVerActas';
 import './Seguimiento.css';
 
 const Seguimiento = () => {
-  // --- INICIO MODIFICACIÓN: Obtener 'updateProject' del hook ---
   const { projects, updateProject } = useProjects();
-  // --- FIN MODIFICACIÓN ---
   const [isHacerSeguimientoModalOpen, setIsHacerSeguimientoModalOpen] = useState(false);
   const [isVerActasModalOpen, setIsVerActasModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [editingActa, setEditingActa] = useState(null); // Will store {acta, index}
+  const [editingActa, setEditingActa] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearchChange = (event) => {
@@ -32,17 +28,16 @@ const Seguimiento = () => {
 
   const handleOpenCreateModal = (proyecto) => {
     setSelectedProject(proyecto);
-    setEditingActa(null); // Ensure we are in "create" mode
+    setEditingActa(null);
     setIsHacerSeguimientoModalOpen(true);
   };
 
   const handleOpenEditModal = (acta, index) => {
-    // Find the project associated with the acta
     const project = projects.find(p => p.id === acta.proyectoId);
     setSelectedProject(project);
     setEditingActa({ acta, index });
     setIsHacerSeguimientoModalOpen(true);
-    setIsVerActasModalOpen(false); // Close the "Ver Actas" modal
+    setIsVerActasModalOpen(false);
   };
 
   const handleOpenVerActasModal = (proyecto) => {
@@ -57,43 +52,42 @@ const Seguimiento = () => {
     setIsVerActasModalOpen(false);
   };
 
-  // --- INICIO MODIFICACIÓN: Lógica de guardado de acta y actualización de proyecto ---
   const handleSaveActa = (actaData) => {
-    console.log('Guardando acta:', actaData);
-
     try {
-      // Paso 1: Guardar el acta en localStorage (lógica existente)
       const storedActas = localStorage.getItem('sennova_actas');
-      const actas = storedActas ? JSON.parse(storedActas) : {};
-
+      const allActas = storedActas ? JSON.parse(storedActas) : {};
       const projectId = actaData.proyectoId;
-      if (!actas[projectId]) {
-        actas[projectId] = [];
-      }
+
+      let projectActas = allActas[projectId] || [];
 
       if (editingActa !== null) {
-        // Update existing acta
-        actas[projectId][editingActa.index] = actaData;
-        alert('Acta actualizada con éxito.');
+        projectActas[editingActa.index] = actaData;
       } else {
-        // Add new acta
-        actas[projectId].push(actaData);
-        alert('Acta guardada con éxito.');
+        projectActas.push(actaData);
       }
 
-      localStorage.setItem('sennova_actas', JSON.stringify(actas));
+      let nuevoProgresoTotal = projectActas.reduce((total, acta) => {
+        return total + (parseFloat(acta.avancePorcentaje) || 0);
+      }, 0);
 
-      // Paso 2: Actualizar el proyecto correspondiente (nueva lógica)
-      // Se extraen los valores del formulario de acta
-      const { avancePorcentaje, estadoProyecto } = actaData;
+      if (nuevoProgresoTotal > 100) {
+        nuevoProgresoTotal = 100;
+      }
+
+      let estadoFinal = actaData.estadoProyecto;
+      if (nuevoProgresoTotal >= 100) {
+        estadoFinal = 'completado';
+      }
       
-      // Se llama a la función del hook para actualizar el proyecto
       updateProject(projectId, {
-        progreso: avancePorcentaje,
-        estado: estadoProyecto
+        progreso: nuevoProgresoTotal,
+        estado: estadoFinal
       });
-      console.log(`Proyecto ${projectId} actualizado con: Progreso ${avancePorcentaje}%, Estado ${estadoProyecto}`);
 
+      allActas[projectId] = projectActas;
+      localStorage.setItem('sennova_actas', JSON.stringify(allActas));
+
+      alert(editingActa ? 'Acta actualizada con éxito.' : 'Acta guardada con éxito.');
 
     } catch (error) {
       console.error('Error guardando el acta o actualizando el proyecto:', error);
@@ -101,6 +95,63 @@ const Seguimiento = () => {
     }
 
     handleCloseModals();
+  };
+
+  // --- INICIO MODIFICACIÓN: Lógica para eliminar acta y recalcular progreso ---
+  const handleDeleteActa = (projectId, actaIndex) => {
+    try {
+        const storedActas = localStorage.getItem('sennova_actas');
+        const allActas = storedActas ? JSON.parse(storedActas) : {};
+        
+        let projectActas = allActas[projectId] || [];
+        const actaEliminada = projectActas[actaIndex];
+        
+        // Filtrar para eliminar el acta
+        const updatedActas = projectActas.filter((_, index) => index !== actaIndex);
+
+        // Recalcular el progreso total con las actas restantes
+        let nuevoProgresoTotal = updatedActas.reduce((total, acta) => {
+            return total + (parseFloat(acta.avancePorcentaje) || 0);
+        }, 0);
+        
+        if (nuevoProgresoTotal > 100) {
+            nuevoProgresoTotal = 100;
+        }
+
+        // Determinar el nuevo estado
+        // Si el progreso baja de 100, el estado NO debe ser 'completado'
+        let estadoFinal = projects.find(p => p.id === projectId)?.estado;
+        if (nuevoProgresoTotal < 100 && estadoFinal === 'completado') {
+            // Revertir a 'en-curso' o al estado del último acta si existe
+            estadoFinal = updatedActas.length > 0 ? updatedActas[updatedActas.length - 1].estadoProyecto : 'en-curso';
+        }
+
+        // Actualizar el estado del proyecto
+        updateProject(projectId, {
+            progreso: nuevoProgresoTotal,
+            estado: estadoFinal
+        });
+
+        // Actualizar localStorage
+        allActas[projectId] = updatedActas;
+        localStorage.setItem('sennova_actas', JSON.stringify(allActas));
+
+        alert(`Acta No. ${actaEliminada.actaNo} eliminada con éxito.`);
+        
+        // Forzar un cierre y reapertura del modal para reflejar los cambios,
+        // o simplemente cerrar si no quedan más actas.
+        if (updatedActas.length === 0) {
+            handleCloseModals();
+        } else {
+            // Esto es un truco para forzar la recarga de datos en el modal
+            setIsVerActasModalOpen(false);
+            setTimeout(() => setIsVerActasModalOpen(true), 50);
+        }
+
+    } catch (error) {
+        console.error("Error al eliminar el acta:", error);
+        alert('Hubo un error al eliminar el acta.');
+    }
   };
   // --- FIN MODIFICACIÓN ---
 
@@ -149,6 +200,7 @@ const Seguimiento = () => {
           onClose={handleCloseModals}
           proyecto={selectedProject}
           onEdit={handleOpenEditModal}
+          onDelete={handleDeleteActa} // <-- Prop 'onDelete' pasada al modal
         />
       )}
     </div>

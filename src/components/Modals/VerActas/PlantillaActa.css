@@ -1,0 +1,107 @@
+/* src/components/Modals/VerActas/PlantillaActa.css */
+
+/* --- Universal Box Sizing for Predictable Layout --- */
+.acta-container *,
+.acta-container *::before,
+.acta-container *::after {
+    box-sizing: border-box;
+}
+
+/* Base container for A4 paper simulation */
+.acta-container {
+    width: 100%; /* Changed from 210mm to 100% */
+    padding: 0; /* Padding is handled by html2pdf margin option */
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    color: #000;
+    background: white;
+}
+
+/* Main table structure used for each section */
+.acta-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid black;
+    table-layout: fixed; /* This is key to controlling width */
+    font-size: 9pt;
+    page-break-inside: avoid; /* Avoid breaking sections across pages */
+}
+
+.acta-table th, 
+.acta-table td {
+    border: 1px solid black;
+    padding: 5px;
+    vertical-align: top;
+    word-wrap: break-word; /* Force long text to wrap */
+}
+
+/* Header Table Styles */
+.header-cell {
+    text-align: center;
+    font-weight: bold;
+    vertical-align: middle;
+}
+.logo-cell { width: 20%; padding: 2px; }
+.title-cell { width: 60%; }
+.code-cell { width: 20%; font-size: 8pt; }
+
+/* Section title row style */
+.acta-section-title {
+    background-color: #E2E2E2;
+    font-weight: bold;
+    text-align: center;
+    padding: 4px;
+}
+
+/* "Información General" table styles */
+.info-key {
+    font-weight: bold;
+    width: 30%;
+}
+.info-value {
+    width: 70%;
+}
+.info-value ul {
+    margin: 0;
+    padding-left: 18px;
+}
+.info-value li {
+    padding-bottom: 3px;
+}
+
+/* Nested tables for "Compromisos" and "Asistentes" */
+.nested-table {
+    width: 100%;
+    border: none;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+.nested-table th, .nested-table td {
+    border: 1px solid black;
+    padding: 4px;
+    font-size: 8pt;
+    word-wrap: break-word;
+    text-align: left;
+}
+.nested-table th {
+    font-weight: bold;
+    text-align: center;
+    background-color: #f2f2f2;
+}
+.nested-table tr {
+    page-break-inside: avoid; /* Avoid breaking individual rows */
+}
+
+/* Cell that contains a nested table */
+.full-width-cell {
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* Footer text style */
+.footer-text {
+    font-size: 7pt;
+    text-align: justify;
+    line-height: 1.1;
+}
